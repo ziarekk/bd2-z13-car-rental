@@ -1,0 +1,94 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="9DC644A5-ED27-3F34-523E-CF51557BE000" name="segments">
+<createdBy>jakub</createdBy>
+<createdTime>2023-04-15 20:25:09 UTC</createdTime>
+<ownerDesignName>car_rental</ownerDesignName>
+<engineerTo>
+<item key="7C3E7055-499D-8F47-4AD2-37546CBE7491" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="segment_id" id="7F84D5B9-6088-3E2C-5FFA-8179890F075C">
+<createdBy>jakub</createdBy>
+<createdTime>2023-04-15 20:25:58 UTC</createdTime>
+<ownerDesignName>car_rental</ownerDesignName>
+<engineerTo>
+<item key="7C3E7055-499D-8F47-4AD2-37546CBE7491" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="name" id="B7887CF8-F5CA-5185-2D2F-A947A8A239DE">
+<createdBy>jakub</createdBy>
+<createdTime>2023-04-15 20:26:08 UTC</createdTime>
+<ownerDesignName>car_rental</ownerDesignName>
+<engineerTo>
+<item key="7C3E7055-499D-8F47-4AD2-37546CBE7491" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>10</dataTypeSize>
+<ownDataTypeParameters>10,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="rental_fee" id="5E10EDBC-B67B-7A33-7FAE-12ED97A02F23">
+<createdBy>jakub</createdBy>
+<createdTime>2023-04-15 20:26:26 UTC</createdTime>
+<ownerDesignName>car_rental</ownerDesignName>
+<engineerTo>
+<item key="7C3E7055-499D-8F47-4AD2-37546CBE7491" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="km_rate" id="DF686F9D-A2D5-9D46-38A1-83EDF87ADCC2">
+<createdBy>jakub</createdBy>
+<createdTime>2023-04-15 20:27:23 UTC</createdTime>
+<ownerDesignName>car_rental</ownerDesignName>
+<engineerTo>
+<item key="7C3E7055-499D-8F47-4AD2-37546CBE7491" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="hour_rate" id="92B0699C-4912-1ECE-749F-3FBDD9C5E6A7">
+<createdBy>jakub</createdBy>
+<createdTime>2023-04-15 20:28:04 UTC</createdTime>
+<ownerDesignName>car_rental</ownerDesignName>
+<engineerTo>
+<item key="7C3E7055-499D-8F47-4AD2-37546CBE7491" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="9ECC4316-A041-B6FC-EB75-063E3C4C5264" name="segments PK">
+<createdBy>jakub</createdBy>
+<createdTime>2023-04-15 20:26:06 UTC</createdTime>
+<ownerDesignName>car_rental</ownerDesignName>
+<engineerTo>
+<item key="7C3E7055-499D-8F47-4AD2-37546CBE7491" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>7F84D5B9-6088-3E2C-5FFA-8179890F075C</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

@@ -1,0 +1,73 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="D941F880-1674-6217-368D-F5B20628E76E" name="payments">
+<createdBy>jakub</createdBy>
+<createdTime>2023-04-15 19:53:37 UTC</createdTime>
+<ownerDesignName>car_rental</ownerDesignName>
+<engineerTo>
+<item key="7C3E7055-499D-8F47-4AD2-37546CBE7491" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="payment_id" id="D8AB62D8-A2DD-D2D7-016F-43F7AFC35367">
+<createdBy>jakub</createdBy>
+<createdTime>2023-04-15 19:53:42 UTC</createdTime>
+<ownerDesignName>car_rental</ownerDesignName>
+<engineerTo>
+<item key="7C3E7055-499D-8F47-4AD2-37546CBE7491" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="bill_id" id="BF632EDA-0FE6-6C42-0FDE-FAA087FE01A8">
+<createdBy>jakub</createdBy>
+<createdTime>2023-04-15 19:56:42 UTC</createdTime>
+<generatorID>B5D08912-C086-AD08-9B44-49C3D525F7C3</generatorID>
+<ownerDesignName>car_rental</ownerDesignName>
+<engineerTo>
+<item key="7C3E7055-499D-8F47-4AD2-37546CBE7491" value="true"/>
+</engineerTo>
+<referedAttribute>5EB32FD3-D65D-3A25-2A33-60EB58A01655</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="type_id" id="1AD6B819-6293-9176-49FD-9C579DE394D7">
+<createdBy>jakub</createdBy>
+<createdTime>2023-04-15 19:57:55 UTC</createdTime>
+<generatorID>F8064DC7-0224-1BCB-8333-FDC568BB8E00</generatorID>
+<ownerDesignName>car_rental</ownerDesignName>
+<engineerTo>
+<item key="7C3E7055-499D-8F47-4AD2-37546CBE7491" value="true"/>
+</engineerTo>
+<referedAttribute>97C7065F-BA2E-115A-80FE-2AB4ADE811E5</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="C03D72F0-4610-E1DC-B1B2-65FF1A3F8B0F" name="payments PK">
+<createdBy>jakub</createdBy>
+<createdTime>2023-04-15 19:53:50 UTC</createdTime>
+<ownerDesignName>car_rental</ownerDesignName>
+<engineerTo>
+<item key="7C3E7055-499D-8F47-4AD2-37546CBE7491" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>D8AB62D8-A2DD-D2D7-016F-43F7AFC35367</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>
