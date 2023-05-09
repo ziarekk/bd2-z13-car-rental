@@ -9,7 +9,7 @@ import lombok.*;
 
 @Data @Entity @NoArgsConstructor @AllArgsConstructor
 @Table(name = "bills")
-public class LocationHistory {
+public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NonNull

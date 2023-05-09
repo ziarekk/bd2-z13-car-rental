@@ -9,7 +9,7 @@ import lombok.*;
 
 @Data @Entity @NoArgsConstructor @AllArgsConstructor
 @Table(name = "penalties") //inconsistency with model (penalty)
-public class LocationHistory {
+public class Penalty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NonNull

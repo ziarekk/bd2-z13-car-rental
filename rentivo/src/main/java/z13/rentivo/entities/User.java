@@ -17,7 +17,7 @@ public class User {
     private Long userId;
 
     @NonNull
-    private String login
+    private String login;
 
     @NonNull
     @Column(name = "hashed_password")
@@ -25,3 +25,4 @@ public class User {
 
     @NonNull
     private String email;
+}
