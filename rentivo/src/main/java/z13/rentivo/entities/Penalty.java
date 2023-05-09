@@ -21,4 +21,8 @@ public class Penalty {
 
     @NonNull
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "rental_id")
+    private Rental rental;
 }

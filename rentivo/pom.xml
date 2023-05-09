@@ -10,12 +10,18 @@
 	<artifactId>rentivo</artifactId>
 	<version>0.9-RELEASE</version>
 	<name>rentivo</name>
-	<description>Manage your work</description>
+	<description>Rent a cuh</description>
 	<properties>
 		<java.version>17</java.version>
 		<vaadin.version>23.2.10</vaadin.version>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>

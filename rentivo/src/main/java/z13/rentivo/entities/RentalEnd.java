@@ -23,4 +23,8 @@ public class RentalEnd {
     @NonNull
     @Column(name = "end_mileage")
     private Float endMileage;
+
+    @OneToOne(mappedBy = "rental")
+    @JoinColumn(name = "rental_id")
+    private Rental rental;
 }

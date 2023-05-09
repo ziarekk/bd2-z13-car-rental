@@ -25,4 +25,8 @@ public class LocationHistory {
     @NonNull
     @Column(name = "registration_timestamp")
     private Date registrationTimestamp;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "car_id", referencedColumnName = "car_id")
+    private Car car;
 }

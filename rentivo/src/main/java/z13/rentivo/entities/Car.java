@@ -61,4 +61,8 @@ public class Car {
     @NonNull
     private String transmission;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "segment_id", referencedColumnName = "segment_id")
+    private Segment segment;
+
 }
