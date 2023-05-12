@@ -3,7 +3,7 @@ package z13.rentivo.entities;
 
 import javax.persistence.*;
 
-import java.util.Date;
+// import java.util.Date;
 
 import lombok.*;
 
@@ -18,4 +18,12 @@ public class Payment {
 
     @NonNull
     private String status;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "bill_id", referencedColumnName = "bill_id")
+    private Bill bill;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "type_id", referencedColumnName = "type_id")
+    private PaymentType paymentType;
 }

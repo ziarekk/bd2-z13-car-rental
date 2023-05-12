@@ -3,7 +3,7 @@ package z13.rentivo.entities;
 
 import javax.persistence.*;
 
-import java.util.Date;
+// import java.util.Date;
 
 import lombok.*;
 

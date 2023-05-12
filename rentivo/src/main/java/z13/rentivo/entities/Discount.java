@@ -3,7 +3,7 @@ package z13.rentivo.entities;
 
 import javax.persistence.*;
 
-import java.util.Date;
+// import java.util.Date;
 
 import lombok.*;
 
@@ -23,6 +23,6 @@ public class Discount {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "rental_id")
+    @JoinColumn(name = "rental_id", referencedColumnName = "rental_id")
     private Rental rental;    
 }

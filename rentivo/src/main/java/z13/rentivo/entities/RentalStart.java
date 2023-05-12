@@ -23,4 +23,7 @@ public class RentalStart {
     @NonNull
     @Column(name = "start_mileage")
     private Float startMileage;
+ 
+    @OneToOne(optional = false, mappedBy = "rentalStart")
+    private Rental rental;
 }

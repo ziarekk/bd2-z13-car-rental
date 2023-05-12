@@ -3,7 +3,7 @@ package z13.rentivo.entities;
 
 import javax.persistence.*;
 
-import java.util.Date;
+// import java.util.Date;
 
 import lombok.*;
 
@@ -25,4 +25,11 @@ public class User {
 
     @NonNull
     private String email;
+
+    @OneToOne(optional = true, mappedBy = "user")
+    private Client client;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
+    private UserRole userRole;
 }

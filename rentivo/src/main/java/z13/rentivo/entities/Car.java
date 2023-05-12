@@ -3,7 +3,7 @@ package z13.rentivo.entities;
 
 import javax.persistence.*;
 
-import java.util.Date;
+// import java.util.Date;
 
 import lombok.*;
 
@@ -64,5 +64,4 @@ public class Car {
     @ManyToOne(optional = false)
     @JoinColumn(name = "segment_id", referencedColumnName = "segment_id")
     private Segment segment;
-
 }

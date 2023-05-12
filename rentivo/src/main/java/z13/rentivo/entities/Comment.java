@@ -3,7 +3,7 @@ package z13.rentivo.entities;
 
 import javax.persistence.*;
 
-import java.util.Date;
+// import java.util.Date;
 
 import lombok.*;
 
@@ -18,4 +18,8 @@ public class Comment {
 
     @NonNull
     private String content;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "rental_id", referencedColumnName = "rental_id")
+    private Rental rental;
 }

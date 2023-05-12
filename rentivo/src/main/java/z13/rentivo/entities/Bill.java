@@ -22,4 +22,8 @@ public class Bill {
     @NonNull
     @Column(name = "date_due")
     private Date dateDue;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "payment_id", referencedColumnName = "payment_id")
+    private Payment payment;
 }
