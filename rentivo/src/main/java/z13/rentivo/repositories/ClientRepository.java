@@ -36,7 +36,7 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     @Query
     List<Client> findByIsVerified(Boolean isVerified);
 
-    @Modifying @Query(value = "INSERT INTO clients (name, surname, birth_date, gender, phone_number, is_verified, licence_id, user_id) VALUES (:name, :surname, :birthDate, :gender, :phoneNumber, :isVerified, :licenceId, :userId)", nativeQuery = true)
+    @Modifying @Query(value = "INSERT INTO clients (name, surname, birth_date, gender, phone_number, is_verified, licence_id, user_id) VALUES (:name, :surname, :birth_date, :gender, :phone_number, :is_verified, :licence_id, :user_id)", nativeQuery = true)
     void insertClient(@Param("name") String name,
                       @Param("surname") String surname,
                       @Param("birth_date") Date birthDate,

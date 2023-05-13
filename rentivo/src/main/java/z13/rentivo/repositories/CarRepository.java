@@ -56,7 +56,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     @Query
     List<Car> findByTransmission(String transmission);
 
-    @Modifying @Query(value = "INSERT INTO cars (mileage, registration_number, production_year, longitude, latitude, fuel_level, is_available_for_rent, fuel_type, fuel_capacity, model, brand, seats, transmission, segment_id) VALUES (:mileage, :registration_number, :production_year, :longitude, :latitude, :fuelLevel, :is_available_for_rent, :fuel_type, :fuel_capacity, :model, :brand, :seats, :transmission, :segment_id)", nativeQuery = true)
+    @Modifying @Query(value = "INSERT INTO cars (mileage, registration_number, production_year, longitude, latitude, fuel_level, is_available_for_rent, fuel_type, fuel_capacity, model, brand, seats, transmission, segment_id) VALUES (:mileage, :registration_number, :production_year, :longitude, :latitude, :fuel_level, :is_available_for_rent, :fuel_type, :fuel_capacity, :model, :brand, :seats, :transmission, :segment_id)", nativeQuery = true)
     void insertCar(@Param("mileage") Integer mileage, 
                    @Param("registration_number") String registrationNumber, 
                    @Param("production_year") Integer productionYear, 

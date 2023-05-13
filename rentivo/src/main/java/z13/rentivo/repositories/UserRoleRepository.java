@@ -21,8 +21,7 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
     List<UserRole> findByName(String name);
 
     @Modifying
-    @Query(value = "INSERT INTO user_role (role_id, name) VALUES (:role_id, :name)", nativeQuery = true)
-    void insertUserRole(@Param("role_id") Long roleId, 
-                        @Param("name") String name);
+    @Query(value = "INSERT INTO user_role (name) VALUES (:name)", nativeQuery = true)
+    void insertUserRole(@Param("name") String name);
 
 }

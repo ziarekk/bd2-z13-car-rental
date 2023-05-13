@@ -18,17 +18,15 @@ public interface RentalRepository extends JpaRepository<Rental, Long> {
     List<Rental> findByRentalId(Long rentalId);
 
     @Modifying
-    @Query(value = "INSERT INTO rentals (rental_id, client_id, car_id, start_id) VALUES (:rental_id, :client_id, :car_id, :start_id)", nativeQuery = true)
-    void insertRental(@Param("rental_id") Long rentalId, 
-                      @Param("client_id") Long clientId, 
+    @Query(value = "INSERT INTO rentals (client_id, car_id, start_id) VALUES (:client_id, :car_id, :start_id)", nativeQuery = true)
+    void insertRental(@Param("client_id") Long clientId, 
                       @Param("car_id") Long carId,
                       @Param("start_id") Long startId);
 
     @Modifying
-    @Query(value = "INSERT INTO rentals (rental_id, client_id, car_id, start_id, end_id) VALUES (:rental_id, :client_id, :car_id, :start_id, :end_id)", nativeQuery = true)
-    void insertRental(@Param("rental_id") Long rentalId, 
-                    @Param("client_id") Long clientId, 
-                    @Param("car_id") Long carId,
-                    @Param("start_id") Long startId,
-                    @Param("end_id") Long endId);
+    @Query(value = "INSERT INTO rentals (client_id, car_id, start_id, end_id) VALUES (:client_id, :car_id, :start_id, :end_id)", nativeQuery = true)
+    void insertRental(@Param("client_id") Long clientId, 
+                      @Param("car_id") Long carId,
+                      @Param("start_id") Long startId,
+                      @Param("end_id") Long endId);
 }

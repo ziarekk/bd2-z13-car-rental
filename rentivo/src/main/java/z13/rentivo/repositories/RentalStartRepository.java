@@ -25,9 +25,8 @@ public interface RentalStartRepository extends JpaRepository<RentalStart, Long> 
     List<RentalStart> findByStartMileage(Float startMileage);
 
     @Modifying
-    @Query(value = "INSERT INTO rental_start (start_id, start_time, start_mileage, rental_id) VALUES (:start_id, :start_time, :start_mileage, :rental_id)", nativeQuery = true)
-    void insertRentalStart(@Param("start_id") Long startId, 
-                           @Param("start_time") Date startTime, 
+    @Query(value = "INSERT INTO rental_start (start_time, start_mileage, rental_id) VALUES (:start_time, :start_mileage, :rental_id)", nativeQuery = true)
+    void insertRentalStart(@Param("start_time") Date startTime, 
                            @Param("start_mileage") Float startMileage,
                            @Param("rental_id") Long rentalId);
 }

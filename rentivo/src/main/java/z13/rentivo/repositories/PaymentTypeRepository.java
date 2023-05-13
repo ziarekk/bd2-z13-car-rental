@@ -21,7 +21,6 @@ public interface PaymentTypeRepository extends JpaRepository<PaymentType, Long> 
     List<PaymentType> findByName(String name);
 
     @Modifying
-    @Query(value = "INSERT INTO payment_type (type_id, name) VALUES (:typeId, :name)", nativeQuery = true)
-    void insertPaymentType(@Param("typeId") Long typeId, 
-                           @Param("name") String name);
+    @Query(value = "INSERT INTO payment_type (name) VALUES (:name)", nativeQuery = true)
+    void insertPaymentType(@Param("name") String name);
 }

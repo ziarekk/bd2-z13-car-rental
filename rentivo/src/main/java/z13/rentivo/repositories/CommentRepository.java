@@ -21,8 +21,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByContent(String content);
 
     @Modifying
-    @Query(value = "INSERT INTO comment (comment_id, content, rental_id) VALUES (:comment_id, :content, :rental_id)", nativeQuery = true)
-    void insertComment(@Param("comment_id") Long commentId, 
-                       @Param("content") String content, 
+    @Query(value = "INSERT INTO comment (content, rental_id) VALUES (:content, :rental_id)", nativeQuery = true)
+    void insertComment(@Param("content") String content, 
                        @Param("rental_id") Long rentalId);
 }

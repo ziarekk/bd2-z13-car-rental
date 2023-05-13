@@ -25,9 +25,8 @@ public interface RentalEndRepository extends JpaRepository<RentalEnd, Long> {
     List<RentalEnd> findByEndMileage(Float endMileage);
 
     @Modifying
-    @Query(value = "INSERT INTO rental_end (end_id, end_time, end_mileage, rental_id) VALUES (:end_id, :end_time, :end_mileage, :rental_id)", nativeQuery = true)
-    void insertRentalEnd(@Param("end_id") Long endId, 
-                         @Param("end_time") Date endTime, 
+    @Query(value = "INSERT INTO rental_end (end_time, end_mileage, rental_id) VALUES (:end_time, :end_mileage, :rental_id)", nativeQuery = true)
+    void insertRentalEnd(@Param("end_time") Date endTime, 
                          @Param("end_mileage") Float endMileage,
                          @Param("rental_id") Long rentalId);
 }
