@@ -24,9 +24,6 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
     @Query
     List<Bill> findByDateDue(Date dateDue);
 
-    @Query
-    List<Bill> findByPaymentId(Long paymentId);
-
     @Modifying @Query(value = "INSERT INTO bills (amount, date_due, payment_id) VALUES (:amount, :dateDue, :paymentId)", nativeQuery = true)
     void insert(@Param("amount") Float amount, 
                 @Param("date_due") Date dateDue, 

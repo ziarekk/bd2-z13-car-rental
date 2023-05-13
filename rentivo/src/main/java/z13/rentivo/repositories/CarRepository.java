@@ -1,7 +1,7 @@
 package z13.rentivo.repositories;
 
 
-import java.util.Date;
+// import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -57,16 +57,13 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     @Query
     List<Car> findByTransmission(String transmission);
 
-    @Query
-    List<Car> findBySegmentId(Long segmentId);
-
     @Modifying @Query(value = "INSERT INTO cars (mileage, registration_number, production_year, longitude, latitude, fuel_level, is_available_for_rent, fuel_type, fuel_capacity, model, brand, seats, transmission, segment_id) VALUES (:mileage, :registrationNumber, :productionYear, :longitude, :latitude, :fuelLevel, :isAvailableForRent, :fuelType, :fuelCapacity, :model, :brand, :seats, :transmission, :segmentId)", nativeQuery = true)
     void insertCar(@Param("mileage") Integer mileage, 
                    @Param("registration_number") String registrationNumber, 
                    @Param("production_year") Integer productionYear, 
                    @Param("longitude") Float longitude, 
                    @Param("latitude") Float latitude, 
-                   @Param("fuelLevel") Float fuelLevel, 
+                   @Param("fuel_level") Float fuelLevel, 
                    @Param("is_available_for_rent") Boolean isAvailableForRent, 
                    @Param("fuel_type") String fuelType, 
                    @Param("fuel_capacity") Float fuelCapacity, 

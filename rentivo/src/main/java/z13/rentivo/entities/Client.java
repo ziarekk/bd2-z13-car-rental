@@ -24,7 +24,7 @@ public class Client {
 
     @NonNull
     @Column(name = "birth_date")
-    private Date birthdate;
+    private Date birthDate;
 
     @NonNull
     private String gender;
