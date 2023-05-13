@@ -3,7 +3,6 @@ package z13.rentivo.repositories;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,4 +26,11 @@ public interface LocationHistoryRepository extends JpaRepository<LocationHistory
 
     @Query
     List<LocationHistory> findByRegistrationTimestamp(Date registrationTimestamp);
+
+    @Modifying 
+    @Query(value = "INSERT INTO location_history (longitude, latitude, registration_timestamp, car_id) VALUES (:longitude, :latitude, :registration_timestamp, :car_id)", nativeQuery = true)
+    void insertLocationHistory(@Param("longitude") Float longitude, 
+                               @Param("latitude") Float latitude, 
+                               @Param("registration_timestamp") Date registrationTimestamp,
+                               @Param("car_id") Long carId);
 }

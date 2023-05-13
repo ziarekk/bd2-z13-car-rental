@@ -3,7 +3,6 @@ package z13.rentivo.repositories;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -25,9 +24,8 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
     @Query
     List<Bill> findByDateDue(Date dateDue);
 
-    // @Modifying @Query(value = "INSERT INTO bills (amount, date_due, payment_id) VALUES (:amount, :dateDue, :paymentId)", nativeQuery = true)
-    // void insert(@Param("amount") Float amount, 
-    //             @Param("date_due") Date dateDue, 
-    //             @Param("payment_id") Long paymentId);
-
+    @Modifying @Query(value = "INSERT INTO bills (amount, date_due, payment_id) VALUES (:amount, :date_due, :payment_id)", nativeQuery = true)
+    void insert(@Param("amount") Float amount, 
+                @Param("date_due") Date dateDue, 
+                @Param("payment_id") Long paymentId);
 }

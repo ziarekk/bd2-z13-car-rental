@@ -1,9 +1,7 @@
 package z13.rentivo.repositories;
 
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,4 +22,10 @@ public interface DiscountRepository extends JpaRepository<Discount, Long> {
 
     @Query
     List<Discount> findByDescription(String description);
+
+    @Modifying
+    @Query(value = "INSERT INTO discount (percent, description, rental_id) VALUES (:percent, :description, :rental_id)", nativeQuery = true)
+    void insertDiscount(@Param("percent") Float percent, 
+                        @Param("description") String description, 
+                        @Param("rental_id") Long rentalId);
 }
