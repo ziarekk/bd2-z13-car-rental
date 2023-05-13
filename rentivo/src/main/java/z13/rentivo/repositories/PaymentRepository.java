@@ -1,9 +1,7 @@
 package z13.rentivo.repositories;
 
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,4 +19,11 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     @Query
     List<Payment> findByStatus(String status);
+
+    @Modifying
+    @Query(value = "INSERT INTO payment (payment_id, status, bill_id, type_id) VALUES (:payment_id, :status, :bill_id, :type_id)", nativeQuery = true)
+    void insertPayment(@Param("paymentId") Long paymentId, 
+                       @Param("status") String status,
+                       @Param("bill_id") Long billId,
+                       @Param("type_id") Long typeId);
 }
