@@ -1,9 +1,7 @@
 package z13.rentivo.repositories;
 
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,4 +16,19 @@ import z13.rentivo.entities.Rental;
 public interface RentalRepository extends JpaRepository<Rental, Long> {
     @Query
     List<Rental> findByRentalId(Long rentalId);
+
+    @Modifying
+    @Query(value = "INSERT INTO rentals (rental_id, client_id, car_id, start_id) VALUES (:rental_id, :client_id, :car_id, :start_id)", nativeQuery = true)
+    void insertRental(@Param("rental_id") Long rentalId, 
+                      @Param("client_id") Long clientId, 
+                      @Param("car_id") Long carId,
+                      @Param("start_id") Long startId);
+
+    @Modifying
+    @Query(value = "INSERT INTO rentals (rental_id, client_id, car_id, start_id, end_id) VALUES (:rental_id, :client_id, :car_id, :start_id, :end_id)", nativeQuery = true)
+    void insertRental(@Param("rental_id") Long rentalId, 
+                    @Param("client_id") Long clientId, 
+                    @Param("car_id") Long carId,
+                    @Param("start_id") Long startId,
+                    @Param("end_id") Long endId);
 }
