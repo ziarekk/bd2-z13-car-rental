@@ -1,9 +1,7 @@
 package z13.rentivo.repositories;
 
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,4 +25,19 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query
     List<User> findByEmail(String email);
+
+    @Modifying
+    @Query(value = "INSERT INTO users (login, hashed_password, email, role_id) VALUES (:login, :hashed_password, :email, :role_id)", nativeQuery = true)
+    void insertUser(@Param("login") String login, 
+                    @Param("hashed_password") String hashedPassword, 
+                    @Param("email") String email,
+                    @Param("role_id") Long roleId);
+
+    @Modifying
+    @Query(value = "INSERT INTO users (login, hashed_password, email, client_id, role_id) VALUES (:login, :hashed_password, :email, :client_id, :role_id)", nativeQuery = true)
+    void insertUser(@Param("login") String login, 
+                    @Param("hashed_password") String hashedPassword, 
+                    @Param("email") String email,
+                    @Param("client_id") Long clientId,
+                    @Param("role_id") Long roleId);
 }
