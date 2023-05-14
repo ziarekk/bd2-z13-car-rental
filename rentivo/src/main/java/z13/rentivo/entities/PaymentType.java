@@ -15,5 +15,6 @@ public class PaymentType {
     private Long typeId;
 
     @NonNull
+    @Column(length = 30)
     private String name;
 }

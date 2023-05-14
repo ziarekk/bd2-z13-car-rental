@@ -5,7 +5,10 @@ import javax.persistence.*;
 
 import lombok.*;
 
-@Data @Entity @NoArgsConstructor @AllArgsConstructor
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
     @Id
@@ -15,13 +18,15 @@ public class User {
     private Long userId;
 
     @NonNull
+    @Column(length = 30)
     private String login;
 
     @NonNull
-    @Column(name = "hashed_password")
+    @Column(name = "hashed_password", length = 128)
     private String hashedPassword;
 
     @NonNull
+    @Column(length = 50)
     private String email;
 
     @OneToOne(optional = true, mappedBy = "user")

@@ -3,9 +3,13 @@ package z13.rentivo.entities;
 
 import javax.persistence.*;
 
+import antlr.actions.python.CodeLexer;
 import lombok.*;
 
-@Data @Entity @NoArgsConstructor @AllArgsConstructor
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "penalties") //inconsistency with model (penalty)
 public class Penalty {
     @Id
@@ -15,9 +19,11 @@ public class Penalty {
     private Long penaltyId;
 
     @NonNull
+    @Column(columnDefinition = "money")
     private Float amount;
 
     @NonNull
+    @Column(columnDefinition = "text")
     private String description;
 
     @ManyToOne

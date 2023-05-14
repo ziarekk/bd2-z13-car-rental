@@ -2,12 +2,21 @@ package z13.rentivo.entities;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 // import java.util.Date;
 
 import lombok.*;
+import org.apache.qpid.proton.amqp.UnsignedInteger;
+import org.hibernate.annotations.Check;
 
-@Data @Entity @NoArgsConstructor @AllArgsConstructor
+import java.math.BigDecimal;
+
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "cars")
 public class Car {
     @Id
@@ -20,7 +29,7 @@ public class Car {
     private Integer mileage;
 
     @NonNull
-    @Column(name = "registration_number")
+    @Column(name = "registration_number", length = 10)
     private String registrationNumber;
 
     @NonNull
@@ -28,37 +37,42 @@ public class Car {
     private Integer productionYear;
 
     @NonNull
-    private Float longitude;
+    @Column(precision = 7, scale = 5)
+    private BigDecimal longitude;
 
     @NonNull
-    private Float latitude;
+    @Column(precision = 7, scale = 5)
+    private BigDecimal latitude;
 
     @NonNull
-    @Column(name = "fuel_level")
-    private Float fuelLevel;
+    @Column(name = "fuel_level", precision = 4, scale = 2)
+    private BigDecimal fuelLevel;
 
     @NonNull
     @Column(name = "is_available_for_rent")
     private Boolean isAvailableForRent;
 
     @NonNull
-    @Column(name = "fuel_type")
+    @Column(name = "fuel_type", length = 20)
     private String fuelType;
 
     @NonNull
-    @Column(name = "fuel_capacity")
-    private Float fuelCapacity;
+    @Column(name = "fuel_capacity", precision = 4, scale = 2)
+    private BigDecimal fuelCapacity;
 
     @NonNull
+    @Column(length = 20)
     private String model;
 
     @NonNull
+    @Column(length = 20)
     private String brand;
 
     @NonNull
     private Integer seats;
 
     @NonNull
+    @Column(length = 20)
     private String transmission;
 
     @ManyToOne(optional = false)

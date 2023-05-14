@@ -91,6 +91,10 @@
 				<type>pom</type>
 				<scope>import</scope>
     		</dependency>
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

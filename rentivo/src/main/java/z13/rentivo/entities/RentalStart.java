@@ -7,7 +7,10 @@ import java.util.Date;
 
 import lombok.*;
 
-@Data @Entity @NoArgsConstructor @AllArgsConstructor
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "rental_start")
 public class RentalStart {
     @Id
@@ -22,8 +25,8 @@ public class RentalStart {
 
     @NonNull
     @Column(name = "start_mileage")
-    private Float startMileage;
- 
+    private Integer startMileage;
+
     @OneToOne(optional = false, mappedBy = "rentalStart")
     private Rental rental;
 }

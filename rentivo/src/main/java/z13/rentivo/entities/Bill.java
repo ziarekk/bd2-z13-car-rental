@@ -2,12 +2,19 @@ package z13.rentivo.entities;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import lombok.*;
 
-@Data @Entity @NoArgsConstructor @AllArgsConstructor
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "bills")
 public class Bill {
     @Id
@@ -17,6 +24,7 @@ public class Bill {
     private Long billId;
 
     @NonNull
+    @Column(columnDefinition = "money")
     private Float amount;
 
     @NonNull

@@ -5,7 +5,10 @@ import javax.persistence.*;
 
 import lombok.*;
 
-@Data @Entity @NoArgsConstructor @AllArgsConstructor
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "segments")
 public class Segment {
     @Id
@@ -15,17 +18,18 @@ public class Segment {
     private Long segmentId;
 
     @NonNull
+    @Column(length = 10)
     private String name;
 
     @NonNull
-    @Column(name = "rental_fee")
+    @Column(name = "rental_fee", columnDefinition = "money")
     private Float rentalFee;
 
     @NonNull
-    @Column(name = "km_rate")
+    @Column(name = "km_rate", columnDefinition = "money")
     private Float kmRate;
 
     @NonNull
-    @Column(name = "hour_rate")
+    @Column(name = "hour_rate", columnDefinition = "money")
     private Float hourRate;
 }

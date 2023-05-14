@@ -2,12 +2,16 @@ package z13.rentivo.entities;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 
 import java.util.Date;
 
 import lombok.*;
 
-@Data @Entity @NoArgsConstructor @AllArgsConstructor
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "clients")
 public class Client {
     @Id
@@ -17,9 +21,11 @@ public class Client {
     private Long clientId;
 
     @NonNull
+    @Column(length = 30)
     private String name;
 
     @NonNull
+    @Column(length = 30)
     private String surname;
 
     @NonNull
@@ -27,10 +33,10 @@ public class Client {
     private Date birthDate;
 
     @NonNull
-    private String gender;
+    private Character gender;
 
     @NonNull
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", length = 9)
     private String phoneNumber;
 
     @NonNull

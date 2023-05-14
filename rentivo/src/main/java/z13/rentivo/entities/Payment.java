@@ -5,7 +5,10 @@ import javax.persistence.*;
 
 import lombok.*;
 
-@Data @Entity @NoArgsConstructor @AllArgsConstructor
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "payments")
 public class Payment {
     @Id
@@ -15,6 +18,7 @@ public class Payment {
     private Long paymentId;
 
     @NonNull
+    @Column(length = 30)
     private String status;
 
     @ManyToOne(optional = false)

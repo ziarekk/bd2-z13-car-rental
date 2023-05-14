@@ -7,7 +7,10 @@ import java.util.Date;
 
 import lombok.*;
 
-@Data @Entity @NoArgsConstructor @AllArgsConstructor
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "driver_licences")
 public class DriverLicence {
     @Id
@@ -17,6 +20,7 @@ public class DriverLicence {
     private Long licenceId;
 
     @NonNull
+    @Column(length = 20)
     private String number;
 
     @NonNull
@@ -28,6 +32,7 @@ public class DriverLicence {
     private Date expirationDate;
 
     @NonNull
+    @Column(length = 5)
     private String category;
 
     @OneToOne(optional = false)

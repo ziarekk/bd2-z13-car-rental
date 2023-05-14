@@ -5,7 +5,12 @@ import javax.persistence.*;
 
 import lombok.*;
 
-@Data @Entity @NoArgsConstructor @AllArgsConstructor
+import java.math.BigDecimal;
+
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "discounts") //inconsistency with model (discount)
 public class Discount {
     @Id
@@ -15,12 +20,14 @@ public class Discount {
     private Long discountId;
 
     @NonNull
-    private Float percent;
+    @Column(precision = 5, scale = 2)
+    private BigDecimal percent;
 
     @NonNull
+    @Column(columnDefinition = "text")
     private String description;
 
     @ManyToOne
     @JoinColumn(name = "rental_id", referencedColumnName = "rental_id")
-    private Rental rental;    
+    private Rental rental;
 }

@@ -5,7 +5,12 @@ import javax.persistence.*;
 
 import lombok.*;
 
-@Data @Entity @NoArgsConstructor @AllArgsConstructor
+import java.awt.*;
+
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "comments")
 public class Comment {
     @Id
@@ -15,6 +20,7 @@ public class Comment {
     private Long commentId;
 
     @NonNull
+    @Column(columnDefinition = "text")
     private String content;
 
     @ManyToOne(optional = false)
