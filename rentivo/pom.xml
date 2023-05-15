@@ -13,6 +13,7 @@
 	<description>Rent a cuh</description>
 	<properties>
 		<java.version>17</java.version>
+		<vaadin.version>23.2.10</vaadin.version>
 	</properties>
 	<dependencies>
 
@@ -77,9 +78,15 @@
         	<groupId>org.hibernate</groupId>
         	<artifactId>hibernate-core</artifactId>
     	</dependency>
+		<!-- Vaadin -->
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-spring-boot-starter</artifactId>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
+			<!-- Azure -->
 			<dependency>
       			<groupId>com.azure.spring</groupId>
 				<artifactId>spring-cloud-azure-dependencies</artifactId>
@@ -87,6 +94,15 @@
 				<type>pom</type>
 				<scope>import</scope>
     		</dependency>
+			<!-- Vaadin -->
+			<dependency>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-bom</artifactId>
+				<version>${vaadin.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

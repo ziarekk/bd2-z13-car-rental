@@ -92,13 +92,13 @@ public class CarFormView extends VerticalLayout {
         addButton.addClickListener(click -> {
             String brand                =  brandTF.getValue();
             String model                =  modelTF.getValue();
-            Float fuelCapacity          =  fuelCapacityTF.getValue();
+            Float fuelCapacity          =  Float.parseFloat(fuelCapacityTF.getValue());
             String fuelType             =  fuelTypeTF.getValue();
-            Float latitude              =  latitudeTF.getValue();
-            Float longitude             =  longitudeTF.getValue();
-            Integer mileage             =  mileageTF.getValue();
+            Float latitude              =  Float.parseFloat(latitudeTF.getValue());
+            Float longitude             =  Float.parseFloat(longitudeTF.getValue());
+            Integer mileage             =  Integer.parseInt(mileageTF.getValue());
             String registrationNumber   =  registrationNoTF.getValue();
-            Integer productionYear      =  ProdYearTF.getValue();
+            Integer productionYear      =  Integer.parseInt(ProdYearTF.getValue());
             Segment segment             =  segmentCB.getValue();
             Integer seats               =  seatsCB.getValue();
             String transmission         =  transmissionCB.getValue();
