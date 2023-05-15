@@ -2,6 +2,8 @@ package z13.rentivo.entities;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import lombok.*;
 
@@ -15,6 +17,8 @@ public class Discount {
     private Long discountId;
 
     @NonNull
+    @Min(value = 0)
+    @Max(value = 100)
     private Float percent;
 
     @NonNull
