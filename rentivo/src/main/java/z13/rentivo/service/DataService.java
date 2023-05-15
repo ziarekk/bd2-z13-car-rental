@@ -1,6 +1,7 @@
 package z13.rentivo.service;
 
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,11 +130,11 @@ public class DataService {
         return userRoleRepository.findAll();
     }
 
-    public void addBill(Bill bill) {
-        billRepository.save(bill);
+    public void addBill(Float amount, Date dateDue, Long paymentId) {
+        billRepository.insertBill(amount, dateDue, paymentId);
     }
 
-    public void addSegment(Segment segment) {
-        segmentRepository.save(segment);
+    public void addSegment(String name, Float rentalFee, Float kmRate, Float hourRate) {
+        segmentRepository.insertSegment(name, rentalFee, kmRate, hourRate);
     }
-};
+}

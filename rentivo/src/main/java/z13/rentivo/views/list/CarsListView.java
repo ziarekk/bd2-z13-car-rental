@@ -45,6 +45,8 @@ public class CarsListView extends VerticalLayout {
         setSizeFull();
         configureGrid();
 
+        // dataService.addSegment("A", 0.0f, 0.0f, 0.0f);
+
     }
 
     @Transactional
