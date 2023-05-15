@@ -156,113 +156,113 @@ create table users (
 
 
 alter table clients
-    add constraint UK_7qo8y1c9673g0pq3ml202hp96 unique (licence_id);
+    add constraint clients_licence_fk_unique unique (licence_id);
 
 
 alter table clients
-    add constraint UK_smrp6gi0tckq1w5rnd7boyowu unique (user_id);
+    add constraint clients_user_fk_unique unique (user_id);
 
 
 alter table driver_licences
-    add constraint UK_o8v4a900cd7r658fi0nwtl16p unique (client_id);
+    add constraint driver_licences_client_fk_unique unique (client_id);
 
 
 alter table rentals
-    add constraint UK_msyvgn4y5uvdp76ddb4d20gt8 unique (start_id);
+    add constraint rentals_rental_start_fk_unique unique (start_id);
 
 
 alter table bills
-    add constraint FKhw7d38mo9arj048pxa30hje3n
+    add constraint bills_payments_fk
     foreign key (payment_id)
     references payments;
 
 
 alter table cars
-    add constraint FK229w2laqrgvvyxeljtj7iicra
+    add constraint cars_segments_fk
     foreign key (segment_id)
     references segments;
 
 
 alter table clients
-    add constraint FKdpck1if4mi7m1nb7jty6xjocp
+    add constraint clients_driver_licences_fk
     foreign key (licence_id)
     references driver_licences;
 
 
 alter table clients
-    add constraint FKtiuqdledq2lybrds2k3rfqrv4
+    add constraint clients_users_fk
     foreign key (user_id)
     references users;
 
 
 alter table comments
-    add constraint FK1j7o03iasixrwquq1q5w61iah
+    add constraint comments_rentals_fk
     foreign key (rental_id)
     references rentals;
 
 
 alter table discounts
-    add constraint FKlv73e3y505tdvqdmqytnnm4h3
+    add constraint discounts_rentals_fk
     foreign key (rental_id)
     references rentals;
 
 
 alter table driver_licences
-    add constraint FKql97wbtm71eu9jdnnn2t3iuvb
+    add constraint driver_licences_clients_fk
     foreign key (client_id)
     references clients;
 
 
 alter table location_history
-    add constraint FKphrandhlpwttavfgvj77ylb0d
+    add constraint location_history_cars_fk
     foreign key (car_id)
     references cars;
 
 
 alter table payments
-    add constraint FK9565r6579khpdjxnyla0l2ycd
+    add constraint payments_bills_fk
     foreign key (bill_id)
     references bills;
 
 
 alter table payments
-    add constraint FK7wle51e3pq67981aab64oj1n1
+    add constraint payments_payment_types_fk
     foreign key (type_id)
     references payment_types;
 
 
 alter table penalties
-    add constraint FK2dnfv4l94693kh2aktb0oilw6
+    add constraint penalties_rentals_fk
     foreign key (rental_id)
     references rentals;
 
 
 alter table rentals
-    add constraint FKb3vpbdnk78p1epicm7a7urvfh
+    add constraint rentals_cars_fk
     foreign key (car_id)
     references cars;
 
 
 alter table rentals
-    add constraint FKq22d9ksit6rd9l9q26x3dx6jg
+    add constraint rentals_clients_fk
     foreign key (client_id)
     references clients;
 
 
 alter table rentals
-    add constraint FK9it2jrinusu326fkciq0yu0w0
+    add constraint rentals_rental_end_fk
     foreign key (end_id)
     references rental_end;
 
 
 alter table rentals
-    add constraint FKy24yaf4djl3nkc44n9pqmvpm
+    add constraint rentals_rental_start_fk
     foreign key (start_id)
     references rental_start;
 
 
 alter table users
-    add constraint FKh555fyoyldpyaltlb7jva35j2
+    add constraint users_user_roles_fk
     foreign key (role_id)
     references user_roles;
 
