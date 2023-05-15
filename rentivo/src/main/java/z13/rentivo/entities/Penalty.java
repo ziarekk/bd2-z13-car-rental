@@ -19,8 +19,7 @@ public class Penalty {
     private Long penaltyId;
 
     @NonNull
-    @Column(columnDefinition = "money")
-    private Float amount;
+    private Integer amount;
 
     @NonNull
     @Column(columnDefinition = "text")

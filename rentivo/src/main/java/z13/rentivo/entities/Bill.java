@@ -24,8 +24,7 @@ public class Bill {
     private Long billId;
 
     @NonNull
-    @Column(columnDefinition = "money")
-    private Float amount;
+    private Integer amount;
 
     @NonNull
     @Column(name = "date_due")

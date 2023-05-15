@@ -22,14 +22,14 @@ public class Segment {
     private String name;
 
     @NonNull
-    @Column(name = "rental_fee", columnDefinition = "money")
-    private Float rentalFee;
+    @Column(name = "rental_fee")
+    private Integer rentalFee;
 
     @NonNull
-    @Column(name = "km_rate", columnDefinition = "money")
-    private Float kmRate;
+    @Column(name = "km_rate")
+    private Integer kmRate;
 
     @NonNull
-    @Column(name = "hour_rate", columnDefinition = "money")
-    private Float hourRate;
+    @Column(name = "hour_rate")
+    private Integer hourRate;
 }
