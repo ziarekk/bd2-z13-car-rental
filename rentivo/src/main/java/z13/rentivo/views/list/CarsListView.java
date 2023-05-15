@@ -34,8 +34,8 @@ import java.util.function.Consumer;
 @Route(value = "/carsList", layout = MainLayout.class)
 public class CarsListView extends VerticalLayout {
     private final DataService dataService;
+    CarFilter carFilter;
     Grid<Car> grid = new Grid<>(Car.class, false);
-
 
     @Autowired
     public CarsListView(DataService dataService) {
@@ -45,11 +45,12 @@ public class CarsListView extends VerticalLayout {
         setSizeFull();
         configureGrid();
 
+        add(getToolbar(carFilter), grid);
     }
 
     @Transactional
     void configureGrid() {
-        grid.addClassNames("animals-grid");
+        grid.addClassNames("cars-grid");
         grid.setSizeFull();
 
         grid.addColumn(Car::getCarId).setHeader("ID").setSortable(true);
@@ -59,35 +60,72 @@ public class CarsListView extends VerticalLayout {
         grid.addColumn(Car::getFuelType).setHeader("Fuel Type").setSortable(true);
         grid.addColumn(Car::getIsAvailableForRent).setHeader("Availability").setSortable(true);
 
-        List<Car> listOfCars = dataService.getAllCars();
+        List<Car> listOfCars = dataService.getFictionalCars();
         GridListDataView<Car> dataView = grid.setItems(listOfCars);
 
-        TextField searchField = new TextField();
-        searchField.setWidth("50%");
-        searchField.setPlaceholder("Search");
-        searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
-        searchField.setValueChangeMode(ValueChangeMode.EAGER);
-        searchField.addValueChangeListener(e -> dataView.refreshAll());
+        carFilter = new CarFilter(dataView);
 
-        dataView.addFilter(car -> {
-                    String searchTerm = searchField.getValue().trim();
-
-                    if (searchTerm.isEmpty())
-                        return true;
-
-                    boolean matchesBrand = matchesTerm(car.getBrand(),
-                            searchTerm);
-                    boolean matchesModel = matchesTerm(car.getModel(), searchTerm);
-
-                    return matchesBrand || matchesModel;
-                });
-        
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
     }
 
-    private boolean matchesTerm(String value, String searchTerm) {
-        return value.toLowerCase().contains(searchTerm.toLowerCase());
+    private static Component createFilter(String labelText,
+                                          Consumer<String> filterChangeConsumer) {
+        TextField textField = new TextField();
+        textField.setPlaceholder("Filter the results...");;
+        textField.setValueChangeMode(ValueChangeMode.EAGER);
+        textField.setClearButtonVisible(true);
+        textField.setWidthFull();
+        textField.getStyle().set("max-width", "100%");
+        textField.addValueChangeListener(
+                e -> filterChangeConsumer.accept(e.getValue()));
+        VerticalLayout layout = new VerticalLayout(textField);
+        layout.getThemeList().clear();
+        layout.getThemeList().add("spacing-xs");
+
+        return layout;
+    }
+
+    private static class CarFilter {
+        private final GridListDataView<Car> dataView;
+        private String input;
+
+        public CarFilter(GridListDataView<Car> dataView) {
+            this.dataView = dataView;
+            this.dataView.addFilter(this::test);
+        }
+        public void setlInput(String input) {
+            this.input = input;
+            this.dataView.refreshAll();
+        }
+        public boolean test(Car car) {
+            boolean matchesBrand = matches(car.getBrand(), input);
+            boolean matchesModel = matches(car.getModel(), input);
+            boolean matchesFuelType = matches(car.getFuelType(), input);
+            return matchesBrand || matchesModel || matchesFuelType;
+        }
+        private boolean matches(String value, String searchTerm) {
+            return searchTerm == null || searchTerm.isEmpty()
+                    || value.toLowerCase().contains(searchTerm.toLowerCase());
+        }
+    }
+
+    private HorizontalLayout getToolbar(CarFilter carFilter) {
+        Component filterText = createFilter("Filter by name...", carFilter::setlInput);
+
+//        Button addAnimalButton = new Button("Add car");
+//        addAnimalButton.addClickListener(click ->{
+//            addAnimalButton.getUI().ifPresent(ui ->
+//                    ui.navigate(CarFormView.class));
+//
+//            Notification.show("Switching tab to animal form.");
+//        });
+
+        HorizontalLayout toolbar = new HorizontalLayout(filterText);
+
+
+        toolbar.addClassName("toolbar");
+        return toolbar;
     }
 
 }

@@ -4,28 +4,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import z13.rentivo.entities.Car;
 import z13.rentivo.entities.Segment;
+import z13.rentivo.repositories.CarRepository;
+import z13.rentivo.repositories.ClientRepository;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class DataService {
-/*
-    private final CarRespoitory carRespoitory;
-    private final ClientRepository clientRepository;\
+
+    private final CarRepository carRepository;
+    private final ClientRepository clientRepository;
 
     @Autowired
-    public DataService(CarRespoitory carRespoitory,
+    public DataService(CarRepository carRepository,
                        ClientRepository clientRepository){
-            this.carRepository = carRespoitory;
+            this.carRepository = carRepository;
             this.clientRepository = clientRepository;
     }
-*/
 
-    @Autowired
-    public DataService(){}
 
-    public List<Car> getAllCars() {
+    public List<Car> getAllCars(){ return  carRepository.findAll(); }
+    public List<Car> getFictionalCars() {
 
         List<Car> carsList = new ArrayList<>();
 

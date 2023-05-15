@@ -32,9 +32,32 @@ import z13.rentivo.views.list.CarsListView;
 public class MainLayout extends AppLayout{
     private DataService dataService;
 
+    private Tabs getLinkTabs() {
+        Tabs tabs = new Tabs();
+
+        tabs.add(
+                createTab(VaadinIcon.CAR, "My cars", CarsListView.class)
+        );
+
+        tabs.setOrientation(Tabs.Orientation.VERTICAL);
+        return tabs;
+    }
+
+    private Tab createTab(VaadinIcon viewIcon, String viewName, Class<? extends Component> link) {
+        Icon icon = viewIcon.create();
+        icon.getStyle().set("box-sizing", "border-box")
+                .set("margin-inline-end", "var(--lumo-space-m)")
+                .set("margin-inline-start", "var(--lumo-space-xs)")
+                .set("padding", "var(--lumo-space-xs)");
+
+        RouterLink Rlink = new RouterLink(link);
+        Rlink.add(icon, new Span(viewName));
+        Rlink.setTabIndex(-1);
+        return new Tab(Rlink);
+    }
+
     public MainLayout(@Autowired DataService dataService) {
         this.dataService = dataService;
-
 
         H1 title = new H1("CarRental");
         title.addClickListener(click ->{
@@ -46,14 +69,18 @@ public class MainLayout extends AppLayout{
 
         HorizontalLayout header = new HorizontalLayout(linksDT, title);
 
-
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         header.expand(title);
         header.setWidthFull();
 
         addToNavbar(header);
 
-
+        createNavigationDrawer();
 
     }
+
+    private void createNavigationDrawer() {
+        addToDrawer(getLinkTabs());
+    }
+
 }
