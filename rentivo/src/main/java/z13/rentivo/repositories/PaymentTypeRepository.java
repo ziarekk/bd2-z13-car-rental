@@ -1,9 +1,7 @@
 package z13.rentivo.repositories;
 
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,4 +19,8 @@ public interface PaymentTypeRepository extends JpaRepository<PaymentType, Long> 
 
     @Query
     List<PaymentType> findByName(String name);
+
+    @Modifying
+    @Query(value = "INSERT INTO payment_type (name) VALUES (:name)", nativeQuery = true)
+    void insertPaymentType(@Param("name") String name);
 }

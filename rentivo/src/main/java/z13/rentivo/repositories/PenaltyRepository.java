@@ -1,9 +1,7 @@
 package z13.rentivo.repositories;
 
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,4 +22,11 @@ public interface PenaltyRepository extends JpaRepository<Penalty, Long> {
 
     @Query
     List<Penalty> findByDescription(String description);
+
+    @Modifying
+    @Query(value = "INSERT INTO penalty (amount, description, rental_id) VALUES (:amount, :description, :rental_id)", nativeQuery = true)
+    void insertPenalty(@Param("amount") Float amount, 
+                       @Param("description") String description, 
+                       @Param("rental_id") Long rentalId);
+
 }

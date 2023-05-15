@@ -3,7 +3,6 @@ package z13.rentivo.repositories;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,4 +23,10 @@ public interface RentalStartRepository extends JpaRepository<RentalStart, Long> 
 
     @Query
     List<RentalStart> findByStartMileage(Float startMileage);
+
+    @Modifying
+    @Query(value = "INSERT INTO rental_start (start_time, start_mileage, rental_id) VALUES (:start_time, :start_mileage, :rental_id)", nativeQuery = true)
+    void insertRentalStart(@Param("start_time") Date startTime, 
+                           @Param("start_mileage") Float startMileage,
+                           @Param("rental_id") Long rentalId);
 }

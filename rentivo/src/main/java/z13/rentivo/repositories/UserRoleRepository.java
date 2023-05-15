@@ -1,9 +1,7 @@
 package z13.rentivo.repositories;
 
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,4 +19,9 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
 
     @Query
     List<UserRole> findByName(String name);
+
+    @Modifying
+    @Query(value = "INSERT INTO user_role (name) VALUES (:name)", nativeQuery = true)
+    void insertUserRole(@Param("name") String name);
+
 }

@@ -1,9 +1,7 @@
 package z13.rentivo.repositories;
 
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,4 +19,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query
     List<Comment> findByContent(String content);
+
+    @Modifying
+    @Query(value = "INSERT INTO comment (content, rental_id) VALUES (:content, :rental_id)", nativeQuery = true)
+    void insertComment(@Param("content") String content, 
+                       @Param("rental_id") Long rentalId);
 }

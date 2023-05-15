@@ -1,9 +1,7 @@
 package z13.rentivo.repositories;
 
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -30,4 +28,11 @@ public interface SegmentRepository extends JpaRepository<Segment, Long> {
 
     @Query
     List<Segment> findByHourRate(Float hourRate);
+
+    @Modifying
+    @Query(value = "INSERT INTO segments (name, rental_fee, km_rate, hour_rate) VALUES (:name, :rental_fee, :km_rate, :hour_rate)", nativeQuery = true)
+    void insertSegment(@Param("name") String name, 
+                       @Param("rental_fee") Float rentalFee, 
+                       @Param("km_rate") Float kmRate, 
+                       @Param("hour_rate") Float hourRate);
 }

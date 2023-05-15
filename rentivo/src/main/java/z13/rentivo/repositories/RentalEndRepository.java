@@ -3,7 +3,6 @@ package z13.rentivo.repositories;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,4 +23,10 @@ public interface RentalEndRepository extends JpaRepository<RentalEnd, Long> {
 
     @Query
     List<RentalEnd> findByEndMileage(Float endMileage);
+
+    @Modifying
+    @Query(value = "INSERT INTO rental_end (end_time, end_mileage, rental_id) VALUES (:end_time, :end_mileage, :rental_id)", nativeQuery = true)
+    void insertRentalEnd(@Param("end_time") Date endTime, 
+                         @Param("end_mileage") Float endMileage,
+                         @Param("rental_id") Long rentalId);
 }
