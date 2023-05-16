@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 
 
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.Component;
@@ -26,8 +28,8 @@ import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.router.RouterLink;
 
 import z13.rentivo.service.DataService;
+import z13.rentivo.views.form.CarFormView;
 import z13.rentivo.views.list.CarsListView;
-
 
 public class MainLayout extends AppLayout{
     private DataService dataService;
@@ -36,7 +38,8 @@ public class MainLayout extends AppLayout{
         Tabs tabs = new Tabs();
 
         tabs.add(
-                createTab(VaadinIcon.CAR, "My cars", CarsListView.class)
+                createTab(VaadinIcon.CAR, "Our cars", CarsListView.class),
+                createTab(VaadinIcon.PLUS_CIRCLE, "Add car", CarFormView.class)
         );
 
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
@@ -59,7 +62,7 @@ public class MainLayout extends AppLayout{
     public MainLayout(@Autowired DataService dataService) {
         this.dataService = dataService;
 
-        H1 title = new H1("CarRental");
+        H1 title = new H1("Rentivo");
         title.addClickListener(click ->{
             title.getUI().ifPresent(ui ->
                     ui.navigate(CarsListView.class));

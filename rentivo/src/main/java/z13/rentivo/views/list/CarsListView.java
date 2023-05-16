@@ -60,7 +60,7 @@ public class CarsListView extends VerticalLayout {
         grid.addColumn(Car::getFuelType).setHeader("Fuel Type").setSortable(true);
         grid.addColumn(Car::getIsAvailableForRent).setHeader("Availability").setSortable(true);
 
-        List<Car> listOfCars = dataService.getFictionalCars();
+        List<Car> listOfCars = dataService.getAllCars();
         GridListDataView<Car> dataView = grid.setItems(listOfCars);
 
         carFilter = new CarFilter(dataView);

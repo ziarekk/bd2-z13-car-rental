@@ -12,6 +12,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
-import javax.annotation.security.RolesAllowed;
 
-@RolesAllowed("ROLE_ADMIN")
+@PageTitle("Add new car to database")
 @Route(value = "/carForm", layout = MainLayout.class)
 public class CarFormView extends VerticalLayout {
 
@@ -99,12 +99,16 @@ public class CarFormView extends VerticalLayout {
             Integer mileage             =  Integer.parseInt(mileageTF.getValue());
             String registrationNumber   =  registrationNoTF.getValue();
             Integer productionYear      =  Integer.parseInt(ProdYearTF.getValue());
-            Segment segment             =  segmentCB.getValue();
+            Long segmentId             =  segmentCB.getValue().getSegmentId();
             Integer seats               =  seatsCB.getValue();
             String transmission         =  transmissionCB.getValue();
+            Float fuelLevel             = 0.0f;
+            Boolean isAvailableForRent  = true;
 
+            dataService.addCar(mileage, registrationNumber, productionYear, longitude, latitude, fuelLevel,
+                    isAvailableForRent, fuelType, fuelCapacity, model, brand, seats, transmission, segmentId
+                    );
 
-            dataService.addCar();
 
             Notification.show("Successfully added new Animal to database!");
         });
