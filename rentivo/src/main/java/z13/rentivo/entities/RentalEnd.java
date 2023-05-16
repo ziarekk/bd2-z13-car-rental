@@ -2,6 +2,7 @@ package z13.rentivo.entities;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 import java.util.Date;
 
@@ -21,6 +22,7 @@ public class RentalEnd {
     private Date endTime;
 
     @NonNull
+    @Min(value = 0)
     @Column(name = "end_mileage")
     private Float endMileage;
 

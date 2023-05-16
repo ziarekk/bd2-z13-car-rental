@@ -1,0 +1,16 @@
+drop table if exists bills cascade;
+drop table if exists cars cascade;
+drop table if exists clients cascade;
+drop table if exists comments cascade;
+drop table if exists discounts cascade;
+drop table if exists driver_licences cascade;
+drop table if exists location_history cascade;
+drop table if exists payments cascade;
+drop table if exists payment_types cascade;
+drop table if exists penalties cascade;
+drop table if exists rentals cascade;
+drop table if exists rental_end cascade;
+drop table if exists rental_start cascade;
+drop table if exists segments cascade;
+drop table if exists users cascade;
+drop table if exists user_roles cascade;

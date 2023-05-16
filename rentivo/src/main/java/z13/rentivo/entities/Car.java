@@ -2,8 +2,9 @@ package z13.rentivo.entities;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
-// import java.util.Date;
+import org.hibernate.annotations.Check;
 
 import lombok.*;
 
@@ -17,6 +18,7 @@ public class Car {
     private Long carId;
 
     @NonNull
+    @Min(value = 0)
     private Integer mileage;
 
     @NonNull
@@ -34,6 +36,7 @@ public class Car {
     private Float latitude;
 
     @NonNull
+    @Min(value = 0)
     @Column(name = "fuel_level")
     private Float fuelLevel;
 
@@ -42,10 +45,12 @@ public class Car {
     private Boolean isAvailableForRent;
 
     @NonNull
+    @Check(constraints = "fuel_type in ('benzyna', 'diesel', 'LPG', 'hybryda', 'elektryczny')")
     @Column(name = "fuel_type")
     private String fuelType;
 
     @NonNull
+    @Min(value = 0)
     @Column(name = "fuel_capacity")
     private Float fuelCapacity;
 
@@ -56,9 +61,11 @@ public class Car {
     private String brand;
 
     @NonNull
+    @Min(value = 1)
     private Integer seats;
 
     @NonNull
+    @Check(constraints = "transmission IN ('manual', 'automatic')")
     private String transmission;
 
     @ManyToOne(optional = false)
