@@ -2,7 +2,7 @@ create table bills (
     bill_id  bigserial not null,
     amount float4,
     date_due timestamp,
-    payment_id int8,
+--    payment_id int8,
     primary key (bill_id)
 );
 
@@ -34,7 +34,7 @@ create table clients (
     name varchar(255),
     phone_number varchar(255),
     surname varchar(255),
-    licence_id int8 not null,
+--    licence_id int8 not null,
     user_id int8 not null,
     primary key (client_id)
 );
@@ -155,8 +155,8 @@ create table users (
 );
 
 
-alter table clients
-    add constraint clients_licence_fk_unique unique (licence_id);
+-- alter table clients
+--     add constraint clients_licence_fk_unique unique (licence_id);
 
 
 alter table clients
@@ -171,10 +171,10 @@ alter table rentals
     add constraint rentals_rental_start_fk_unique unique (start_id);
 
 
-alter table bills
-    add constraint bills_payments_fk
-    foreign key (payment_id)
-    references payments;
+-- alter table bills
+--     add constraint bills_payments_fk
+--     foreign key (payment_id)
+--     references payments;
 
 
 alter table cars
@@ -183,10 +183,10 @@ alter table cars
     references segments;
 
 
-alter table clients
-    add constraint clients_driver_licences_fk
-    foreign key (licence_id)
-    references driver_licences;
+-- alter table clients
+--     add constraint clients_driver_licences_fk
+--     foreign key (licence_id)
+--     references driver_licences;
 
 
 alter table clients
