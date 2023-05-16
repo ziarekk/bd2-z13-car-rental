@@ -3,6 +3,8 @@ package z13.rentivo.entities;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Check;
+
 import java.util.Date;
 
 import lombok.*;
@@ -24,9 +26,10 @@ public class Client {
 
     @NonNull
     @Column(name = "birth_date")
-    private Date birthdate;
+    private Date birthDate;
 
     @NonNull
+    @Check(constraints = "gender in ('K', 'M', 'O')")
     private String gender;
 
     @NonNull

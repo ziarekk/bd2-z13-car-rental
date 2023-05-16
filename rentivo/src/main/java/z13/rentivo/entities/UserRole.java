@@ -3,7 +3,7 @@ package z13.rentivo.entities;
 
 import javax.persistence.*;
 
-// import java.util.Date;
+import org.hibernate.annotations.Check;
 
 import lombok.*;
 
@@ -17,5 +17,6 @@ public class UserRole {
     private Long roleId;
     
     @NonNull
+    @Check(constraints = "name in ('normal', 'employee', 'vip', 'superuser')")
     private String name;
 }

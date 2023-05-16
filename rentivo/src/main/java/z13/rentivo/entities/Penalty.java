@@ -2,8 +2,7 @@ package z13.rentivo.entities;
 
 
 import javax.persistence.*;
-
-// import java.util.Date;
+import javax.validation.constraints.Min;
 
 import lombok.*;
 
@@ -17,6 +16,7 @@ public class Penalty {
     private Long penaltyId;
 
     @NonNull
+    @Min(value = 0)
     private Float amount;
 
     @NonNull

@@ -3,7 +3,7 @@ package z13.rentivo.entities;
 
 import javax.persistence.*;
 
-// import java.util.Date;
+import org.hibernate.annotations.Check;
 
 import lombok.*;
 
@@ -17,6 +17,7 @@ public class Payment {
     private Long paymentId;
 
     @NonNull
+    @Check(constraints = "status in ('przyjeta', 'oczekujaca', 'odrzucona')")
     private String status;
 
     @ManyToOne(optional = false)

@@ -2,6 +2,7 @@ package z13.rentivo.entities;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 import java.util.Date;
 
@@ -17,6 +18,7 @@ public class Bill {
     private Long billId;
 
     @NonNull
+    @Min(value = 0)
     private Float amount;
 
     @NonNull
