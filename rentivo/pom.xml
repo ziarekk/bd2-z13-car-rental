@@ -99,7 +99,7 @@
 				<type>pom</type>
 				<scope>import</scope>
     		</dependency>
-			
+
 			<!-- Vaadin -->
 			<dependency>
 				<groupId>com.vaadin</groupId>
@@ -136,6 +136,20 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- <plugin>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-maven-plugin</artifactId>
+				<version>${vaadin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-frontend</goal>
+							<goal>build-frontend</goal>
+						</goals>
+					</execution>
+				</executions>
+        	</plugin> -->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
