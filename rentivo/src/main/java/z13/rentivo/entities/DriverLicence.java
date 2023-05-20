@@ -31,6 +31,5 @@ public class DriverLicence {
     private String category;
 
     @OneToOne(optional = false)
-    @JoinColumn(name = "client_id", referencedColumnName = "client_id")
     private Client client;
 }

@@ -3,6 +3,7 @@ package z13.rentivo.views;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
 
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -27,12 +28,16 @@ import com.vaadin.flow.dom.ElementFactory;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.router.RouterLink;
 
+import z13.rentivo.security.SecurityService;
 import z13.rentivo.service.DataService;
 import z13.rentivo.views.form.CarFormView;
 import z13.rentivo.views.list.CarsListView;
 
+@Route("")
+@PermitAll
 public class MainLayout extends AppLayout{
     private DataService dataService;
+    private SecurityService securityService;
 
     private Tabs getLinkTabs() {
         Tabs tabs = new Tabs();
@@ -59,7 +64,11 @@ public class MainLayout extends AppLayout{
         return new Tab(Rlink);
     }
 
-    public MainLayout(@Autowired DataService dataService) {
+    public MainLayout(
+        @Autowired SecurityService securityService, 
+        @Autowired DataService dataService) {
+
+        this.securityService = securityService;
         this.dataService = dataService;
 
         H1 title = new H1("Rentivo");

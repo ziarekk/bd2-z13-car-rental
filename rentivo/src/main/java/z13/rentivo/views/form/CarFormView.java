@@ -25,7 +25,10 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 
+@RolesAllowed("ROLE_ADMIN")
 @PageTitle("Add new car to database")
 @Route(value = "/carForm", layout = MainLayout.class)
 public class CarFormView extends VerticalLayout {

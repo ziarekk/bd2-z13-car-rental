@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import z13.rentivo.entities.User;
+import z13.rentivo.entities.UserRole;
 import z13.rentivo.repositories.UserRepository;
 
 @Service
@@ -52,6 +53,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private List<GrantedAuthority> getAuthority(User user) {
         // return Arrays.asList(new SimpleGrantedAuthority(user.getRole()));
-        return Arrays.asList(new SimpleGrantedAuthority(user.getUserRole().getName()));
+
+        // return Arrays.asList(new SimpleGrantedAuthority(user.getUserRole().getName()));
+
+        UserRole userRole = user.getUserRole();
+        String role = userRole.getName();
+        if (role.equals("normal") || role.equals("vip")) {
+            return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+        else {
+            return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
     }
 }

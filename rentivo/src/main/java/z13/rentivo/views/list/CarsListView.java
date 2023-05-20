@@ -29,7 +29,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javax.annotation.security.PermitAll;
 
+@PermitAll
 @PageTitle("List of all cars")
 @Route(value = "/carsList", layout = MainLayout.class)
 public class CarsListView extends VerticalLayout {
