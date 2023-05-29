@@ -1,35 +1,24 @@
 package z13.rentivo.views;
 
-import java.util.Collection;
-import java.util.List;
 
-
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.dom.ElementFactory;
-import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.router.RouterLink;
 
 import z13.rentivo.service.DataService;
-import z13.rentivo.views.form.CarFormView;
-import z13.rentivo.views.list.CarsListView;
+import z13.rentivo.views.car.CarAddView;
+import z13.rentivo.views.car.CarListView;
 
 public class MainLayout extends AppLayout{
     private DataService dataService;
@@ -38,8 +27,8 @@ public class MainLayout extends AppLayout{
         Tabs tabs = new Tabs();
 
         tabs.add(
-                createTab(VaadinIcon.CAR, "Our cars", CarsListView.class),
-                createTab(VaadinIcon.PLUS_CIRCLE, "Add car", CarFormView.class)
+                createTab(VaadinIcon.CAR, "Our cars", CarListView.class),
+                createTab(VaadinIcon.PLUS_CIRCLE, "Add car", CarAddView.class)
         );
 
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
@@ -62,10 +51,10 @@ public class MainLayout extends AppLayout{
     public MainLayout(@Autowired DataService dataService) {
         this.dataService = dataService;
 
-        H1 title = new H1("Rentivo");
+        H1 title = new H1("Rentivo - raport app");
         title.addClickListener(click ->{
             title.getUI().ifPresent(ui ->
-                    ui.navigate(CarsListView.class));
+                    ui.navigate(WelcomeView.class));
         });
         DrawerToggle linksDT = new DrawerToggle();
         linksDT.addClassNames("drawer-toggle");

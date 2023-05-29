@@ -1,16 +1,11 @@
-package z13.rentivo.views.list;
+package z13.rentivo.views.car;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -24,21 +19,19 @@ import z13.rentivo.service.DataService;
 import z13.rentivo.views.MainLayout;
 
 
-import java.time.ZoneId;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
 
 @PageTitle("List of all cars")
-@Route(value = "/carsList", layout = MainLayout.class)
-public class CarsListView extends VerticalLayout {
+@Route(value = "/cars", layout = MainLayout.class)
+public class CarListView extends VerticalLayout {
     private final DataService dataService;
     CarFilter carFilter;
     Grid<Car> grid = new Grid<>(Car.class, false);
 
     @Autowired
-    public CarsListView(DataService dataService) {
+    public CarListView(DataService dataService) {
         this.dataService = dataService;
 
         addClassName("list-view");

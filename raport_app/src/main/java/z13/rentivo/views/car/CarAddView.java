@@ -1,10 +1,9 @@
-package z13.rentivo.views.form;
+package z13.rentivo.views.car;
 
 
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
@@ -21,17 +20,11 @@ import z13.rentivo.service.DataService;
 import z13.rentivo.views.MainLayout;
 
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-
-
 @PageTitle("Add new car to database")
-@Route(value = "/carForm", layout = MainLayout.class)
-public class CarFormView extends VerticalLayout {
+@Route(value = "/cars/add", layout = MainLayout.class)
+public class CarAddView extends VerticalLayout {
 
     private final DataService dataService;
-
     private final ComboBox<Segment> segmentCB;
     private final ComboBox<Integer> seatsCB;
     private final ComboBox<String> transmissionCB;
@@ -52,7 +45,7 @@ public class CarFormView extends VerticalLayout {
     HorizontalLayout buttons;
 
     @Autowired
-    public CarFormView(DataService dataService) {
+    public CarAddView(DataService dataService) {
         this.dataService = dataService;
 
         FormLayout carForm = new FormLayout();

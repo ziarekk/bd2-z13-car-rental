@@ -19,6 +19,13 @@ target/
 *.iws
 *.iml
 *.ipr
+package-lock.json
+package.json
+tsconfig.json
+types.d.ts
+vite.config.ts
+vite.generated.ts
+*.sql
 
 ### NetBeans ###
 /nbproject/private/
