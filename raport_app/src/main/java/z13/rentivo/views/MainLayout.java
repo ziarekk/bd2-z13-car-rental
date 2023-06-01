@@ -19,6 +19,12 @@ import com.vaadin.flow.router.RouterLink;
 import z13.rentivo.service.DataService;
 import z13.rentivo.views.car.CarAddView;
 import z13.rentivo.views.car.CarListView;
+import z13.rentivo.views.payment.PaymentListView;
+import z13.rentivo.views.client.ClientListView;
+import z13.rentivo.views.rental.RentalListView;
+import z13.rentivo.views.discount.DiscountListView;
+import z13.rentivo.views.penalty.PenaltyListView;
+import z13.rentivo.views.location.LocationListView;
 
 public class MainLayout extends AppLayout{
     private DataService dataService;
@@ -27,8 +33,13 @@ public class MainLayout extends AppLayout{
         Tabs tabs = new Tabs();
 
         tabs.add(
-                createTab(VaadinIcon.CAR, "Our cars", CarListView.class),
-                createTab(VaadinIcon.PLUS_CIRCLE, "Add car", CarAddView.class)
+                createTab(VaadinIcon.MONEY, "Payments", PaymentListView.class),
+                createTab(VaadinIcon.CAR, "Cars", CarListView.class),
+                createTab(VaadinIcon.USER, "Clients", ClientListView.class),
+                createTab(VaadinIcon.EXCHANGE, "Rental", RentalListView.class),
+                createTab(VaadinIcon.TICKET, "Discounts", DiscountListView.class),
+                createTab(VaadinIcon.BAN, "Penalty", PenaltyListView.class),
+                createTab(VaadinIcon.LOCATION_ARROW_CIRCLE, "Location", LocationListView.class)
         );
 
         tabs.setOrientation(Tabs.Orientation.VERTICAL);

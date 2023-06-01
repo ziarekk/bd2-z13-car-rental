@@ -21,7 +21,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     List<Payment> findByStatus(String status);
 
     @Modifying
-    @Query(value = "INSERT INTO payment (status, bill_id, type_id) VALUES (:status, :bill_id, :type_id)", nativeQuery = true)
+    @Query(value = "INSERT INTO z13.rentivo.views.payment (status, bill_id, type_id) VALUES (:status, :bill_id, :type_id)", nativeQuery = true)
     void insertPayment(@Param("status") String status,
                        @Param("bill_id") Long billId,
                        @Param("type_id") Long typeId);

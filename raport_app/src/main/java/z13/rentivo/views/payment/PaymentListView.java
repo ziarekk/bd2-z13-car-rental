@@ -1,4 +1,4 @@
-package z13.rentivo.views.car;
+package z13.rentivo.views.payment;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
@@ -13,7 +13,7 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import z13.rentivo.entities.Car;
+import z13.rentivo.entities.Payment;
 import z13.rentivo.service.DataService;
 import z13.rentivo.views.MainLayout;
 
@@ -21,43 +21,40 @@ import java.util.List;
 import java.util.function.Consumer;
 
 
-@PageTitle("List of all cars")
-@Route(value = "/cars", layout = MainLayout.class)
-public class CarListView extends VerticalLayout {
+@PageTitle("List of all payments")
+@Route(value = "/payments", layout = MainLayout.class)
+public class PaymentListView extends VerticalLayout {
     private final DataService dataService;
-    CarFilter carFilter;
-    Grid<Car> grid = new Grid<>(Car.class, false);
+    PaymentFilter paymentFilter;
+    Grid<Payment> grid = new Grid<>(Payment.class, false);
 
     @Autowired
-    public CarListView(DataService dataService) {
+    public PaymentListView(DataService dataService) {
         this.dataService = dataService;
 
         addClassName("list-view");
         setSizeFull();
         configureGrid();
 
-        add(getToolbar(carFilter), grid);
+        add(getToolbar(paymentFilter), grid);
     }
 
     @Transactional
     void configureGrid() {
-        grid.addClassNames("cars-grid");
+        grid.addClassNames("client-grid");
         grid.setSizeFull();
 
-        grid.addColumn(Car::getCarId).setHeader("ID").setSortable(true);
-        grid.addColumn(Car::getBrand).setHeader("Brand").setSortable(true);
-        grid.addColumn(Car::getModel).setHeader("Model").setSortable(true);
-        grid.addColumn(Car::getProductionYear).setHeader("Production Year").setSortable(true);
-        grid.addColumn(Car::getFuelType).setHeader("Fuel Type").setSortable(true);
-        grid.addColumn(Car::getIsAvailableForRent).setHeader("Availability").setSortable(true);
+        grid.addColumn(Payment::getPaymentId).setHeader("ID").setSortable(true);
+        grid.addColumn(Payment::getStatus).setHeader("Status").setSortable(true);
+        grid.addColumn(Payment::getBill).setHeader("Bill").setSortable(true);
+        grid.addColumn(Payment::getPaymentType).setHeader("Type").setSortable(true);
 
-        List<Car> listOfCars = dataService.getAllCars();
-        GridListDataView<Car> dataView = grid.setItems(listOfCars);
+        List<Payment> listOfPayments = dataService.getAllPayments();
+        GridListDataView<Payment> dataView = grid.setItems(listOfPayments);
 
-        carFilter = new CarFilter(dataView);
+        paymentFilter = new PaymentFilter(dataView);
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
-
     }
 
     private static Component createFilter(String labelText,
@@ -77,11 +74,11 @@ public class CarListView extends VerticalLayout {
         return layout;
     }
 
-    private static class CarFilter {
-        private final GridListDataView<Car> dataView;
+    private static class PaymentFilter {
+        private final GridListDataView<Payment> dataView;
         private String input;
 
-        public CarFilter(GridListDataView<Car> dataView) {
+        public PaymentFilter(GridListDataView<Payment> dataView) {
             this.dataView = dataView;
             this.dataView.addFilter(this::test);
         }
@@ -89,11 +86,8 @@ public class CarListView extends VerticalLayout {
             this.input = input;
             this.dataView.refreshAll();
         }
-        public boolean test(Car car) {
-            boolean matchesBrand = matches(car.getBrand(), input);
-            boolean matchesModel = matches(car.getModel(), input);
-            boolean matchesFuelType = matches(car.getFuelType(), input);
-            return matchesBrand || matchesModel || matchesFuelType;
+        public boolean test(Payment payment) {
+            return matches(payment.getStatus(), input);
         }
         private boolean matches(String value, String searchTerm) {
             return searchTerm == null || searchTerm.isEmpty()
@@ -101,19 +95,10 @@ public class CarListView extends VerticalLayout {
         }
     }
 
-    private HorizontalLayout getToolbar(CarFilter carFilter) {
-        Component filterText = createFilter("Filter by name...", carFilter::setlInput);
-
-//        Button addAnimalButton = new Button("Add car");
-//        addAnimalButton.addClickListener(click ->{
-//            addAnimalButton.getUI().ifPresent(ui ->
-//                    ui.navigate(CarFormView.class));
-//
-//            Notification.show("Switching tab to animal form.");
-//        });
+    private HorizontalLayout getToolbar(PaymentFilter paymentFilter) {
+        Component filterText = createFilter("Filter by status...", paymentFilter::setlInput);
 
         HorizontalLayout toolbar = new HorizontalLayout(filterText);
-
 
         toolbar.addClassName("toolbar");
         return toolbar;

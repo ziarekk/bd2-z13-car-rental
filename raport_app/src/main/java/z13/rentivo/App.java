@@ -12,7 +12,7 @@ import com.vaadin.flow.server.PWA;
 
 @SpringBootApplication
 //@Theme(value = "my_theme", variant = Lumo.DARK)
-@PWA(name = "Rentivo - rent yourself a cuh", shortName = "Rentivo", offlineResources = {})
+@PWA(name = "Rentivo - rent yourself a car", shortName = "Rentivo", offlineResources = {})
 @NpmPackage(value = "line-awesome", version = "1.3.0")
 public class App implements AppShellConfigurator {
     public static void main(String[] args) {
