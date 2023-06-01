@@ -26,6 +26,6 @@ public class RentalStart {
     @Column(name = "start_mileage")
     private Float startMileage;
  
-    @OneToOne(optional = false, mappedBy = "rentalStart")
-    private Rental rental;
+//    @OneToOne(optional = false, mappedBy = "rentalStart")
+//    private Rental rental;
 }

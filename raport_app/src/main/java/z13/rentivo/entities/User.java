@@ -24,8 +24,8 @@ public class User {
     @NonNull
     private String email;
 
-    @OneToOne(optional = true, mappedBy = "user")
-    private Client client;
+//    @OneToOne(optional = true, mappedBy = "user")
+//    private Client client;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
