@@ -47,8 +47,7 @@ public class DiscountListView extends VerticalLayout {
         grid.addColumn(Discount::getDiscountId).setHeader("ID").setSortable(true);
         grid.addColumn(Discount::getDescription).setHeader("Description").setSortable(true);
         grid.addColumn(Discount::getPercent).setHeader("Percent").setSortable(true);
-        grid.addColumn(Discount::getRental).setHeader("Rental").setSortable(true);
-        grid.addColumn(Discount::getClass).setHeader("Class").setSortable(true);
+//        grid.addColumn(Discount::getRental).setHeader("Rental").setSortable(true);
 
         List<Discount> listOfDiscounts = dataService.getAllDiscounts();
         GridListDataView<Discount> dataView = grid.setItems(listOfDiscounts);

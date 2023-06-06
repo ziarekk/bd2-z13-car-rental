@@ -45,11 +45,10 @@ public class LocationListView extends VerticalLayout {
         grid.setSizeFull();
 
         grid.addColumn(LocationHistory::getLocationId).setHeader("ID").setSortable(true);
-        grid.addColumn(LocationHistory::getCar).setHeader("Car").setSortable(true);
+        grid.addColumn(locationHistory -> locationHistory.getCar().getCarId()).setHeader("Car ID").setSortable(true);
         grid.addColumn(LocationHistory::getLatitude).setHeader("Latitude").setSortable(true);
         grid.addColumn(LocationHistory::getLongitude).setHeader("Longitude").setSortable(true);
         grid.addColumn(LocationHistory::getRegistrationTimestamp).setHeader("Registration Timestamp").setSortable(true);
-        grid.addColumn(LocationHistory::getClass).setHeader("Class").setSortable(true);
 
         List<LocationHistory> listOfLocations = dataService.getAllLocationHistories();
         grid.setItems(listOfLocations);

@@ -46,8 +46,9 @@ public class PaymentListView extends VerticalLayout {
 
         grid.addColumn(Payment::getPaymentId).setHeader("ID").setSortable(true);
         grid.addColumn(Payment::getStatus).setHeader("Status").setSortable(true);
-        grid.addColumn(Payment::getBill).setHeader("Bill").setSortable(true);
-        grid.addColumn(Payment::getPaymentType).setHeader("Type").setSortable(true);
+        grid.addColumn(payment -> payment.getBill().getAmount()).setHeader("Amount").setSortable(true);
+        grid.addColumn(payment -> payment.getBill().getDateDue()).setHeader("Date Due").setSortable(true);
+        grid.addColumn(payment -> payment.getPaymentType().getName()).setHeader("Type").setSortable(true);
 
         List<Payment> listOfPayments = dataService.getAllPayments();
         GridListDataView<Payment> dataView = grid.setItems(listOfPayments);

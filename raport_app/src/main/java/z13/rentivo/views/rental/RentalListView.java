@@ -45,11 +45,12 @@ public class RentalListView extends VerticalLayout {
         grid.setSizeFull();
 
         grid.addColumn(Rental::getRentalId).setHeader("ID").setSortable(true);
-        grid.addColumn(Rental::getRentalStart).setHeader("Start").setSortable(true);
-        grid.addColumn(Rental::getRentalEnd).setHeader("End").setSortable(true);
-        grid.addColumn(Rental::getCar).setHeader("Car").setSortable(true);
-        grid.addColumn(Rental::getClient).setHeader("Client").setSortable(true);
-        grid.addColumn(Rental::getClass).setHeader("Class").setSortable(true);
+        grid.addColumn(rental -> rental.getRentalStart().getStartTime()).setHeader("Start Date").setSortable(true);
+        grid.addColumn(rental -> rental.getRentalEnd().getEndTime()).setHeader("End Date").setSortable(true);
+        grid.addColumn(rental -> rental.getRentalEnd().getEndMileage() -
+                rental.getRentalStart().getStartMileage()).setHeader("Mileage").setSortable(true);
+//        grid.addColumn(Rental::getCar).setHeader("Car").setSortable(true);
+//        grid.addColumn(Rental::getClient).setHeader("Client").setSortable(true);
 
         List<Rental> listOfRentals = dataService.getAllRentals();
         GridListDataView<Rental> dataView = grid.setItems(listOfRentals);

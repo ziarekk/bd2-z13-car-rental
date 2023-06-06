@@ -48,8 +48,7 @@ public class PenaltyListView extends VerticalLayout {
         grid.addColumn(Penalty::getPenaltyId).setHeader("ID").setSortable(true);
         grid.addColumn(Penalty::getDescription).setHeader("Description").setSortable(true);
         grid.addColumn(Penalty::getAmount).setHeader("Amount").setSortable(true);
-        grid.addColumn(Penalty::getRental).setHeader("Rental").setSortable(true);
-        grid.addColumn(Penalty::getClass).setHeader("Class").setSortable(true);
+//        grid.addColumn(Penalty::getRental).setHeader("Rental").setSortable(true);
 
         List<Penalty> listOfPenalties = dataService.getAllPenalties();
         GridListDataView<Penalty> dataView = grid.setItems(listOfPenalties);
