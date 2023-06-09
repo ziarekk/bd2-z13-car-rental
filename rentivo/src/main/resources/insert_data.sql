@@ -1,4 +1,3 @@
-
 -- Wstawianie danych do tabeli user_roles
 INSERT INTO user_roles (name) VALUES
                                   ('normal'),
@@ -56,21 +55,22 @@ VALUES
 
 -- Dodawanie użytkowników do tabeli users
 INSERT INTO users (email, hashed_password, login, role_id) VALUES
-                                                               ('jan@example.com', 'johnsmith', 'jan123', 1),
-                                                               ('anna@example.com', 'jenniferbrown', 'anna456', 2),
-                                                               ('maria@example.com', 'michaeljones', 'maria789', 3);
+                                                               ('janeck@uwu.pl', '$2a$10$Jj/6lPoEbbCFgp7aBT9rH.5fRAK0Q4zFta/OLDy.zNds2eLXWzZh2', 'johny', 1),
+                                                               ('tik@tok.rak', '$2a$10$GehJwd3DyVrqqmyWHNSR5.b8C.qR20f5ALCPnfA5d63d3fREXCAu.', 'yanny', 2),
+                                                               ('rockstar@gta.eu', '$2a$10$CiNMosNxAKKFCyA1AsVG4.saUejWKeixdL5IWYNVx8Dq1TJ8bvd8S', 'mikey', 3),
+                                                               ('anime@lover.com', '$2a$10$ApAYwMmFuvy6AzSTDIcCD.G7VdbBNDyUmUuLY/uno.pt8Vk1sKusK', 'tate', 4);
 
 -- Wstawianie danych do tabeli clients
 INSERT INTO clients (birth_date, gender, is_verified, name, phone_number, surname, user_id) VALUES
-                                                                ('1990-01-15', 'M', true, 'John', '123456789', 'Smith', 1),
-                                                                ('1985-05-20', 'K', true, 'Jennifer', '987654321', 'Brown',  2),
-                                                                ('1995-12-01', 'K', false, 'Michael', '555555555', 'Jones', 3);
+                                                                                                ('1990-01-15', 'M', true, 'John', '123456789', 'Smith', 1),
+                                                                                                ('1985-05-20', 'K', true, 'Jennifer', '987654321', 'Brown',  2),
+                                                                                                ('1995-12-01', 'K', false, 'Michael', '555555555', 'Jones', 3);
 
 -- Wstawianie danych do tabeli driver_licences
 INSERT INTO driver_licences (category, date_obtained, expiration_date, number, client_id) VALUES
-                                                                  ('B', '2010-06-15', '2023-06-15', 'ABC123', 1),
-                                                                  ('A', '2008-02-10', '2024-02-10', 'XYZ789', 2),
-                                                                  ('B', '2015-08-01', '2023-08-01', 'DEF456', 3);
+                                                                                              ('B', '2010-06-15', '2023-06-15', 'ABC123', 1),
+                                                                                              ('A', '2008-02-10', '2024-02-10', 'XYZ789', 2),
+                                                                                              ('B', '2015-08-01', '2023-08-01', 'DEF456', 3);
 
 INSERT INTO location_history (latitude, longitude, registration_timestamp, car_id)
 VALUES
