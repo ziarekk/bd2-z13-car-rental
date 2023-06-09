@@ -15,6 +15,7 @@ import z13.rentivo.entities.Comment;
 
 import z13.rentivo.entities.Rental;
 import z13.rentivo.service.DataService;
+import z13.rentivo.views.DataSelectView;
 import z13.rentivo.views.MainLayout;
 import z13.rentivo.views.rental.RentalListView;
 
@@ -23,7 +24,7 @@ import java.util.function.Consumer;
 
 
 @PageTitle("List of all comments")
-@Route(value = "/comments", layout = MainLayout.class)
+@Route(value = "/comments", layout = DataSelectView.class)
 public class CommentListView extends VerticalLayout {
     private final DataService dataService;
     Grid<Comment> grid = new Grid<>(Comment.class, false);
