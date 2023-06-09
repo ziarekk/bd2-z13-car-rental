@@ -4,13 +4,9 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -22,15 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 import z13.rentivo.entities.Car;
 import z13.rentivo.service.DataService;
 import z13.rentivo.views.MainLayout;
+import z13.rentivo.views.form.CarFormView;
 
 
-import java.time.ZoneId;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
 import javax.annotation.security.PermitAll;
-
 @PermitAll
 @PageTitle("List of all cars")
 @Route(value = "/carsList", layout = MainLayout.class)
@@ -55,12 +49,20 @@ public class CarsListView extends VerticalLayout {
         grid.addClassNames("cars-grid");
         grid.setSizeFull();
 
+        grid.addColumn(Car::getIsAvailableForRent).setHeader("Availability").setSortable(true);
         grid.addColumn(Car::getCarId).setHeader("ID").setSortable(true);
         grid.addColumn(Car::getBrand).setHeader("Brand").setSortable(true);
         grid.addColumn(Car::getModel).setHeader("Model").setSortable(true);
         grid.addColumn(Car::getProductionYear).setHeader("Production Year").setSortable(true);
         grid.addColumn(Car::getFuelType).setHeader("Fuel Type").setSortable(true);
-        grid.addColumn(Car::getIsAvailableForRent).setHeader("Availability").setSortable(true);
+        grid.addColumn(Car::getTransmission).setHeader("Transmission").setSortable(true);
+        grid.addColumn(Car::getSeats).setHeader("Seats").setSortable(true);
+        grid.addColumn(Car::getFuelCapacity).setHeader("Fuel Capacity").setSortable(true);
+        grid.addColumn(Car::getMileage).setHeader("Mileage").setSortable(true);
+        grid.addColumn(Car::getRegistrationNumber).setHeader("Registration Number").setSortable(true);
+        grid.addColumn(Car -> Car.getSegment().getName()).setHeader("Segment").setSortable(true);
+
+        //TODO Add Comments Pop-up
 
         List<Car> listOfCars = dataService.getAllCars();
         GridListDataView<Car> dataView = grid.setItems(listOfCars);
@@ -73,6 +75,8 @@ public class CarsListView extends VerticalLayout {
 
     private static Component createFilter(String labelText,
                                           Consumer<String> filterChangeConsumer) {
+
+        //TODO Rebuild the filter so its able to filter by all car features (like the one on Otomoto
         TextField textField = new TextField();
         textField.setPlaceholder("Filter the results...");;
         textField.setValueChangeMode(ValueChangeMode.EAGER);
@@ -113,15 +117,15 @@ public class CarsListView extends VerticalLayout {
     }
 
     private HorizontalLayout getToolbar(CarFilter carFilter) {
-        Component filterText = createFilter("Filter by name...", carFilter::setlInput);
+        Component filterText = createFilter("Filter the cars...", carFilter::setlInput);
 
-//        Button addAnimalButton = new Button("Add car");
-//        addAnimalButton.addClickListener(click ->{
-//            addAnimalButton.getUI().ifPresent(ui ->
-//                    ui.navigate(CarFormView.class));
-//
-//            Notification.show("Switching tab to animal form.");
-//        });
+        Button addCarButton = new Button("Add car");
+        addCarButton.addClickListener(click ->{
+            addCarButton.getUI().ifPresent(ui ->
+                    ui.navigate(CarFormView.class));
+
+
+        });
 
         HorizontalLayout toolbar = new HorizontalLayout(filterText);
 

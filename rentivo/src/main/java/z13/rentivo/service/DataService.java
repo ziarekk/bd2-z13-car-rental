@@ -172,4 +172,7 @@ public class DataService {
         return carsList;
     }
 
+    public List<User> getUserByLogin(String name) {
+        return userRepository.findByLogin(name);
+    }
 }
