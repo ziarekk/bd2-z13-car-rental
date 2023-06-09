@@ -24,4 +24,9 @@ public class Bill {
     @NonNull
     @Column(name = "date_due")
     private Date dateDue;
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "rental_id", referencedColumnName = "rental_id")
+    private Rental rental;
+
 }
