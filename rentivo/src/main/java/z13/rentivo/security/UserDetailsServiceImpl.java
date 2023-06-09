@@ -48,7 +48,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
         
-        return new org.springframework.security.core.userdetails.User(user.getLogin(), passwordEncoder.encode(user.getHashedPassword()), getAuthority(user));
+        return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getHashedPassword(), getAuthority(user));
     }
 
     private List<GrantedAuthority> getAuthority(User user) {

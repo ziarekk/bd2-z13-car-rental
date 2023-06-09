@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import z13.rentivo.repositories.*;
@@ -145,6 +146,13 @@ public class DataService {
 
         carRepository.insertCar(mileage, registrationNumber, productionYear, longitude, latitude, fuelLevel,
                         isAvailableForRent, fuelType, fuelCapacity, model, brand, seats, transmission, segmentId);
+    }
+
+    public void addUser(String login, String password, String email, Long clientId, Long roleId) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(password);
+         
+        userRepository.insertUser(login, hashedPassword, email, clientId, roleId);
     }
 
     public List<Car> getFictionalCars() {
