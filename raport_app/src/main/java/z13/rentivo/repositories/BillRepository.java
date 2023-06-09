@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import z13.rentivo.entities.Bill;
+import z13.rentivo.entities.Rental;
 
 @Transactional @Repository
 public interface BillRepository extends JpaRepository<Bill, Long> {
@@ -24,8 +25,11 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
     @Query
     List<Bill> findByDateDue(Date dateDue);
 
-    @Modifying @Query(value = "INSERT INTO bills (amount, date_due, payment_id) VALUES (:amount, :date_due, :payment_id)", nativeQuery = true)
+    @Query
+    List<Bill> findByRental(Rental rental);
+
+    @Modifying @Query(value = "INSERT INTO bills (amount, date_due, rental_id) VALUES (:amount, :date_due, :rental_id)", nativeQuery = true)
     void insertBill(@Param("amount") Float amount, 
                     @Param("date_due") Date dateDue, 
-                    @Param("payment_id") Long paymentId);
+                    @Param("rental_id") Long rentalId);
 }
