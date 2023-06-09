@@ -4,6 +4,8 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -49,17 +51,18 @@ public class CarsListView extends VerticalLayout {
         grid.addClassNames("cars-grid");
         grid.setSizeFull();
 
-        grid.addColumn(Car::getIsAvailableForRent).setHeader("Availability").setSortable(true);
-        grid.addColumn(Car::getCarId).setHeader("ID").setSortable(true);
+        grid.addComponentColumn(Car -> createStatusIcon(Car.getIsAvailableForRent()))
+                .setTooltipGenerator(Car -> getStatus(Car.getIsAvailableForRent()))
+                .setHeader("Available");
         grid.addColumn(Car::getBrand).setHeader("Brand").setSortable(true);
         grid.addColumn(Car::getModel).setHeader("Model").setSortable(true);
-        grid.addColumn(Car::getProductionYear).setHeader("Production Year").setSortable(true);
+        grid.addColumn(Car::getProductionYear).setHeader("Year").setSortable(true);
         grid.addColumn(Car::getFuelType).setHeader("Fuel Type").setSortable(true);
         grid.addColumn(Car::getTransmission).setHeader("Transmission").setSortable(true);
         grid.addColumn(Car::getSeats).setHeader("Seats").setSortable(true);
         grid.addColumn(Car::getFuelCapacity).setHeader("Fuel Capacity").setSortable(true);
         grid.addColumn(Car::getMileage).setHeader("Mileage").setSortable(true);
-        grid.addColumn(Car::getRegistrationNumber).setHeader("Registration Number").setSortable(true);
+        grid.addColumn(Car::getRegistrationNumber).setHeader("Ro. Number").setSortable(true);
         grid.addColumn(Car -> Car.getSegment().getName()).setHeader("Segment").setSortable(true);
 
         //TODO Add Comments Pop-up
@@ -132,6 +135,27 @@ public class CarsListView extends VerticalLayout {
 
         toolbar.addClassName("toolbar");
         return toolbar;
+    }
+
+    private Icon createStatusIcon(Boolean isAvailable) {
+        Icon icon;
+        if (isAvailable) {
+            icon = VaadinIcon.CHECK.create();
+            icon.getElement().getThemeList().add("badge success");
+        } else {
+            icon = VaadinIcon.CLOSE_SMALL.create();
+            icon.getElement().getThemeList().add("badge error");
+        }
+        icon.getStyle().set("padding", "var(--lumo-space-xs");
+        return icon;
+    }
+
+    private String getStatus(Boolean isAvailable){
+        if (isAvailable) {
+            return "Available";
+        }   else{
+            return "Busy";
+        }
     }
 
 }
