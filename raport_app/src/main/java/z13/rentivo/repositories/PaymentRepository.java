@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import z13.rentivo.entities.Bill;
 import z13.rentivo.entities.Payment;
 
 @Transactional @Repository
@@ -19,6 +20,9 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     @Query
     List<Payment> findByStatus(String status);
+
+    @Query
+    List<Payment> findByBill(Bill bill);
 
     @Modifying
     @Query(value = "INSERT INTO z13.rentivo.views.payment (status, bill_id, type_id) VALUES (:status, :bill_id, :type_id)", nativeQuery = true)
