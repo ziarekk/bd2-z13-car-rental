@@ -1,6 +1,7 @@
 package z13.rentivo.views;
 
 
+import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.Component;
@@ -17,17 +18,29 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
 
 import z13.rentivo.service.DataService;
+import z13.rentivo.views.car.CarListView;
+import z13.rentivo.views.payment.PaymentListView;
+import z13.rentivo.views.client.ClientListView;
+import z13.rentivo.views.rental.RentalListView;
+import z13.rentivo.views.discount.DiscountListView;
+import z13.rentivo.views.penalty.PenaltyListView;
+import z13.rentivo.views.location.LocationListView;
 
-public class MainLayout extends AppLayout{
+@Route(value = "/data")
+public class DataSelectView extends AppLayout{
     private DataService dataService;
 
     private Tabs getLinkTabs() {
         Tabs tabs = new Tabs();
 
         tabs.add(
-                createTab(VaadinIcon.DATABASE, "Data View", DataSelectView.class),
-                createTab(VaadinIcon.CHART_GRID, "Statistic View", DataSelectView.class),
-                createTab(VaadinIcon.CHART, "Chart View", DataSelectView.class)
+                createTab(VaadinIcon.MONEY, "Payments", PaymentListView.class),
+                createTab(VaadinIcon.CAR, "Cars", CarListView.class),
+                createTab(VaadinIcon.USER, "Clients", ClientListView.class),
+                createTab(VaadinIcon.EXCHANGE, "Rental", RentalListView.class),
+                createTab(VaadinIcon.TICKET, "Discounts", DiscountListView.class),
+                createTab(VaadinIcon.BAN, "Penalty", PenaltyListView.class),
+                createTab(VaadinIcon.LOCATION_ARROW_CIRCLE, "Location", LocationListView.class)
         );
 
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
@@ -47,7 +60,7 @@ public class MainLayout extends AppLayout{
         return new Tab(Rlink);
     }
 
-    public MainLayout(@Autowired DataService dataService) {
+    public DataSelectView(@Autowired DataService dataService) {
         this.dataService = dataService;
 
         H1 title = new H1("Rentivo - raport app");

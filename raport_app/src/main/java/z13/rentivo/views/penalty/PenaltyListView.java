@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import z13.rentivo.entities.Discount;
 import z13.rentivo.entities.Penalty;
 import z13.rentivo.service.DataService;
+import z13.rentivo.views.DataSelectView;
 import z13.rentivo.views.MainLayout;
 
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.function.Consumer;
 
 
 @PageTitle("List of all penalties")
-@Route(value = "/penalties", layout = MainLayout.class)
+@Route(value = "/data/penalties", layout = DataSelectView.class)
 public class PenaltyListView extends VerticalLayout {
     private final DataService dataService;
     PenaltyFilter penaltyFilter;

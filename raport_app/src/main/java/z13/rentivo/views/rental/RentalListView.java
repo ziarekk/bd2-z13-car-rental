@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import z13.rentivo.entities.Rental;
 import z13.rentivo.service.DataService;
+import z13.rentivo.views.DataSelectView;
 import z13.rentivo.views.MainLayout;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.function.Consumer;
 
 
 @PageTitle("List of all rentals")
-@Route(value = "/rentals", layout = MainLayout.class)
+@Route(value = "/data/rentals", layout = DataSelectView.class)
 public class RentalListView extends VerticalLayout {
     private final DataService dataService;
     RentalFilter rentalFilter;

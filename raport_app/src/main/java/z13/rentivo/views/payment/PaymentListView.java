@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import z13.rentivo.entities.Payment;
 import z13.rentivo.service.DataService;
+import z13.rentivo.views.DataSelectView;
 import z13.rentivo.views.MainLayout;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.function.Consumer;
 
 
 @PageTitle("List of all payments")
-@Route(value = "/payments", layout = MainLayout.class)
+@Route(value = "/data/payments", layout = DataSelectView.class)
 public class PaymentListView extends VerticalLayout {
     private final DataService dataService;
     PaymentFilter paymentFilter;
@@ -41,7 +42,7 @@ public class PaymentListView extends VerticalLayout {
 
     @Transactional
     void configureGrid() {
-        grid.addClassNames("client-grid");
+        grid.addClassNames("payment-grid");
         grid.setSizeFull();
 
         grid.addColumn(Payment::getPaymentId).setHeader("ID").setSortable(true);
