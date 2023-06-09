@@ -43,4 +43,8 @@ public class Client {
     @OneToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
+
+    @OneToOne(optional = true)
+    @JoinColumn(name = "licence_id", referencedColumnName = "licence_id")
+    private DriverLicence license;
 }
