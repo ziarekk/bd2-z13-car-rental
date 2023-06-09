@@ -155,6 +155,13 @@ public class DataService {
         userRepository.insertUser(login, hashedPassword, email, clientId, roleId);
     }
 
+    public void addUser(String login, String password, String email, Long roleId) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(password);
+         
+        userRepository.insertUser(login, hashedPassword, email, roleId);
+    }
+
     public List<Car> getFictionalCars() {
         List<Car> carsList = new ArrayList<>();
         Car car1 = new Car(1l, 100, "WSI ŻABA", 2002, 20.21f, 21.37f, 0.9f , true, "petrol", 90f, "Yaris", "Toyota", 4, "Automatic", new Segment(1l,"D", 21f, 2f, 3f));
