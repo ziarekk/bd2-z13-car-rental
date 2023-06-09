@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import z13.rentivo.entities.Client;
 import z13.rentivo.service.DataService;
+import z13.rentivo.views.DataSelectView;
 import z13.rentivo.views.MainLayout;
 
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 
 
 @PageTitle("List of all clients")
-@Route(value = "/clients", layout = MainLayout.class)
+@Route(value = "/data/clients", layout = DataSelectView.class)
 public class ClientListView extends VerticalLayout {
     private final DataService dataService;
     ClientFilter clientFilter;
@@ -94,7 +95,7 @@ public class ClientListView extends VerticalLayout {
         public boolean test(Client client) {
             boolean matchesName = matches(client.getName(), input);
             boolean matchesSurname = matches(client.getSurname(), input);
-            return true;
+            return matchesName || matchesSurname;
         }
         private boolean matches(String value, String searchTerm) {
             return searchTerm == null || searchTerm.isEmpty()
