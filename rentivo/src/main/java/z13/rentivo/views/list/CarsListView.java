@@ -63,7 +63,7 @@ public class CarsListView extends VerticalLayout {
         setSizeFull();
         configureGrid();
 
-        add(getToolbar(segmentCB, textField, carFilter, segmentFilter, dataService), grid);
+        add(getToolbar(dataService), grid);
     }
 
     @Transactional
@@ -274,7 +274,7 @@ public class CarsListView extends VerticalLayout {
                                               Consumer<String> filterChangeConsumer) {
 
         transmissionCB.setLabel(labelText);
-        List <String> transmissions =  Arrays.asList("automatyczna", "manulana");
+        List <String> transmissions =  Arrays.asList("automatyczna", "manualna");
         transmissionCB.setItems(transmissions);
         transmissionCB.setClearButtonVisible(true);
 
@@ -331,8 +331,7 @@ public class CarsListView extends VerticalLayout {
     }
 
 
-    private HorizontalLayout getToolbar(ComboBox<Segment> segmentCB, TextField textField,
-                    CarFilter carFilter, SegmentFilter segmentFilter, DataService dataService) {
+    private HorizontalLayout getToolbar(DataService dataService) {
 
         Component filterText = createTextFilter("Custom search.", textField, carFilter::setlInput);
         Component filterSegment = createSegmentFilter("Segment", segmentCB, segmentFilter::setSegment, dataService);
@@ -340,7 +339,9 @@ public class CarsListView extends VerticalLayout {
         Component filterFuelTypes= createFuelTypeFilter("Fuel Type", fuelTypeCB, fuelTypeFilter::setFuelType);
         Component filterTransmission = createTransmissionFilter("Transmission", transmissionCB, transmissionFilter::setTransmission);
 
-        Button clearButton = new Button("Clear filters");
+        Button clearButton = new Button();
+        clearButton.setWidthFull();
+        clearButton.setText("Reset filters");
         clearButton.addClickListener(click ->{
             textField.clear();
             segmentFilter.setSegment("");
@@ -353,8 +354,8 @@ public class CarsListView extends VerticalLayout {
         clearButton.getStyle().set("max-width", "100%");
 
         HorizontalLayout toolbar = new HorizontalLayout(filterText, filterSegment,filterSeats, filterFuelTypes,
-                    filterTransmission, clearButton);
-
+                    filterTransmission);
+        toolbar.add(clearButton);
         toolbar.setAlignSelf(FlexComponent.Alignment.END, clearButton);
 
         toolbar.addClassName("toolbar");
