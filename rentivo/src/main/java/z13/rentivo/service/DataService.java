@@ -175,4 +175,8 @@ public class DataService {
     public List<User> getUserByLogin(String name) {
         return userRepository.findByLogin(name);
     }
+
+    public List<Rental> getRentalsByUser(String login){
+        return rentalRepository.findByUser(login);
+    }
 }

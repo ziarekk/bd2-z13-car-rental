@@ -17,6 +17,10 @@ public interface RentalRepository extends JpaRepository<Rental, Long> {
     @Query
     List<Rental> findByRentalId(Long rentalId);
 
+
+    @Query(value = "SELECT rent.* FROM users u JOIN clients clnt ON(clnt.user_id = u.user_id) JOIN rentals rent ON(rent.client_id = clnt.client_id) WHERE u.login = :login", nativeQuery = true)
+    List<Rental> findByUser(@Param("login") String login);
+
     @Modifying
     @Query(value = "INSERT INTO rentals (client_id, car_id, start_id) VALUES (:client_id, :car_id, :start_id)", nativeQuery = true)
     void insertRental(@Param("client_id") Long clientId, 
@@ -28,5 +32,8 @@ public interface RentalRepository extends JpaRepository<Rental, Long> {
     void insertRental(@Param("client_id") Long clientId, 
                       @Param("car_id") Long carId,
                       @Param("start_id") Long startId,
+
                       @Param("end_id") Long endId);
+
+
 }
