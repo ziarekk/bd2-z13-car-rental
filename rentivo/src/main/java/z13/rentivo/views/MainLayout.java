@@ -37,6 +37,9 @@ import z13.rentivo.security.SecurityService;
 import z13.rentivo.service.DataService;
 import z13.rentivo.views.form.CarFormView;
 import z13.rentivo.views.list.CarsListView;
+import z13.rentivo.views.list.ClientsListView;
+import z13.rentivo.views.list.MyRentalsListView;
+import z13.rentivo.views.list.RentalsListView;
 
 @Route(value = "")
 @PermitAll
@@ -48,8 +51,8 @@ public class MainLayout extends AppLayout{
         Tabs tabs = new Tabs();
 
         tabs.add(
-                createTab(VaadinIcon.CAR, "Our cars", CarsListView.class)
-
+                createTab(VaadinIcon.CAR, "Our cars", CarsListView.class),
+                createTab(VaadinIcon.BAR_CHART, "Your rentals", MyRentalsListView.class)
         );
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -58,7 +61,10 @@ public class MainLayout extends AppLayout{
         for (GrantedAuthority role : roles) {
             if (role.getAuthority().equals("ROLE_ADMIN")) {
                 tabs.add(
-                        createTab(VaadinIcon.PLUS_CIRCLE, "Add car", CarFormView.class));
+                        createTab(VaadinIcon.USERS, "Clients", ClientsListView.class),
+                        createTab(VaadinIcon.ABACUS, "All rentals", RentalsListView.class),
+                        createTab(VaadinIcon.PLUS_CIRCLE, "Add car", CarFormView.class)
+                );
             }
         }
 
