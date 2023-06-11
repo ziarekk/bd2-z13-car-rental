@@ -179,4 +179,9 @@ public class DataService {
     public List<Rental> getRentalsByUser(String login){
         return rentalRepository.findByUser(login);
     }
+
+    public List<Car> getCarById(Car car){
+        return carRepository.findByCarId(car.getCarId());
+    }
+
 }

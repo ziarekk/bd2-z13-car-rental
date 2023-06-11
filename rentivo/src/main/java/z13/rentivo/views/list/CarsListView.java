@@ -1,17 +1,21 @@
 package z13.rentivo.views.list;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -48,6 +52,7 @@ public class CarsListView extends VerticalLayout {
     private final ComboBox<String> fuelTypeCB;
     private final ComboBox<Integer> seatsCB;
 
+    Dialog detailsDialog = new Dialog();
     Grid<Car> grid = new Grid<>(Car.class, false);
 
     @Autowired
@@ -61,6 +66,7 @@ public class CarsListView extends VerticalLayout {
 
         addClassName("list-view");
         setSizeFull();
+        configureDialog();
         configureGrid();
 
         add(getToolbar(dataService), grid);
@@ -85,7 +91,14 @@ public class CarsListView extends VerticalLayout {
         grid.addColumn(Car::getRegistrationNumber).setHeader("Ro. Number").setSortable(true);
         grid.addColumn(Car -> Car.getSegment().getName()).setHeader("Segment").setSortable(true);
 
-        //TODO Add Comments Pop-up
+        grid.addColumn(new ComponentRenderer<>(car -> {
+            Button buttonDetails = new Button("Show details", e -> {
+                updateDetailsDialog(car);
+                detailsDialog.open();
+            } );
+            return buttonDetails;
+
+        })).setHeader("Show details");
 
         List<Car> listOfCars = dataService.getAllCars();
         GridListDataView<Car> dataView = grid.setItems(listOfCars);
@@ -381,6 +394,67 @@ public class CarsListView extends VerticalLayout {
         }   else{
             return "Busy";
         }
+    }
+
+    void configureDialog() {
+        detailsDialog.setHeaderTitle("Car details");
+
+        detailsDialog.setMinWidth("680px");
+
+        VerticalLayout detailsDialogLayout = getDetailsLayout(dataService.getAllCars().get(0));
+
+        detailsDialog.add(detailsDialogLayout);
+
+        detailsDialog.getFooter().add(new Button("Close", e -> detailsDialog.close()));
+    }
+
+    private void updateDetailsDialog(Car car) {
+        detailsDialog.removeAll();
+        List<Car> cars = dataService.getCarById(car);
+
+        detailsDialog.setHeaderTitle("Details of the car");
+        detailsDialog.add(getDetailsLayout(cars.get(0)));
+    }
+
+    private VerticalLayout getDetailsLayout(Car car) {
+        VerticalLayout verticalDetailsLayout = new VerticalLayout();
+
+        Accordion accordion = new Accordion();
+
+        Span brand = new Span(car.getBrand());
+        Span model = new Span(car.getModel());
+        Span yearOP = new Span(String.valueOf(car.getProductionYear()));
+
+        VerticalLayout generalInformation = new VerticalLayout(brand,
+                model, yearOP);
+        generalInformation.setSpacing(false);
+        generalInformation.setPadding(false);
+
+        accordion.add("General information", generalInformation);
+
+        Span street = new Span("4027 Amber Lake Canyon");
+        Span zipCode = new Span("72333-5884 Cozy Nook");
+        Span city = new Span("Arkansas");
+
+        VerticalLayout billingAddressLayout = new VerticalLayout();
+        billingAddressLayout.setSpacing(false);
+        billingAddressLayout.setPadding(false);
+        billingAddressLayout.add(street, zipCode, city);
+        accordion.add("Billing address", billingAddressLayout);
+
+        Span cardBrand = new Span("Mastercard");
+        Span cardNumber = new Span("1234 5678 9012 3456");
+        Span expiryDate = new Span("Expires 06/21");
+
+        VerticalLayout paymentLayout = new VerticalLayout();
+        paymentLayout.setSpacing(false);
+        paymentLayout.setPadding(false);
+        paymentLayout.add(cardBrand, cardNumber, expiryDate);
+        accordion.add("Payment", paymentLayout);
+
+        verticalDetailsLayout.add(accordion);
+
+        return verticalDetailsLayout;
     }
 
 }
