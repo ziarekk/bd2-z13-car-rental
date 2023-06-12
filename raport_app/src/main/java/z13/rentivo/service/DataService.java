@@ -157,4 +157,29 @@ public class DataService {
         return carsList;
     }
 
+    public double getAverageBillAmount(){
+        double sum = 0;
+        List<Bill> bills = getAllBills();
+        for (Bill bill: bills) {
+            sum += bill.getAmount();
+        }
+        return sum / bills.size();
+    }
+
+    public Long getPaidBillsCount() {
+        long count = 0;
+        for (Bill bill : getAllBills()) {
+            for (Payment payment : paymentRepository.findByBill(bill)) {
+                if (payment.getStatus().equals("przyjeta")) {
+                    count++;
+                    break;
+                }
+            }
+        }
+        return count;
+    }
+
+    public Long getNotPaidBillsCount(){
+        return getAllBills().size() - getPaidBillsCount();
+    }
 }
