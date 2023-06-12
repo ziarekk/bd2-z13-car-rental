@@ -182,4 +182,22 @@ public class DataService {
     public Long getNotPaidBillsCount(){
         return getAllBills().size() - getPaidBillsCount();
     }
+
+    public Client getMostActiveClient()
+    {
+        long maxRentals = 0;
+        Client bestClient = null;
+        for (Client client: clientRepository.findAll()) {
+            Long numRentals = rentalRepository.countByClient(client);
+            if(numRentals >= maxRentals){
+                maxRentals = numRentals;
+                bestClient = client;
+            }
+        }
+        return bestClient;
+    }
+
+    public Long countClientRentals(Client client){
+        return rentalRepository.countByClient(client);
+    }
 }

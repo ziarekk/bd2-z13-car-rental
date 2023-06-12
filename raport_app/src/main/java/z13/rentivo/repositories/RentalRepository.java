@@ -10,12 +10,18 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import z13.rentivo.entities.Client;
 import z13.rentivo.entities.Rental;
 
 @Transactional @Repository
 public interface RentalRepository extends JpaRepository<Rental, Long> {
     @Query
     List<Rental> findByRentalId(Long rentalId);
+
+    @Query
+    List<Rental> findByClient(Client client);
+
+    Long countByClient(Client client);
 
     @Modifying
     @Query(value = "INSERT INTO rentals (client_id, car_id, start_id) VALUES (:client_id, :car_id, :start_id)", nativeQuery = true)
