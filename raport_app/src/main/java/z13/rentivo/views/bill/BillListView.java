@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import z13.rentivo.entities.Bill;
 import z13.rentivo.entities.Rental;
 import z13.rentivo.service.DataService;
+import z13.rentivo.views.DataSelectView;
 import z13.rentivo.views.MainLayout;
 import z13.rentivo.views.rental.RentalListView;
 
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @PageTitle("List of all bills")
-@Route(value = "/bills", layout = MainLayout.class)
+@Route(value = "/bills", layout = DataSelectView.class)
 public class BillListView extends VerticalLayout {
     private final DataService dataService;
     BillFilter billFilter;

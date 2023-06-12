@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import z13.rentivo.entities.Segment;
 
 import z13.rentivo.service.DataService;
+import z13.rentivo.views.DataSelectView;
 import z13.rentivo.views.MainLayout;
 
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.function.Consumer;
 
 
 @PageTitle("List of all segments")
-@Route(value = "/segments", layout = MainLayout.class)
+@Route(value = "/segments", layout = DataSelectView.class)
 public class SegmentListView extends VerticalLayout {
     private final DataService dataService;
     Grid<Segment> grid = new Grid<>(Segment.class, false);
