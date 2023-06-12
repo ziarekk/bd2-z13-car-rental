@@ -15,6 +15,7 @@ import z13.rentivo.entities.DriverLicence;
 
 import z13.rentivo.entities.Rental;
 import z13.rentivo.service.DataService;
+import z13.rentivo.views.DataSelectView;
 import z13.rentivo.views.MainLayout;
 import z13.rentivo.views.rental.RentalListView;
 
@@ -23,7 +24,7 @@ import java.util.function.Consumer;
 
 
 @PageTitle("List of all driverLicences")
-@Route(value = "/driverLicences", layout = MainLayout.class)
+@Route(value = "/driverLicences", layout = DataSelectView.class)
 public class DriverLicenceListView extends VerticalLayout {
     private final DataService dataService;
     Grid<DriverLicence> grid = new Grid<>(DriverLicence.class, false);
