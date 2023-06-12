@@ -14,16 +14,18 @@ import com.vaadin.flow.router.RouteAlias;
 @PageTitle("Welcome to Rentivo")
 @RouteAlias(value = "", layout = MainLayout.class)
 public class WelcomeView extends VerticalLayout {
-    private H1 title;
-    private H3 description;
 
     public WelcomeView() {
         setId("hello-world-view");
 
-        H1 title = new H1("Welcome to Rentivo Admin App");
+//        H1 title = new H1("Welcome to Rentivo Admin App");
+//
+//        add(title);
 
-        add(title);
+        ChartComponent chart = new ChartComponent();
+        chart.setData(new double[]{10, 20, 30, 40, 50});
 
+        add(chart);
     }
 
 }
