@@ -29,9 +29,8 @@ public class RentService {
     private EntityManagerFactory emf;
 
     public RentService() {
-        emf = Persistence.createEntityManagerFactory("your-persistence-unit-name");
+        emf = Persistence.createEntityManagerFactory("rentivo");
     }
-
     
     public void rentCar(int clientId, int carId) {
         EntityManager em = emf.createEntityManager();
@@ -46,7 +45,7 @@ public class RentService {
     }
 
     public static void main(String[] args) {
-        RentalService rentalService = new RentalService();
+        RentService rentalService = new RentService();
         rentalService.rentCar(1, 1);
     }
 }
