@@ -1,4 +1,4 @@
-package z13.rentivo.views.comment;
+package z13.rentivo.views.list_views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
@@ -11,57 +11,60 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import z13.rentivo.entities.Comment;
+import z13.rentivo.entities.DriverLicence;
 
-import z13.rentivo.entities.Rental;
 import z13.rentivo.service.DataService;
 import z13.rentivo.views.DataSelectView;
-import z13.rentivo.views.MainLayout;
-import z13.rentivo.views.rental.RentalListView;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 
-@PageTitle("List of all comments")
-@Route(value = "/data/comments", layout = DataSelectView.class)
-public class CommentListView extends VerticalLayout {
+@PageTitle("List of all driverLicences")
+@Route(value = "/data/driverLicences", layout = DataSelectView.class)
+public class DriverLicenceListView extends VerticalLayout {
     private final DataService dataService;
-    Grid<Comment> grid = new Grid<>(Comment.class, false);
-    CommentFilter commentFilter;
+    Grid<DriverLicence> grid = new Grid<>(DriverLicence.class, false);
+    DriverLicenceFilter driverLicenceFilter;
 
     @Autowired
-    public CommentListView(DataService dataService) {
+    public DriverLicenceListView(DataService dataService) {
         this.dataService = dataService;
 
         addClassName("list-view");
         setSizeFull();
         configureGrid();
-        add(getToolbar(commentFilter), grid);
+        add(getToolbar(driverLicenceFilter), grid);
 
     }
 
     @Transactional
     void configureGrid() {
-        grid.addClassNames("comment-grid");
+        grid.addClassNames("driverLicence-grid");
         grid.setSizeFull();
 
-        grid.addColumn(Comment::getCommentId).setHeader("ID").setSortable(true);
-        grid.addColumn(Comment::getContent).setHeader("Content").setSortable(true);
-        grid.addColumn(Comment::getRental).setHeader("Rental").setSortable(true);
+        grid.addColumn(DriverLicence::getLicenceId).setHeader("ID").setSortable(true);
+        grid.addColumn(DriverLicence::getCategory).setHeader("Category").setSortable(true);
+        grid.addColumn(DriverLicence::getNumber).setHeader("Number").setSortable(true);
+        grid.addColumn(DriverLicence::getDateObtained).setHeader("Date obtained").setSortable(true);
+        grid.addColumn(DriverLicence::getExpirationDate).setHeader("Expiration date").setSortable(true);
+        grid.addColumn(DriverLicence::getClient).setHeader("Client").setSortable(true);
 
-        List<Comment> listOfComments = dataService.getAllComments();
-        GridListDataView<Comment> dataView = grid.setItems(listOfComments);
-        commentFilter = new CommentFilter(dataView);
+
+
+
+        List<DriverLicence> listOfDriverLicences = dataService.getAllDriverLicences();
+        GridListDataView<DriverLicence> dataView = grid.setItems(listOfDriverLicences);
+        driverLicenceFilter = new DriverLicenceFilter(dataView);
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
 
-    private static class CommentFilter {
-        private final GridListDataView<Comment> dataView;
+    private static class DriverLicenceFilter {
+        private final GridListDataView<DriverLicence> dataView;
         private String input;
 
-        public CommentFilter(GridListDataView<Comment> dataView) {
+        public DriverLicenceFilter(GridListDataView<DriverLicence> dataView) {
             this.dataView = dataView;
             this.dataView.addFilter(this::test);
         }
@@ -69,7 +72,7 @@ public class CommentListView extends VerticalLayout {
             this.input = input;
             this.dataView.refreshAll();
         }
-        public boolean test(Comment rental) {
+        public boolean test(DriverLicence rental) {
             return true;
         }
         private boolean matches(String value, String searchTerm) {
@@ -94,8 +97,8 @@ public class CommentListView extends VerticalLayout {
 
         return layout;
     }
-    private HorizontalLayout getToolbar(CommentFilter commentFilter) {
-        Component filterText = createFilter("Filter by name...", commentFilter::setlInput);
+    private HorizontalLayout getToolbar(DriverLicenceFilter driverLicenceFilter) {
+        Component filterText = createFilter("Filter by name...", driverLicenceFilter::setlInput);
 
         HorizontalLayout toolbar = new HorizontalLayout(filterText);
 

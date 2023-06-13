@@ -18,17 +18,17 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
 
 import z13.rentivo.service.DataService;
-import z13.rentivo.views.bill.BillListView;
-import z13.rentivo.views.car.CarListView;
-import z13.rentivo.views.comment.CommentListView;
-import z13.rentivo.views.licences.DriverLicenceListView;
-import z13.rentivo.views.payment.PaymentListView;
-import z13.rentivo.views.client.ClientListView;
-import z13.rentivo.views.rental.RentalListView;
-import z13.rentivo.views.discount.DiscountListView;
-import z13.rentivo.views.penalty.PenaltyListView;
-import z13.rentivo.views.location.LocationListView;
-import z13.rentivo.views.segment.SegmentListView;
+import z13.rentivo.views.list_views.BillListView;
+import z13.rentivo.views.list_views.CarListView;
+import z13.rentivo.views.list_views.CommentListView;
+import z13.rentivo.views.list_views.DriverLicenceListView;
+import z13.rentivo.views.list_views.PaymentListView;
+import z13.rentivo.views.list_views.ClientListView;
+import z13.rentivo.views.list_views.RentalListView;
+import z13.rentivo.views.list_views.DiscountListView;
+import z13.rentivo.views.list_views.PenaltyListView;
+import z13.rentivo.views.list_views.LocationListView;
+import z13.rentivo.views.list_views.SegmentListView;
 
 @Route(value = "/data")
 public class DataSelectView extends AppLayout{

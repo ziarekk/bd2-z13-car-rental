@@ -1,4 +1,4 @@
-package z13.rentivo.views.rental;
+package z13.rentivo.views.list_views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
@@ -13,7 +13,7 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import z13.rentivo.entities.Rental;
+import z13.rentivo.entities.Car;
 import z13.rentivo.service.DataService;
 import z13.rentivo.views.DataSelectView;
 import z13.rentivo.views.MainLayout;
@@ -22,43 +22,43 @@ import java.util.List;
 import java.util.function.Consumer;
 
 
-@PageTitle("List of all rentals")
-@Route(value = "/data/rentals", layout = DataSelectView.class)
-public class RentalListView extends VerticalLayout {
+@PageTitle("List of all cars")
+@Route(value = "/data/cars", layout = DataSelectView.class)
+public class CarListView extends VerticalLayout {
     private final DataService dataService;
-    RentalFilter rentalFilter;
-    Grid<Rental> grid = new Grid<>(Rental.class, false);
+    CarFilter carFilter;
+    Grid<Car> grid = new Grid<>(Car.class, false);
 
     @Autowired
-    public RentalListView(DataService dataService) {
+    public CarListView(DataService dataService) {
         this.dataService = dataService;
 
         addClassName("list-view");
         setSizeFull();
         configureGrid();
 
-        add(getToolbar(rentalFilter), grid);
+        add(getToolbar(carFilter), grid);
     }
 
     @Transactional
     void configureGrid() {
-        grid.addClassNames("rental-grid");
+        grid.addClassNames("cars-grid");
         grid.setSizeFull();
 
-        grid.addColumn(Rental::getRentalId).setHeader("ID").setSortable(true);
-        grid.addColumn(rental -> rental.getRentalStart().getStartTime()).setHeader("Start Date").setSortable(true);
-        grid.addColumn(rental -> rental.getRentalEnd() == null ? "" : rental.getRentalEnd().getEndTime()).setHeader("End Date").setSortable(true);
-        grid.addColumn(rental -> rental.getRentalEnd() == null ? "" : rental.getRentalEnd().getEndMileage() -
-                rental.getRentalStart().getStartMileage()).setHeader("Mileage").setSortable(true);
-//        grid.addColumn(Rental::getCar).setHeader("Car").setSortable(true);
-//        grid.addColumn(Rental::getClient).setHeader("Client").setSortable(true);
+        grid.addColumn(Car::getCarId).setHeader("ID").setSortable(true);
+        grid.addColumn(Car::getBrand).setHeader("Brand").setSortable(true);
+        grid.addColumn(Car::getModel).setHeader("Model").setSortable(true);
+        grid.addColumn(Car::getProductionYear).setHeader("Production Year").setSortable(true);
+        grid.addColumn(Car::getFuelType).setHeader("Fuel Type").setSortable(true);
+        grid.addColumn(Car::getIsAvailableForRent).setHeader("Availability").setSortable(true);
 
-        List<Rental> listOfRentals = dataService.getAllRentals();
-        GridListDataView<Rental> dataView = grid.setItems(listOfRentals);
+        List<Car> listOfCars = dataService.getAllCars();
+        GridListDataView<Car> dataView = grid.setItems(listOfCars);
 
-        rentalFilter = new RentalFilter(dataView);
+        carFilter = new CarFilter(dataView);
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
+
     }
 
     private static Component createFilter(String labelText,
@@ -78,11 +78,11 @@ public class RentalListView extends VerticalLayout {
         return layout;
     }
 
-    private static class RentalFilter {
-        private final GridListDataView<Rental> dataView;
+    private static class CarFilter {
+        private final GridListDataView<Car> dataView;
         private String input;
 
-        public RentalFilter(GridListDataView<Rental> dataView) {
+        public CarFilter(GridListDataView<Car> dataView) {
             this.dataView = dataView;
             this.dataView.addFilter(this::test);
         }
@@ -90,10 +90,11 @@ public class RentalListView extends VerticalLayout {
             this.input = input;
             this.dataView.refreshAll();
         }
-        public boolean test(Rental rental) {
-            boolean matchesStart = matches(rental.getRentalStart().toString(), input);
-//            boolean matchesEnd = matches(rental.getRentalEnd().toString(), input);
-            return matchesStart;
+        public boolean test(Car car) {
+            boolean matchesBrand = matches(car.getBrand(), input);
+            boolean matchesModel = matches(car.getModel(), input);
+            boolean matchesFuelType = matches(car.getFuelType(), input);
+            return matchesBrand || matchesModel || matchesFuelType;
         }
         private boolean matches(String value, String searchTerm) {
             return searchTerm == null || searchTerm.isEmpty()
@@ -101,10 +102,19 @@ public class RentalListView extends VerticalLayout {
         }
     }
 
-    private HorizontalLayout getToolbar(RentalFilter rentalFilter) {
-        Component filterText = createFilter("Filter by name...", rentalFilter::setlInput);
+    private HorizontalLayout getToolbar(CarFilter carFilter) {
+        Component filterText = createFilter("Filter by name...", carFilter::setlInput);
+
+//        Button addAnimalButton = new Button("Add car");
+//        addAnimalButton.addClickListener(click ->{
+//            addAnimalButton.getUI().ifPresent(ui ->
+//                    ui.navigate(CarFormView.class));
+//
+//            Notification.show("Switching tab to animal form.");
+//        });
 
         HorizontalLayout toolbar = new HorizontalLayout(filterText);
+
 
         toolbar.addClassName("toolbar");
         return toolbar;
