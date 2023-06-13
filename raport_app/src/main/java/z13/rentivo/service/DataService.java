@@ -200,4 +200,6 @@ public class DataService {
     public Long countClientRentals(Client client){
         return rentalRepository.countByClient(client);
     }
+
+    public Long countComments(){return commentRepository.count();}
 }
