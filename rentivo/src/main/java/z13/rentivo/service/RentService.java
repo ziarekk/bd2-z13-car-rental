@@ -32,21 +32,24 @@ public class RentService {
         this.entityManager = entityManager;
     }
 
-    public void rentCar(Integer clientId, Integer carId) {
+    public boolean rentCar(Integer clientId, Integer carId) {
+        boolean result = false;
         try {
             StoredProcedureQuery query = entityManager.createStoredProcedureQuery("rent_car");
             query.registerStoredProcedureParameter("p_client_id", Integer.class, ParameterMode.IN);
             query.registerStoredProcedureParameter("p_car_id", Integer.class, ParameterMode.IN);
             query.setParameter("p_client_id", clientId);
             query.setParameter("p_car_id", carId);
-            boolean result = query.execute();
+            result = query.execute();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         } finally {
             entityManager.close();
+            return result;
         }
     }
+
 }
 
 

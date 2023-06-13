@@ -1,11 +1,17 @@
 package z13.rentivo.views.list;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.accordion.Accordion;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -13,12 +19,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
+import z13.rentivo.entities.Car;
+import z13.rentivo.entities.Client;
 import z13.rentivo.entities.Rental;
+import z13.rentivo.entities.User;
 import z13.rentivo.service.DataService;
 import z13.rentivo.views.MainLayout;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -31,6 +43,7 @@ public class MyRentalsListView extends VerticalLayout {
     private final TextField textField;
     private RentalFilter rentalFilter;
 
+    Dialog detailsDialog = new Dialog();
     Grid<Rental> grid = new Grid<>(Rental.class, false);
 
     @Autowired
@@ -40,6 +53,7 @@ public class MyRentalsListView extends VerticalLayout {
 
         addClassName("list-view");
         setSizeFull();
+        configureDialog();
         configureGrid();
 
         add(getToolbar(dataService), grid);
@@ -51,15 +65,20 @@ public class MyRentalsListView extends VerticalLayout {
         grid.setSizeFull();
 
 
-      //  grid.addColumn(Rental::getRentalId).setHeader("Rental ID").setSortable(true);
+
         grid.addColumn(Rental -> Rental.getCar().getBrand()).setHeader("Car Brand").setSortable(true);
         grid.addColumn(Rental -> Rental.getCar().getModel()).setHeader("Car Model").setSortable(true);
         grid.addColumn(Rental -> Rental.getCar().getCarId()).setHeader("Car ID").setSortable(true);
-    //    grid.addColumn(Rental -> Rental.getClient().getName()).setHeader("Client Name").setSortable(true);
-    //    grid.addColumn(Rental -> Rental.getClient().getSurname()).setHeader("Client Surname").setSortable(true);
-    //    grid.addColumn(Rental -> Rental.getClient().getClientId()).setHeader("Client ID").setSortable(true);
-        grid.addColumn(Rental -> Rental.getRentalStart().getStartTime()).setHeader("Start Time").setSortable(true);
-        grid.addColumn(Rental -> Rental.getRentalEnd().getEndTime()).setHeader("End Time").setSortable(true);
+        grid.addColumn(this::getStartTime).setHeader("Start Time").setSortable(true);
+        grid.addColumn(this::getEndTime).setHeader("End Time").setSortable(true);
+        grid.addColumn(new ComponentRenderer<>(rental -> {
+            return new Button("Show details", e -> {
+                updateDetailsDialog(rental);
+                detailsDialog.open();
+            } );
+
+        })).setHeader("Show details");
+
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<Rental> listOfRentals = dataService.getRentalsByUser(authentication.getName());
@@ -130,6 +149,132 @@ public class MyRentalsListView extends VerticalLayout {
         return toolbar;
     }
 
+    private String getEndTime(Rental rental){
 
+        if(rental.getRentalEnd() == null){
+            return "Not ended";
+        } else {
+            DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy hh:mm");
+            String strDate = dateFormat.format(rental.getRentalEnd().getEndTime());
+            return  strDate;
+        }
+    }
+
+    private String getStartTime(Rental rental){
+
+        if(rental.getRentalStart() == null){
+            return "Not started";
+        } else {
+            DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy hh:mm");
+            String strDate = dateFormat.format(rental.getRentalStart().getStartTime());
+            return  strDate;
+        }
+    }
+
+    void configureDialog() {
+        detailsDialog.setHeaderTitle("Rent details");
+
+        detailsDialog.setMinWidth("680px");
+
+//        VerticalLayout detailsDialogLayout = getDetailsLayout(dataService.getAllRentals().get(0));
+//        detailsDialog.add(detailsDialogLayout);
+//        Rental rental = dataService.getAllRentals().get(0);
+//        Button rentButton = getEndButton(rental);
+
+        detailsDialog.getFooter().add(new Button("Close", e -> detailsDialog.close()));
+    }
+
+    private void updateDetailsDialog(Rental rental) {
+        detailsDialog.removeAll();
+        detailsDialog.getFooter().removeAll();
+
+        detailsDialog.setHeaderTitle("Details of the rental: " + rental.getRentalId());
+        detailsDialog.add(getDetailsLayout(rental));
+
+        if (rental.getRentalEnd() == null ){
+            Button endButton = getEndButton(rental);
+            detailsDialog.getFooter().add(endButton);
+        }
+
+        detailsDialog.getFooter().add(new Button("Close", e -> detailsDialog.close()));
+
+    }
+
+    private VerticalLayout getDetailsLayout(Rental rental) {
+        VerticalLayout verticalDetailsLayout = new VerticalLayout();
+
+        Accordion accordion = new Accordion();
+        Car car = rental.getCar();
+        Span brand = new Span(car.getBrand() + " " + car.getModel());
+        Span yearOP = new Span("Year of production: " + car.getProductionYear());
+        Span trans = new Span("Transmission: " + car.getTransmission());
+        Span fuelCap= new Span("Fuel Type: "+ car.getFuelType() + ",  Fuel Capacity: " + car.getFuelCapacity());
+        Span seats = new Span("Seats: " + car.getSeats());
+        Span mileage = new Span("Mileage: " + car.getMileage());
+        Span regNumber = new Span("Registration number: " + car.getRegistrationNumber());
+
+        VerticalLayout carInfo = new VerticalLayout(brand,
+                yearOP, trans, regNumber);
+        carInfo.setSpacing(false);
+        carInfo.setPadding(false);
+        accordion.add("Car information", carInfo);
+
+        Span status = new Span(getStatus(rental));
+        Span time = new Span("Time started: " + getStartTime(rental) + "  Time ended: " + getEndTime(rental));
+        Span bill = new Span("Amount to pay: " + "Payment status: ");
+
+        VerticalLayout paymentInfo = new VerticalLayout();
+        paymentInfo.setSpacing(false);
+        paymentInfo.setPadding(false);
+
+        paymentInfo.add(status, time, bill);
+        accordion.add("Rental information", paymentInfo);
+
+        verticalDetailsLayout.add(accordion);
+
+        return verticalDetailsLayout;
+    }
+
+    private Button getEndButton(Rental rental){
+
+        Button endRentalButton = new Button("End the rental");
+        endRentalButton.addClickListener(
+                e -> {
+                    boolean result = rentService.endRental(rental.getRentalId().intValue());
+                    detailsDialog.close();
+                    if (result){
+                        showMessage("Your rent is ended." ,
+                                "You just finished a rent of  " + rental.getCar().getBrand() + " " + rental.getCar().getModel()+ ". Thank you!");
+                    } else{
+                        showMessage("Whoops, something went wrong.." ,
+                                "There was an error while closing your rent. Please, try again later.");
+                    }
+                }
+        );
+        return endRentalButton;
+    }
+
+    private void showMessage( String title, String message){
+        Dialog messageBox = new Dialog();
+        messageBox.setHeaderTitle(title);
+
+        messageBox.setMinWidth("680px");
+        H2 msgH2 = new H2(message);
+
+        VerticalLayout layoutMSG = new VerticalLayout(msgH2);
+
+        messageBox.add(layoutMSG);
+        messageBox.getFooter().add(new Button("Close", e -> messageBox.close()));
+
+        messageBox.open();
+    }
+
+    private String getStatus(Rental rental){
+        if (rental.getRentalEnd() == null){
+            return "Rental is still active.";
+        } else{
+            return "Rental is over.";
+        }
+    }
 
 }

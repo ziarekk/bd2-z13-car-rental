@@ -82,6 +82,8 @@ public class CarsListView extends VerticalLayout {
         configureGrid();
 
         add(getToolbar(dataService), grid);
+
+        availableCX.setValue(true);
     }
 
     @Transactional
@@ -459,8 +461,13 @@ public class CarsListView extends VerticalLayout {
         detailsDialog.setHeaderTitle("Details of the car");
         detailsDialog.add(getDetailsLayout(car));
 
+        if (car.getIsAvailableForRent()){
         Button rentButton = getRentButton(car);
-        detailsDialog.getFooter().add(rentButton, new Button("Close", e -> detailsDialog.close()));
+        detailsDialog.getFooter().add(rentButton);
+        }
+
+        detailsDialog.getFooter().add(new Button("Close", e -> detailsDialog.close()));
+
     }
 
     private VerticalLayout getDetailsLayout(Car car) {
@@ -483,7 +490,7 @@ public class CarsListView extends VerticalLayout {
         accordion.add("Technical information", technicalInformation);
 
 
-        Span location = new Span("Location: " + car.getLongitude() + car.getLatitude());
+        Span location = new Span("Location: " + car.getLongitude() + " - " + car.getLatitude());
         Span regNumber = new Span("Registration number: " + car.getRegistrationNumber());
         Span fuelStatus = new Span("Level of fuel: " + car.getFuelCapacity() + "%");
 
@@ -516,13 +523,21 @@ public class CarsListView extends VerticalLayout {
         Button rentButton = new Button("Rent this car");
         rentButton.addClickListener(
             e -> {
-                if (clientsList.isEmpty()){
+                if (clientsList.isEmpty() || !clientsList.get(0).getIsVerified()){
+                    detailsDialog.close();
                     showMessage("This action is forbidden!",
             "You need to be verified client to rent a car. Please, be sure to verify your account and try again");
+
                 } else{
-                    rentService.rentCar(clientsList.get(0).getClientId().intValue(), car.getCarId().intValue());
-                    showMessage("You just rent a car!",
-            "You just successfully rented a " + car.getBrand() + " " + car.getModel()+ ". Enjoy your rent!");
+                    boolean result = rentService.rentCar(clientsList.get(0).getClientId().intValue(), car.getCarId().intValue());
+                    detailsDialog.close();
+                    if (result){
+                        showMessage("You just rent a car with result: " ,
+                "You just successfully rented a " + car.getBrand() + " " + car.getModel()+ ". Enjoy your rent!");
+                    } else{
+                        showMessage("Whoops, something went wrong.." ,
+                        "There was an error while renting a " + car.getBrand() + " " + car.getModel()+ ". Please, try again later.");
+                    }
                 }
             }
         );
@@ -540,7 +555,10 @@ public class CarsListView extends VerticalLayout {
 
         messageBox.add(layoutMSG);
         messageBox.getFooter().add(new Button("Close", e -> messageBox.close()));
+
         messageBox.open();
+        availableCX.clear();
+        carFilter.setAvaialable(false);
     }
 
 }
