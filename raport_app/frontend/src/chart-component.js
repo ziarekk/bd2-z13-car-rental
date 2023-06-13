@@ -6,7 +6,7 @@ class ChartComponent extends LitElement {
         :host {
             display: block;
             width: 100%;
-            height: 600px;
+            height: 300px;
         }
     `;
 

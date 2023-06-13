@@ -3,6 +3,7 @@ package z13.rentivo.components;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.littemplate.LitTemplate;
@@ -91,6 +92,15 @@ public class ChartComponent extends LitTemplate {
         setChartType(ChartType.BAR);
     }
 
+    public void setMaxWidth(float value, Unit unit)
+    {
+        this.chartContainer.setMaxWidth(value, unit);
+    }
+
+    public void setMinHeight(float value, Unit unit)
+    {
+        this.chartContainer.setMinHeight(value, unit);
+    }
     @ClientCallable
     private void chartRendered() {
         // Wywoływane, gdy wykres jest gotowy do renderowania

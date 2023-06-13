@@ -2,14 +2,15 @@ package z13.rentivo.service;
 
 
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import z13.rentivo.querries.IFuelTypeCount;
+import z13.rentivo.querries.IProductionYearCount;
+import z13.rentivo.querries.ISegmentsCount;
 import z13.rentivo.repositories.*;
 import z13.rentivo.entities.*;
 
@@ -226,5 +227,37 @@ public class DataService {
             sumDiscounts += discountAmount;
         }
         return sumDiscounts / discounts.size();
+    }
+
+    public Long countAvailableCars(){ return carRepository.countCarsByIsAvailableForRent(true);}
+
+    public Long countNotAvailableCars(){ return carRepository.countCarsByIsAvailableForRent(false);}
+
+    public Map<String, Long> countCarsForFuelTypes(){
+        Map<String, Long> result = new HashMap<>();
+        List<IFuelTypeCount> data =  carRepository.countCarsByFuelType();
+        for (IFuelTypeCount row: data) {
+            result.put(row.getFuelType(), row.getTotalCount());
+        }
+        return result;
+    }
+
+    public Map<String, Long> countCarsForProductionYear() {
+        Map<String, Long> result = new LinkedHashMap<>();
+        List<IProductionYearCount> data = carRepository.countCarsByProductionYear();
+        for (IProductionYearCount row: data) {
+            result.put(row.getProductionYear().toString(), row.getTotalCount());
+        }
+        System.out.println(result);
+        return result;
+    }
+
+    public Map<String, Long> countCarsForSegments(){
+        Map<String, Long> result = new HashMap<>();
+        List<ISegmentsCount> data = carRepository.countCarsBySegment();
+        for (ISegmentsCount row: data) {
+            result.put(row.getSegmentName(), row.getTotalCount());
+        }
+        return result;
     }
 }
