@@ -1,9 +1,11 @@
 package z13.rentivo.service;
 
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -157,4 +159,72 @@ public class DataService {
         return carsList;
     }
 
+    public double getAverageBillAmount(){
+        double sum = 0;
+        List<Bill> bills = getAllBills();
+        for (Bill bill: bills) {
+            sum += bill.getAmount();
+        }
+        return sum / bills.size();
+    }
+
+    public Long getPaidBillsCount() {
+        long count = 0;
+        for (Bill bill : getAllBills()) {
+            for (Payment payment : paymentRepository.findByBill(bill)) {
+                if (payment.getStatus().equals("przyjeta")) {
+                    count++;
+                    break;
+                }
+            }
+        }
+        return count;
+    }
+
+    public Long getNotPaidBillsCount(){
+        return getAllBills().size() - getPaidBillsCount();
+    }
+
+    public Client getMostActiveClient()
+    {
+        long maxRentals = 0;
+        Client bestClient = null;
+        for (Client client: clientRepository.findAll()) {
+            Long numRentals = rentalRepository.countByClient(client);
+            if(numRentals >= maxRentals){
+                maxRentals = numRentals;
+                bestClient = client;
+            }
+        }
+        return bestClient;
+    }
+
+    public Long countClientRentals(Client client){
+        return rentalRepository.countByClient(client);
+    }
+
+    public Long countComments(){return commentRepository.count();}
+
+
+    public double calculateRentalAmount(Rental rental)
+    {
+        RentalStart start = rental.getRentalStart();
+        RentalEnd end = rental.getRentalEnd();
+        Segment segment = rental.getCar().getSegment();
+        float mileage = end.getEndMileage() - start.getStartMileage();
+
+        long diffMilliseconds = end.getEndTime().getTime() - start.getStartTime().getTime();
+        long diffHours = TimeUnit.MILLISECONDS.toHours(diffMilliseconds);
+        return  segment.getRentalFee() + segment.getHourRate() * diffHours + segment.getKmRate() * mileage;
+    }
+    public Double averageDiscountAmount() {
+        Double sumDiscounts = 0.0;
+        List<Discount> discounts = discountRepository.findAll();
+        for (Discount discount : discounts) {
+            Rental rental = rentalRepository.findByRentalId(discount.getRental().getRentalId()).get(0);
+            Double discountAmount = calculateRentalAmount(rental) * discount.getPercent() / 100;
+            sumDiscounts += discountAmount;
+        }
+        return sumDiscounts / discounts.size();
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import z13.rentivo.entities.Discount;
+import z13.rentivo.entities.Rental;
 
 @Transactional @Repository
 public interface DiscountRepository extends JpaRepository<Discount, Long> {
@@ -22,6 +23,7 @@ public interface DiscountRepository extends JpaRepository<Discount, Long> {
 
     @Query
     List<Discount> findByDescription(String description);
+
 
     @Modifying
     @Query(value = "INSERT INTO discount (percent, description, rental_id) VALUES (:percent, :description, :rental_id)", nativeQuery = true)
