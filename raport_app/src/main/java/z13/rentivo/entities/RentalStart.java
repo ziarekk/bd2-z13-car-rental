@@ -26,7 +26,7 @@ public class RentalStart {
     @Column(name = "start_mileage")
     private Float startMileage;
 
-    @OneToOne(optional = true)
-    @JoinColumn(name = "rental_id", referencedColumnName = "rental_id")
-    private Rental rental;
+//    @OneToOne(optional = true)
+//    @JoinColumn(name = "rental_id", referencedColumnName = "rental_id")
+//    private Rental rental;
 }

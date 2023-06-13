@@ -4,6 +4,7 @@ package z13.rentivo.entities;
 import javax.persistence.*;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 @Data @Entity @NoArgsConstructor @AllArgsConstructor
 @Table(name = "rentals")

@@ -47,8 +47,8 @@ public class RentalListView extends VerticalLayout {
 
         grid.addColumn(Rental::getRentalId).setHeader("ID").setSortable(true);
         grid.addColumn(rental -> rental.getRentalStart().getStartTime()).setHeader("Start Date").setSortable(true);
-        grid.addColumn(rental -> rental.getRentalEnd().getEndTime()).setHeader("End Date").setSortable(true);
-        grid.addColumn(rental -> rental.getRentalEnd().getEndMileage() -
+        grid.addColumn(rental -> rental.getRentalEnd() == null ? "" : rental.getRentalEnd().getEndTime()).setHeader("End Date").setSortable(true);
+        grid.addColumn(rental -> rental.getRentalEnd() == null ? "" : rental.getRentalEnd().getEndMileage() -
                 rental.getRentalStart().getStartMileage()).setHeader("Mileage").setSortable(true);
 //        grid.addColumn(Rental::getCar).setHeader("Car").setSortable(true);
 //        grid.addColumn(Rental::getClient).setHeader("Client").setSortable(true);
@@ -92,8 +92,8 @@ public class RentalListView extends VerticalLayout {
         }
         public boolean test(Rental rental) {
             boolean matchesStart = matches(rental.getRentalStart().toString(), input);
-            boolean matchesEnd = matches(rental.getRentalEnd().toString(), input);
-            return matchesStart || matchesEnd;
+//            boolean matchesEnd = matches(rental.getRentalEnd().toString(), input);
+            return matchesStart;
         }
         private boolean matches(String value, String searchTerm) {
             return searchTerm == null || searchTerm.isEmpty()
