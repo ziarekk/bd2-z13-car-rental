@@ -165,13 +165,13 @@ VALUES
 
 
 -- Dane dla rachunku i płatności
-INSERT INTO bills (amount, date_due)
+INSERT INTO bills (amount, date_due, rental_id)
 VALUES
-    (100.50, '2023-05-10'),
-    (80.25, '2023-05-11'),
-    (120.75, '2023-05-12'),
-    (150.00, '2023-05-13'),
-    (90.50, '2023-05-14');
+    (100.50, '2023-05-10', 1),
+    (80.25, '2023-05-11', 2),
+    (120.75, '2023-05-12', 3),
+    (150.00, '2023-05-13', 4),
+    (90.50, '2023-05-14', 5);
 
 INSERT INTO payments (status, bill_id, type_id)
 VALUES
