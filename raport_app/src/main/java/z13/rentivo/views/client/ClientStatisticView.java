@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @PageTitle("Clients statistics")
-@Route(value = "/clients/stats", layout = DataSelectView.class)
+@Route(value = "/stats/clients", layout = DataSelectView.class)
 public class ClientStatisticView extends VerticalLayout {
     DataService dataService;
     Map<String, Object> stats = new HashMap<>();

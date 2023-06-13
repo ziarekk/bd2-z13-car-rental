@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @PageTitle("List of all bills")
-@Route(value = "/bills", layout = DataSelectView.class)
+@Route(value = "/data/bills", layout = DataSelectView.class)
 public class BillListView extends VerticalLayout {
     private final DataService dataService;
     BillFilter billFilter;

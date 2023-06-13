@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @PageTitle("Discounts statistics")
-@Route(value = "/discounts/stats", layout = DataSelectView.class)
+@Route(value = "/stats/discounts", layout = DataSelectView.class)
 public class DiscountStatisticView extends VerticalLayout {
     DataService dataService;
     Map<String, Object> stats = new HashMap<>();

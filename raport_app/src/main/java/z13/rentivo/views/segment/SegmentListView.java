@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 
 
 @PageTitle("List of all segments")
-@Route(value = "/segments", layout = DataSelectView.class)
+@Route(value = "/data/segments", layout = DataSelectView.class)
 public class SegmentListView extends VerticalLayout {
     private final DataService dataService;
     Grid<Segment> grid = new Grid<>(Segment.class, false);

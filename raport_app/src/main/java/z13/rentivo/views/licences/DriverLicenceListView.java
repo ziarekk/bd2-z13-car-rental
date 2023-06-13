@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 
 
 @PageTitle("List of all driverLicences")
-@Route(value = "/driverLicences", layout = DataSelectView.class)
+@Route(value = "/data/driverLicences", layout = DataSelectView.class)
 public class DriverLicenceListView extends VerticalLayout {
     private final DataService dataService;
     Grid<DriverLicence> grid = new Grid<>(DriverLicence.class, false);

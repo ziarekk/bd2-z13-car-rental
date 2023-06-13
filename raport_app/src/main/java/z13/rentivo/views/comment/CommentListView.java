@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 
 
 @PageTitle("List of all comments")
-@Route(value = "/comments", layout = DataSelectView.class)
+@Route(value = "/data/comments", layout = DataSelectView.class)
 public class CommentListView extends VerticalLayout {
     private final DataService dataService;
     Grid<Comment> grid = new Grid<>(Comment.class, false);

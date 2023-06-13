@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @PageTitle("Comments statistics")
-@Route(value = "/comments/stats", layout = DataSelectView.class)
+@Route(value = "/stats/comments", layout = DataSelectView.class)
 public class CommentStatisticView extends VerticalLayout {
     DataService dataService;
     Map<String, Object> stats = new HashMap<>();
