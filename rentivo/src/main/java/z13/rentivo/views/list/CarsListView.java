@@ -9,6 +9,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -516,14 +517,30 @@ public class CarsListView extends VerticalLayout {
         rentButton.addClickListener(
             e -> {
                 if (clientsList.isEmpty()){
-                    // wyslij komunikat ze nie da sie wypozyczyc
-                    Integer int2 = 2;
+                    showMessage("This action is forbidden!",
+            "You need to be verified client to rent a car. Please, be sure to verify your account and try again");
                 } else{
                     rentService.rentCar(car.getCarId(), clientsList.get(0).getClientId());
+                    showMessage("You just rent a car!",
+            "You just successfully rented a " + car.getBrand() + " " + car.getModel()+ ". Enjoy your rent!");
                 }
             }
         );
         return rentButton;
+    }
+
+    private void showMessage( String title, String message){
+        Dialog messageBox = new Dialog();
+        messageBox.setHeaderTitle(title);
+
+        messageBox.setMinWidth("680px");
+        H2 msgH2 = new H2(message);
+
+        VerticalLayout layoutMSG = new VerticalLayout(msgH2);
+
+        messageBox.add(layoutMSG);
+        messageBox.getFooter().add(new Button("Close", e -> messageBox.close()));
+        messageBox.open();
     }
 
 }
