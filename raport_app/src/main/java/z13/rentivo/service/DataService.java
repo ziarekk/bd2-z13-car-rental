@@ -1,9 +1,11 @@
 package z13.rentivo.service;
 
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -202,4 +204,27 @@ public class DataService {
     }
 
     public Long countComments(){return commentRepository.count();}
+
+
+    public double calculateRentalAmount(Rental rental)
+    {
+        RentalStart start = rental.getRentalStart();
+        RentalEnd end = rental.getRentalEnd();
+        Segment segment = rental.getCar().getSegment();
+        float mileage = end.getEndMileage() - start.getStartMileage();
+
+        long diffMilliseconds = end.getEndTime().getTime() - start.getStartTime().getTime();
+        long diffHours = TimeUnit.MILLISECONDS.toHours(diffMilliseconds);
+        return  segment.getRentalFee() + segment.getHourRate() * diffHours + segment.getKmRate() * mileage;
+    }
+    public Double averageDiscountAmount() {
+        Double sumDiscounts = 0.0;
+        List<Discount> discounts = discountRepository.findAll();
+        for (Discount discount : discounts) {
+            Rental rental = rentalRepository.findByRentalId(discount.getRental().getRentalId()).get(0);
+            Double discountAmount = calculateRentalAmount(rental) * discount.getPercent() / 100;
+            sumDiscounts += discountAmount;
+        }
+        return sumDiscounts / discounts.size();
+    }
 }

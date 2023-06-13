@@ -23,6 +23,7 @@ public interface RentalRepository extends JpaRepository<Rental, Long> {
 
     Long countByClient(Client client);
 
+
     @Modifying
     @Query(value = "INSERT INTO rentals (client_id, car_id, start_id) VALUES (:client_id, :car_id, :start_id)", nativeQuery = true)
     void insertRental(@Param("client_id") Long clientId, 
