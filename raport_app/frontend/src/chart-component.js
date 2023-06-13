@@ -6,12 +6,17 @@ class ChartComponent extends LitElement {
         :host {
             display: block;
             width: 100%;
-            height: 300px;
+            height: 600px;
         }
     `;
 
     static properties = {
-        data: { type: Array },
+        datasets: { type: Array },
+        labels: { type: Array },
+        title: { type: String },
+        xAxisLabel: { type: String },
+        yAxisLabel: { type: String },
+        chartType: { type: String },
         chart: { type: Object },
     };
 
@@ -28,20 +33,34 @@ class ChartComponent extends LitElement {
         const ctx = canvas.getContext('2d');
 
         this.chart = new Chart(ctx, {
-            type: 'bar',
+            type: this.chartType,
             data: {
-                labels: ['A', 'B', 'C', 'D', 'E'],
-                datasets: [{
-                    label: 'Data',
-                    data: this.data,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
+                labels: this.labels,
+                datasets: this.datasets
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: this.xAxisLabel
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: this.yAxisLabel
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: this.title
+                    }
+                }
             }
         });
 
@@ -51,8 +70,28 @@ class ChartComponent extends LitElement {
     }
 
     updated(changedProperties) {
-        if (changedProperties.has('data') && this.chart) {
-            this.chart.data.datasets[0].data = this.data;
+        if (changedProperties.has('datasets') && this.chart) {
+            this.chart.data.datasets = this.datasets;
+            this.chart.update();
+        }
+        if (changedProperties.has('labels') && this.chart) {
+            this.chart.data.labels = this.labels;
+            this.chart.update();
+        }
+        if (changedProperties.has('title') && this.chart) {
+            this.chart.options.plugins.title.text = this.title;
+            this.chart.update();
+        }
+        if (changedProperties.has('xAxisLabel') && this.chart) {
+            this.chart.options.scales.x.title.text = this.xAxisLabel;
+            this.chart.update();
+        }
+        if (changedProperties.has('yAxisLabel') && this.chart) {
+            this.chart.options.scales.y.title.text = this.yAxisLabel;
+            this.chart.update();
+        }
+        if (changedProperties.has('chartType') && this.chart) {
+            this.chart.config.type = this.chartType;
             this.chart.update();
         }
     }
