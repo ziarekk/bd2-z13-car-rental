@@ -8,9 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import z13.rentivo.querries.IFuelTypeCount;
-import z13.rentivo.querries.IProductionYearCount;
-import z13.rentivo.querries.ISegmentsCount;
+import z13.rentivo.querries.*;
 import z13.rentivo.repositories.*;
 import z13.rentivo.entities.*;
 
@@ -257,6 +255,35 @@ public class DataService {
         List<ISegmentsCount> data = carRepository.countCarsBySegment();
         for (ISegmentsCount row: data) {
             result.put(row.getSegmentName(), row.getTotalCount());
+        }
+        return result;
+    }
+
+    public Map<String, Long> getTenClientsWithMostRentals(){
+        Map<String, Long> result = new LinkedHashMap<>();
+        List<IClientsMostRentalsCount> data = clientRepository.getTenClientsWithMostRentals();
+        for(IClientsMostRentalsCount row: data){
+            String client = row.getName() + " " + row.getSurname();
+            result.put(client, row.getTotalCount());
+        }
+        return result;
+    }
+
+    public Map<String, Float> getFiveClientsWithHighestPenaltySum(){
+        Map<String, Float> result = new LinkedHashMap<>();
+        List<IClientsHighestPenaltySum> data = clientRepository.getFiveClientsWithHighestPenaltySum();
+        for (IClientsHighestPenaltySum row: data) {
+            String client = row.getName() + " " + row.getSurname();
+            result.put(client, row.getPenaltySum());
+        }
+        return result;
+    }
+
+    public Map<String, Long> countClientsByGenders(){
+        Map<String, Long> result = new LinkedHashMap<>();
+        List<IClientsGendersCount> data = clientRepository.countClientByGender();
+        for (IClientsGendersCount row: data) {
+            result.put(row.getGender(), row.getCount());
         }
         return result;
     }
