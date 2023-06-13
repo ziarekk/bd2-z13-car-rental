@@ -30,6 +30,7 @@ import com.vaadin.flow.router.RouterLink;
 
 import z13.rentivo.security.SecurityService;
 import z13.rentivo.service.DataService;
+import z13.rentivo.service.RentService;
 import z13.rentivo.views.form.CarFormView;
 import z13.rentivo.views.list.CarsListView;
 
@@ -38,6 +39,7 @@ import z13.rentivo.views.list.CarsListView;
 public class MainLayout extends AppLayout{
     private DataService dataService;
     private SecurityService securityService;
+    private RentService rentService;
 
     private Tabs getLinkTabs() {
         Tabs tabs = new Tabs();
@@ -66,10 +68,12 @@ public class MainLayout extends AppLayout{
 
     public MainLayout(
         @Autowired SecurityService securityService, 
-        @Autowired DataService dataService) {
+        @Autowired DataService dataService,
+        @Autowired RentService rentService) {
 
         this.securityService = securityService;
         this.dataService = dataService;
+        this.rentService = rentService;
 
         H1 title = new H1("Rentivo");
         title.addClickListener(click ->{
