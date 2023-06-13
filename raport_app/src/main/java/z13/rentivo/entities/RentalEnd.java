@@ -7,6 +7,7 @@ import javax.validation.constraints.Min;
 import java.util.Date;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 @Data @Entity @NoArgsConstructor @AllArgsConstructor
 @Table(name = "rental_end")
@@ -21,12 +22,11 @@ public class RentalEnd {
     @Column(name = "end_time")
     private Date endTime;
 
-    @NonNull
     @Min(value = 0)
     @Column(name = "end_mileage")
     private Float endMileage;
 
-    @OneToOne(optional = true)
-    @JoinColumn(name = "rental_id", referencedColumnName = "rental_id")
-    private Rental rental;
+//    @OneToOne(optional = false)
+//    @JoinColumn(name = "rental_id", referencedColumnName = "rental_id")
+//    private Rental rental;
 }
