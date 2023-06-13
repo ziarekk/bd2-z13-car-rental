@@ -1,12 +1,7 @@
 package z13.rentivo.service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.NamedStoredProcedureQuery;
-import javax.persistence.ParameterMode;
-import javax.persistence.Persistence;
-import javax.persistence.StoredProcedureParameter;
-import javax.persistence.StoredProcedureQuery;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -15,7 +10,6 @@ import javax.persistence.ParameterMode;
 import javax.persistence.Persistence;
 import javax.persistence.StoredProcedureParameter;
 import javax.persistence.StoredProcedureQuery;
-
 
 @NamedStoredProcedureQuery(
         name = "rentCar",
@@ -25,14 +19,16 @@ import javax.persistence.StoredProcedureQuery;
             @StoredProcedureParameter(name = "p_car_id", mode = ParameterMode.IN, type = Integer.class)
         }
     )
+@Service
 public class RentService {
     private EntityManagerFactory emf;
 
+    @Autowired
     public RentService() {
         emf = Persistence.createEntityManagerFactory("rentivo");
     }
     
-    public void rentCar(int clientId, int carId) {
+    public void rentCar(Long clientId, Long carId) {
         EntityManager em = emf.createEntityManager();
         try {
             StoredProcedureQuery query = em.createNamedStoredProcedureQuery("rentCar");
@@ -46,7 +42,7 @@ public class RentService {
 
     public static void main(String[] args) {
         RentService rentalService = new RentService();
-        rentalService.rentCar(1, 1);
+        rentalService.rentCar(1L, 1L);
     }
 }
 

@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
@@ -31,6 +32,7 @@ import z13.rentivo.entities.Client;
 import z13.rentivo.entities.Segment;
 import z13.rentivo.entities.User;
 import z13.rentivo.service.DataService;
+import z13.rentivo.service.RentService;
 import z13.rentivo.views.MainLayout;
 
 
@@ -45,6 +47,7 @@ import javax.annotation.security.PermitAll;
 @Route(value = "/carsList", layout = MainLayout.class)
 public class CarsListView extends VerticalLayout {
     private final DataService dataService;
+    private final RentService rentService;
     CarFilter carFilter;
     SegmentFilter segmentFilter;
     TransmissionFilter transmissionFilter;
@@ -55,19 +58,22 @@ public class CarsListView extends VerticalLayout {
     private final ComboBox<String> transmissionCB;
     private final ComboBox<String> fuelTypeCB;
     private final ComboBox<Integer> seatsCB;
+    private final Checkbox availableCX;
 
     Dialog detailsDialog = new Dialog();
     Grid<Car> grid = new Grid<>(Car.class, false);
 
     @Autowired
-    public CarsListView(DataService dataService) {
+    public CarsListView(DataService dataService, RentService rentService) {
         this.dataService = dataService;
+        this.rentService = rentService;
 
         textField = new TextField("Custom search");
         segmentCB = new ComboBox<Segment>("Car segment");
         transmissionCB = new ComboBox<String>("Transmission");
         fuelTypeCB = new ComboBox<String>("Fuel Type");
         seatsCB = new ComboBox<Integer>("Seats");
+        availableCX = new Checkbox();
 
         addClassName("list-view");
         setSizeFull();
@@ -118,19 +124,23 @@ public class CarsListView extends VerticalLayout {
 
     }
 
-
-
     private static class CarFilter {
         private final GridListDataView<Car> dataView;
         private String nameInput;
-
+        private Boolean isAvailable;
         public CarFilter(GridListDataView<Car> dataView) {
             this.dataView = dataView;
             this.dataView.addFilter(this::test);
+            this.dataView.addFilter(this::testAvailable);
 
         }
         public void setlInput(String nameInput) {
             this.nameInput = nameInput;
+            this.dataView.refreshAll();
+        }
+
+        public void setAvaialable(Boolean isAvailable){
+            this.isAvailable = isAvailable;
             this.dataView.refreshAll();
         }
         public boolean test(Car car) {
@@ -138,6 +148,10 @@ public class CarsListView extends VerticalLayout {
             boolean matchesModel = matches(car.getModel(), nameInput);
             boolean matchesFuelType = matches(car.getFuelType(), nameInput);
             return matchesBrand || matchesModel || matchesFuelType;
+        }
+
+        public boolean testAvailable(Car car){
+            return isAvailable == car.getIsAvailableForRent() || car.getIsAvailableForRent();
         }
 
         private boolean matches(String value, String searchTerm) {
@@ -348,6 +362,24 @@ public class CarsListView extends VerticalLayout {
         return layout;
     }
 
+    private static Component createAvailabilityFilter(String labelText,
+                                               Checkbox availableCX,
+                                               Consumer<Boolean> filterChangeConsumer) {
+
+        availableCX.setLabel(labelText);
+
+
+        availableCX.addValueChangeListener(
+                e -> filterChangeConsumer.accept(e.getValue()));
+
+
+        VerticalLayout layout = new VerticalLayout(availableCX);
+        layout.getThemeList().clear();
+        layout.getThemeList().add("spacing-xs");
+
+        return layout;
+    }
+
 
     private HorizontalLayout getToolbar(DataService dataService) {
 
@@ -356,6 +388,7 @@ public class CarsListView extends VerticalLayout {
         Component filterSeats = createSeatsFilter("Seats", seatsCB, seatsFilter::setSeats);
         Component filterFuelTypes= createFuelTypeFilter("Fuel Type", fuelTypeCB, fuelTypeFilter::setFuelType);
         Component filterTransmission = createTransmissionFilter("Transmission", transmissionCB, transmissionFilter::setTransmission);
+        Component filterAvailable = createAvailabilityFilter("Show only available cars", availableCX, carFilter::setAvaialable);
 
         Button clearButton = new Button();
         clearButton.setWidthFull();
@@ -367,12 +400,13 @@ public class CarsListView extends VerticalLayout {
             fuelTypeCB.clear();
             transmissionCB.clear();
             seatsCB.clear();
+            availableCX.clear();
         });
         clearButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         clearButton.getStyle().set("max-width", "100%");
 
         HorizontalLayout toolbar = new HorizontalLayout(filterText, filterSegment,filterSeats, filterFuelTypes,
-                    filterTransmission);
+                    filterTransmission, filterAvailable);
         toolbar.add(clearButton);
         toolbar.setAlignSelf(FlexComponent.Alignment.END, clearButton);
 
@@ -410,21 +444,22 @@ public class CarsListView extends VerticalLayout {
 
         detailsDialog.add(detailsDialogLayout);
 
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        User user = dataService.getUserByLogin(authentication.getName()).get(0);
-//        Client client = dataService.getClientByUserId(user.getUserId()).get(0);
-//        Car car = dataService.getAllCars().get(0);
-        Button rentButton = getRentButton(); //car, client);
+        Car car = dataService.getAllCars().get(0);
+
+        Button rentButton = getRentButton(car);
 
         detailsDialog.getFooter().add(rentButton, new Button("Close", e -> detailsDialog.close()));
     }
 
     private void updateDetailsDialog(Car car) {
         detailsDialog.removeAll();
-        List<Car> cars = dataService.getCarById(car);
+        detailsDialog.getFooter().removeAll();
 
         detailsDialog.setHeaderTitle("Details of the car");
-        detailsDialog.add(getDetailsLayout(cars.get(0)));
+        detailsDialog.add(getDetailsLayout(car));
+
+        Button rentButton = getRentButton(car);
+        detailsDialog.getFooter().add(rentButton, new Button("Close", e -> detailsDialog.close()));
     }
 
     private VerticalLayout getDetailsLayout(Car car) {
@@ -472,12 +507,22 @@ public class CarsListView extends VerticalLayout {
         return verticalDetailsLayout;
     }
 
-    private Button getRentButton(){
+    private Button getRentButton(Car car){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = dataService.getUserByLogin(authentication.getName()).get(0);
+        List<Client> clientsList = dataService.getClientByUserId(user.getUserId());
+
         Button rentButton = new Button("Rent this car");
-//        rentButton.addClickListener(
-//        e -> {
-//            Boolean isRented = rentalService.rentCar(car, client);
-//        } );
+        rentButton.addClickListener(
+            e -> {
+                if (clientsList.isEmpty()){
+                    // wyslij komunikat ze nie da sie wypozyczyc
+                    Integer int2 = 2;
+                } else{
+                    rentService.rentCar(car.getCarId(), clientsList.get(0).getClientId());
+                }
+            }
+        );
         return rentButton;
     }
 
