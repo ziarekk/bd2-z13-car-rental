@@ -22,10 +22,14 @@ import com.vaadin.flow.router.Route;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 import z13.rentivo.entities.Car;
+import z13.rentivo.entities.Client;
 import z13.rentivo.entities.Segment;
+import z13.rentivo.entities.User;
 import z13.rentivo.service.DataService;
 import z13.rentivo.views.MainLayout;
 
@@ -58,6 +62,7 @@ public class CarsListView extends VerticalLayout {
     @Autowired
     public CarsListView(DataService dataService) {
         this.dataService = dataService;
+
         textField = new TextField("Custom search");
         segmentCB = new ComboBox<Segment>("Car segment");
         transmissionCB = new ComboBox<String>("Transmission");
@@ -405,7 +410,13 @@ public class CarsListView extends VerticalLayout {
 
         detailsDialog.add(detailsDialogLayout);
 
-        detailsDialog.getFooter().add(new Button("Close", e -> detailsDialog.close()));
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        User user = dataService.getUserByLogin(authentication.getName()).get(0);
+//        Client client = dataService.getClientByUserId(user.getUserId()).get(0);
+//        Car car = dataService.getAllCars().get(0);
+        Button rentButton = getRentButton(); //car, client);
+
+        detailsDialog.getFooter().add(rentButton, new Button("Close", e -> detailsDialog.close()));
     }
 
     private void updateDetailsDialog(Car car) {
@@ -421,40 +432,53 @@ public class CarsListView extends VerticalLayout {
 
         Accordion accordion = new Accordion();
 
-        Span brand = new Span(car.getBrand());
-        Span model = new Span(car.getModel());
-        Span yearOP = new Span(String.valueOf(car.getProductionYear()));
+        Span brand = new Span(car.getBrand() + " " + car.getModel());
+        Span yearOP = new Span("Year of production: " + car.getProductionYear());
+        Span trans = new Span("Transmission: " + car.getTransmission());
+        Span fuelCap= new Span("Fuel Type: "+ car.getFuelType() + ",  Fuel Capacity: " + car.getFuelCapacity());
+        Span seats = new Span("Seats: " + car.getSeats());
+        Span mileage = new Span("Mileage: " + car.getMileage());
 
-        VerticalLayout generalInformation = new VerticalLayout(brand,
-                model, yearOP);
-        generalInformation.setSpacing(false);
-        generalInformation.setPadding(false);
+        VerticalLayout technicalInformation = new VerticalLayout(brand,
+                yearOP, trans);
+        technicalInformation.setSpacing(false);
+        technicalInformation.setPadding(false);
 
-        accordion.add("General information", generalInformation);
+        accordion.add("Technical information", technicalInformation);
 
-        Span street = new Span("4027 Amber Lake Canyon");
-        Span zipCode = new Span("72333-5884 Cozy Nook");
-        Span city = new Span("Arkansas");
+
+        Span location = new Span("Location: " + car.getLongitude() + car.getLatitude());
+        Span regNumber = new Span("Registration number: " + car.getRegistrationNumber());
+        Span fuelStatus = new Span("Level of fuel: " + car.getFuelCapacity() + "%");
 
         VerticalLayout billingAddressLayout = new VerticalLayout();
         billingAddressLayout.setSpacing(false);
         billingAddressLayout.setPadding(false);
-        billingAddressLayout.add(street, zipCode, city);
-        accordion.add("Billing address", billingAddressLayout);
+        billingAddressLayout.add(location, regNumber, fuelStatus);
+        accordion.add("Location & legal information", billingAddressLayout);
 
-        Span cardBrand = new Span("Mastercard");
-        Span cardNumber = new Span("1234 5678 9012 3456");
-        Span expiryDate = new Span("Expires 06/21");
+        Span rentalFee = new Span("Initial rental fee: $" + car.getSegment().getRentalFee());
+        Span hourFee = new Span("Hourly fee: $" + car.getSegment().getHourRate() + "/h");
+        Span kmRate = new Span("Kilometer fee: $" + car.getSegment().getKmRate() + "/km");
 
         VerticalLayout paymentLayout = new VerticalLayout();
         paymentLayout.setSpacing(false);
         paymentLayout.setPadding(false);
-        paymentLayout.add(cardBrand, cardNumber, expiryDate);
-        accordion.add("Payment", paymentLayout);
+        paymentLayout.add(rentalFee, hourFee, kmRate);
+        accordion.add("Pricing of the segment - " + car.getSegment().getName(), paymentLayout);
 
         verticalDetailsLayout.add(accordion);
 
         return verticalDetailsLayout;
+    }
+
+    private Button getRentButton(){
+        Button rentButton = new Button("Rent this car");
+//        rentButton.addClickListener(
+//        e -> {
+//            Boolean isRented = rentalService.rentCar(car, client);
+//        } );
+        return rentButton;
     }
 
 }

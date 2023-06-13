@@ -184,4 +184,9 @@ public class DataService {
         return carRepository.findByCarId(car.getCarId());
     }
 
+    public List<Client> getClientByUserId(Long userId){
+        return clientRepository.findByUserId(userId) ;
+    }
+
+
 }
