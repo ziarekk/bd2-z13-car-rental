@@ -1,4 +1,4 @@
-package z13.rentivo.views.penalty;
+package z13.rentivo.views.list_views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
@@ -13,8 +13,7 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import z13.rentivo.entities.Discount;
-import z13.rentivo.entities.Penalty;
+import z13.rentivo.entities.Payment;
 import z13.rentivo.service.DataService;
 import z13.rentivo.views.DataSelectView;
 import z13.rentivo.views.MainLayout;
@@ -23,38 +22,39 @@ import java.util.List;
 import java.util.function.Consumer;
 
 
-@PageTitle("List of all penalties")
-@Route(value = "/data/penalties", layout = DataSelectView.class)
-public class PenaltyListView extends VerticalLayout {
+@PageTitle("List of all payments")
+@Route(value = "/data/payments", layout = DataSelectView.class)
+public class PaymentListView extends VerticalLayout {
     private final DataService dataService;
-    PenaltyFilter penaltyFilter;
-    Grid<Penalty> grid = new Grid<>(Penalty.class, false);
+    PaymentFilter paymentFilter;
+    Grid<Payment> grid = new Grid<>(Payment.class, false);
 
     @Autowired
-    public PenaltyListView(DataService dataService) {
+    public PaymentListView(DataService dataService) {
         this.dataService = dataService;
 
         addClassName("list-view");
         setSizeFull();
         configureGrid();
 
-        add(getToolbar(penaltyFilter), grid);
+        add(getToolbar(paymentFilter), grid);
     }
 
     @Transactional
     void configureGrid() {
-        grid.addClassNames("penalty-grid");
+        grid.addClassNames("payment-grid");
         grid.setSizeFull();
 
-        grid.addColumn(Penalty::getPenaltyId).setHeader("ID").setSortable(true);
-        grid.addColumn(Penalty::getDescription).setHeader("Description").setSortable(true);
-        grid.addColumn(Penalty::getAmount).setHeader("Amount").setSortable(true);
-//        grid.addColumn(Penalty::getRental).setHeader("Rental").setSortable(true);
+        grid.addColumn(Payment::getPaymentId).setHeader("ID").setSortable(true);
+        grid.addColumn(Payment::getStatus).setHeader("Status").setSortable(true);
+        grid.addColumn(payment -> payment.getBill().getAmount()).setHeader("Amount").setSortable(true);
+        grid.addColumn(payment -> payment.getBill().getDateDue()).setHeader("Date Due").setSortable(true);
+        grid.addColumn(payment -> payment.getPaymentType().getName()).setHeader("Type").setSortable(true);
 
-        List<Penalty> listOfPenalties = dataService.getAllPenalties();
-        GridListDataView<Penalty> dataView = grid.setItems(listOfPenalties);
+        List<Payment> listOfPayments = dataService.getAllPayments();
+        GridListDataView<Payment> dataView = grid.setItems(listOfPayments);
 
-        penaltyFilter = new PenaltyFilter(dataView);
+        paymentFilter = new PaymentFilter(dataView);
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
@@ -76,11 +76,11 @@ public class PenaltyListView extends VerticalLayout {
         return layout;
     }
 
-    private static class PenaltyFilter {
-        private final GridListDataView<Penalty> dataView;
+    private static class PaymentFilter {
+        private final GridListDataView<Payment> dataView;
         private String input;
 
-        public PenaltyFilter(GridListDataView<Penalty> dataView) {
+        public PaymentFilter(GridListDataView<Payment> dataView) {
             this.dataView = dataView;
             this.dataView.addFilter(this::test);
         }
@@ -88,8 +88,8 @@ public class PenaltyListView extends VerticalLayout {
             this.input = input;
             this.dataView.refreshAll();
         }
-        public boolean test(Penalty penalty) {
-            return matches(penalty.getDescription(), input);
+        public boolean test(Payment payment) {
+            return matches(payment.getStatus(), input);
         }
         private boolean matches(String value, String searchTerm) {
             return searchTerm == null || searchTerm.isEmpty()
@@ -97,8 +97,8 @@ public class PenaltyListView extends VerticalLayout {
         }
     }
 
-    private HorizontalLayout getToolbar(PenaltyFilter penaltyFilter) {
-        Component filterText = createFilter("Filter by desc...", penaltyFilter::setlInput);
+    private HorizontalLayout getToolbar(PaymentFilter paymentFilter) {
+        Component filterText = createFilter("Filter by status...", paymentFilter::setlInput);
 
         HorizontalLayout toolbar = new HorizontalLayout(filterText);
 

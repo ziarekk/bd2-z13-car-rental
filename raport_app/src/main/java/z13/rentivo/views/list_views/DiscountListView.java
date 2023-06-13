@@ -1,4 +1,4 @@
-package z13.rentivo.views.payment;
+package z13.rentivo.views.list_views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
@@ -13,7 +13,7 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import z13.rentivo.entities.Payment;
+import z13.rentivo.entities.Discount;
 import z13.rentivo.service.DataService;
 import z13.rentivo.views.DataSelectView;
 import z13.rentivo.views.MainLayout;
@@ -22,39 +22,38 @@ import java.util.List;
 import java.util.function.Consumer;
 
 
-@PageTitle("List of all payments")
-@Route(value = "/data/payments", layout = DataSelectView.class)
-public class PaymentListView extends VerticalLayout {
+@PageTitle("List of all discounts")
+@Route(value = "/data/discounts", layout = DataSelectView.class)
+public class DiscountListView extends VerticalLayout {
     private final DataService dataService;
-    PaymentFilter paymentFilter;
-    Grid<Payment> grid = new Grid<>(Payment.class, false);
+    DiscountFilter discountFilter;
+    Grid<Discount> grid = new Grid<>(Discount.class, false);
 
     @Autowired
-    public PaymentListView(DataService dataService) {
+    public DiscountListView(DataService dataService) {
         this.dataService = dataService;
 
         addClassName("list-view");
         setSizeFull();
         configureGrid();
 
-        add(getToolbar(paymentFilter), grid);
+        add(getToolbar(discountFilter), grid);
     }
 
     @Transactional
     void configureGrid() {
-        grid.addClassNames("payment-grid");
+        grid.addClassNames("discount-grid");
         grid.setSizeFull();
 
-        grid.addColumn(Payment::getPaymentId).setHeader("ID").setSortable(true);
-        grid.addColumn(Payment::getStatus).setHeader("Status").setSortable(true);
-        grid.addColumn(payment -> payment.getBill().getAmount()).setHeader("Amount").setSortable(true);
-        grid.addColumn(payment -> payment.getBill().getDateDue()).setHeader("Date Due").setSortable(true);
-        grid.addColumn(payment -> payment.getPaymentType().getName()).setHeader("Type").setSortable(true);
+        grid.addColumn(Discount::getDiscountId).setHeader("ID").setSortable(true);
+        grid.addColumn(Discount::getDescription).setHeader("Description").setSortable(true);
+        grid.addColumn(Discount::getPercent).setHeader("Percent").setSortable(true);
+//        grid.addColumn(Discount::getRental).setHeader("Rental").setSortable(true);
 
-        List<Payment> listOfPayments = dataService.getAllPayments();
-        GridListDataView<Payment> dataView = grid.setItems(listOfPayments);
+        List<Discount> listOfDiscounts = dataService.getAllDiscounts();
+        GridListDataView<Discount> dataView = grid.setItems(listOfDiscounts);
 
-        paymentFilter = new PaymentFilter(dataView);
+        discountFilter = new DiscountFilter(dataView);
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
@@ -76,11 +75,11 @@ public class PaymentListView extends VerticalLayout {
         return layout;
     }
 
-    private static class PaymentFilter {
-        private final GridListDataView<Payment> dataView;
+    private static class DiscountFilter {
+        private final GridListDataView<Discount> dataView;
         private String input;
 
-        public PaymentFilter(GridListDataView<Payment> dataView) {
+        public DiscountFilter(GridListDataView<Discount> dataView) {
             this.dataView = dataView;
             this.dataView.addFilter(this::test);
         }
@@ -88,8 +87,8 @@ public class PaymentListView extends VerticalLayout {
             this.input = input;
             this.dataView.refreshAll();
         }
-        public boolean test(Payment payment) {
-            return matches(payment.getStatus(), input);
+        public boolean test(Discount discount) {
+            return matches(discount.getDescription(), input);
         }
         private boolean matches(String value, String searchTerm) {
             return searchTerm == null || searchTerm.isEmpty()
@@ -97,8 +96,8 @@ public class PaymentListView extends VerticalLayout {
         }
     }
 
-    private HorizontalLayout getToolbar(PaymentFilter paymentFilter) {
-        Component filterText = createFilter("Filter by status...", paymentFilter::setlInput);
+    private HorizontalLayout getToolbar(DiscountFilter discountFilter) {
+        Component filterText = createFilter("Filter by desc...", discountFilter::setlInput);
 
         HorizontalLayout toolbar = new HorizontalLayout(filterText);
 

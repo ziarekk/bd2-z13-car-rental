@@ -1,4 +1,4 @@
-package z13.rentivo.views.client;
+package z13.rentivo.views.list_views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
@@ -6,7 +6,6 @@ import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -14,51 +13,48 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import z13.rentivo.entities.Client;
+import z13.rentivo.entities.Discount;
+import z13.rentivo.entities.Penalty;
 import z13.rentivo.service.DataService;
 import z13.rentivo.views.DataSelectView;
 import z13.rentivo.views.MainLayout;
 
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 
-@PageTitle("List of all clients")
-@Route(value = "/data/clients", layout = DataSelectView.class)
-public class ClientListView extends VerticalLayout {
+@PageTitle("List of all penalties")
+@Route(value = "/data/penalties", layout = DataSelectView.class)
+public class PenaltyListView extends VerticalLayout {
     private final DataService dataService;
-    ClientFilter clientFilter;
-    Grid<Client> grid = new Grid<>(Client.class, false);
+    PenaltyFilter penaltyFilter;
+    Grid<Penalty> grid = new Grid<>(Penalty.class, false);
 
     @Autowired
-    public ClientListView(DataService dataService) {
+    public PenaltyListView(DataService dataService) {
         this.dataService = dataService;
 
         addClassName("list-view");
         setSizeFull();
         configureGrid();
 
-        add(getToolbar(clientFilter), grid);
+        add(getToolbar(penaltyFilter), grid);
     }
 
     @Transactional
     void configureGrid() {
-        grid.addClassNames("client-grid");
+        grid.addClassNames("penalty-grid");
         grid.setSizeFull();
 
-        grid.addColumn(Client::getClientId).setHeader("ID").setSortable(true);
-        grid.addColumn(Client::getBirthDate).setHeader("Birth date").setSortable(true);
-        grid.addColumn(Client::getGender).setHeader("Gender").setSortable(true);
-        grid.addColumn(Client::getIsVerified).setHeader("Verified?").setSortable(true);
-        grid.addColumn(Client::getName).setHeader("Name").setSortable(true);
-        grid.addColumn(Client::getSurname).setHeader("Surname").setSortable(true);
-        grid.addColumn(Client::getPhoneNumber).setHeader("Phone number").setSortable(true);
+        grid.addColumn(Penalty::getPenaltyId).setHeader("ID").setSortable(true);
+        grid.addColumn(Penalty::getDescription).setHeader("Description").setSortable(true);
+        grid.addColumn(Penalty::getAmount).setHeader("Amount").setSortable(true);
+//        grid.addColumn(Penalty::getRental).setHeader("Rental").setSortable(true);
 
-        List<Client> listOfClients = dataService.getAllClients();
-        GridListDataView<Client> dataView = grid.setItems(listOfClients);
+        List<Penalty> listOfPenalties = dataService.getAllPenalties();
+        GridListDataView<Penalty> dataView = grid.setItems(listOfPenalties);
 
-        clientFilter = new ClientFilter(dataView);
+        penaltyFilter = new PenaltyFilter(dataView);
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
@@ -80,11 +76,11 @@ public class ClientListView extends VerticalLayout {
         return layout;
     }
 
-    private static class ClientFilter {
-        private final GridListDataView<Client> dataView;
+    private static class PenaltyFilter {
+        private final GridListDataView<Penalty> dataView;
         private String input;
 
-        public ClientFilter(GridListDataView<Client> dataView) {
+        public PenaltyFilter(GridListDataView<Penalty> dataView) {
             this.dataView = dataView;
             this.dataView.addFilter(this::test);
         }
@@ -92,10 +88,8 @@ public class ClientListView extends VerticalLayout {
             this.input = input;
             this.dataView.refreshAll();
         }
-        public boolean test(Client client) {
-            boolean matchesName = matches(client.getName(), input);
-            boolean matchesSurname = matches(client.getSurname(), input);
-            return matchesName || matchesSurname;
+        public boolean test(Penalty penalty) {
+            return matches(penalty.getDescription(), input);
         }
         private boolean matches(String value, String searchTerm) {
             return searchTerm == null || searchTerm.isEmpty()
@@ -103,8 +97,8 @@ public class ClientListView extends VerticalLayout {
         }
     }
 
-    private HorizontalLayout getToolbar(ClientFilter clientFilter) {
-        Component filterText = createFilter("Filter by name...", clientFilter::setlInput);
+    private HorizontalLayout getToolbar(PenaltyFilter penaltyFilter) {
+        Component filterText = createFilter("Filter by desc...", penaltyFilter::setlInput);
 
         HorizontalLayout toolbar = new HorizontalLayout(filterText);
 

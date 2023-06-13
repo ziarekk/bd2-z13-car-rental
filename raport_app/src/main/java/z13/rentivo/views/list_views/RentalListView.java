@@ -1,4 +1,4 @@
-package z13.rentivo.views.discount;
+package z13.rentivo.views.list_views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
@@ -13,7 +13,7 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import z13.rentivo.entities.Discount;
+import z13.rentivo.entities.Rental;
 import z13.rentivo.service.DataService;
 import z13.rentivo.views.DataSelectView;
 import z13.rentivo.views.MainLayout;
@@ -22,38 +22,41 @@ import java.util.List;
 import java.util.function.Consumer;
 
 
-@PageTitle("List of all discounts")
-@Route(value = "/data/discounts", layout = DataSelectView.class)
-public class DiscountListView extends VerticalLayout {
+@PageTitle("List of all rentals")
+@Route(value = "/data/rentals", layout = DataSelectView.class)
+public class RentalListView extends VerticalLayout {
     private final DataService dataService;
-    DiscountFilter discountFilter;
-    Grid<Discount> grid = new Grid<>(Discount.class, false);
+    RentalFilter rentalFilter;
+    Grid<Rental> grid = new Grid<>(Rental.class, false);
 
     @Autowired
-    public DiscountListView(DataService dataService) {
+    public RentalListView(DataService dataService) {
         this.dataService = dataService;
 
         addClassName("list-view");
         setSizeFull();
         configureGrid();
 
-        add(getToolbar(discountFilter), grid);
+        add(getToolbar(rentalFilter), grid);
     }
 
     @Transactional
     void configureGrid() {
-        grid.addClassNames("discount-grid");
+        grid.addClassNames("rental-grid");
         grid.setSizeFull();
 
-        grid.addColumn(Discount::getDiscountId).setHeader("ID").setSortable(true);
-        grid.addColumn(Discount::getDescription).setHeader("Description").setSortable(true);
-        grid.addColumn(Discount::getPercent).setHeader("Percent").setSortable(true);
-//        grid.addColumn(Discount::getRental).setHeader("Rental").setSortable(true);
+        grid.addColumn(Rental::getRentalId).setHeader("ID").setSortable(true);
+        grid.addColumn(rental -> rental.getRentalStart().getStartTime()).setHeader("Start Date").setSortable(true);
+        grid.addColumn(rental -> rental.getRentalEnd() == null ? "" : rental.getRentalEnd().getEndTime()).setHeader("End Date").setSortable(true);
+        grid.addColumn(rental -> rental.getRentalEnd() == null ? "" : rental.getRentalEnd().getEndMileage() -
+                rental.getRentalStart().getStartMileage()).setHeader("Mileage").setSortable(true);
+//        grid.addColumn(Rental::getCar).setHeader("Car").setSortable(true);
+//        grid.addColumn(Rental::getClient).setHeader("Client").setSortable(true);
 
-        List<Discount> listOfDiscounts = dataService.getAllDiscounts();
-        GridListDataView<Discount> dataView = grid.setItems(listOfDiscounts);
+        List<Rental> listOfRentals = dataService.getAllRentals();
+        GridListDataView<Rental> dataView = grid.setItems(listOfRentals);
 
-        discountFilter = new DiscountFilter(dataView);
+        rentalFilter = new RentalFilter(dataView);
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
@@ -75,11 +78,11 @@ public class DiscountListView extends VerticalLayout {
         return layout;
     }
 
-    private static class DiscountFilter {
-        private final GridListDataView<Discount> dataView;
+    private static class RentalFilter {
+        private final GridListDataView<Rental> dataView;
         private String input;
 
-        public DiscountFilter(GridListDataView<Discount> dataView) {
+        public RentalFilter(GridListDataView<Rental> dataView) {
             this.dataView = dataView;
             this.dataView.addFilter(this::test);
         }
@@ -87,8 +90,10 @@ public class DiscountListView extends VerticalLayout {
             this.input = input;
             this.dataView.refreshAll();
         }
-        public boolean test(Discount discount) {
-            return matches(discount.getDescription(), input);
+        public boolean test(Rental rental) {
+            boolean matchesStart = matches(rental.getRentalStart().toString(), input);
+//            boolean matchesEnd = matches(rental.getRentalEnd().toString(), input);
+            return matchesStart;
         }
         private boolean matches(String value, String searchTerm) {
             return searchTerm == null || searchTerm.isEmpty()
@@ -96,8 +101,8 @@ public class DiscountListView extends VerticalLayout {
         }
     }
 
-    private HorizontalLayout getToolbar(DiscountFilter discountFilter) {
-        Component filterText = createFilter("Filter by desc...", discountFilter::setlInput);
+    private HorizontalLayout getToolbar(RentalFilter rentalFilter) {
+        Component filterText = createFilter("Filter by name...", rentalFilter::setlInput);
 
         HorizontalLayout toolbar = new HorizontalLayout(filterText);
 

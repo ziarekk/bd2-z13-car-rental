@@ -1,4 +1,4 @@
-package z13.rentivo.views.location;
+package z13.rentivo.views.list_views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;

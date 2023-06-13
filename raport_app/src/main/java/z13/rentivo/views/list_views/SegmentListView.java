@@ -1,4 +1,4 @@
-package z13.rentivo.views.bill;
+package z13.rentivo.views.list_views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
@@ -10,73 +10,75 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
-import z13.rentivo.entities.Bill;
-import z13.rentivo.entities.Rental;
+import org.springframework.transaction.annotation.Transactional;
+import z13.rentivo.entities.Segment;
+
 import z13.rentivo.service.DataService;
 import z13.rentivo.views.DataSelectView;
 import z13.rentivo.views.MainLayout;
-import z13.rentivo.views.rental.RentalListView;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.function.Consumer;
 
-@PageTitle("List of all bills")
-@Route(value = "/data/bills", layout = DataSelectView.class)
-public class BillListView extends VerticalLayout {
+
+@PageTitle("List of all segments")
+@Route(value = "/data/segments", layout = DataSelectView.class)
+public class SegmentListView extends VerticalLayout {
     private final DataService dataService;
-    BillFilter billFilter;
-    Grid<Bill> grid = new Grid<>(Bill.class, false);
+    Grid<Segment> grid = new Grid<>(Segment.class, false);
+    SegmentFilter segmentFilter;
 
     @Autowired
-    public BillListView(DataService dataService) {
+    public SegmentListView(DataService dataService) {
         this.dataService = dataService;
+
         addClassName("list-view");
         setSizeFull();
         configureGrid();
-        add(getToolbar(billFilter), grid);
+        add(getToolbar(segmentFilter), grid);
+
     }
 
     @Transactional
     void configureGrid() {
-        grid.addClassNames("bill-grid");
+        grid.addClassNames("segment-grid");
         grid.setSizeFull();
 
-        grid.addColumn(Bill::getBillId).setHeader("ID").setSortable(true);
-        grid.addColumn(Bill::getAmount).setHeader("Amount").setSortable(true);
-        grid.addColumn(Bill::getDateDue).setHeader("DateDue").setSortable(true);
+        grid.addColumn(Segment::getSegmentId).setHeader("ID").setSortable(true);
+        grid.addColumn(Segment::getName).setHeader("Name").setSortable(true);
+        grid.addColumn(Segment::getHourRate).setHeader("Hour rate").setSortable(true);
+        grid.addColumn(Segment::getKmRate).setHeader("KM rate").setSortable(true);
+        grid.addColumn(Segment::getRentalFee).setHeader("Rental fee").setSortable(true);
 
-        List<Bill> listOfBills = dataService.getAllBills();
-        GridListDataView<Bill> dataView = grid.setItems(listOfBills);
-        billFilter = new BillFilter(dataView);
+        List<Segment> listOfSegments = dataService.getAllSegments();
+        GridListDataView<Segment> dataView = grid.setItems(listOfSegments);
+        segmentFilter = new SegmentFilter(dataView);
+
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
-    private static class BillFilter{
-        private final GridListDataView<Bill> dataView;
+
+    private static class SegmentFilter {
+        private final GridListDataView<Segment> dataView;
         private String input;
 
-        public BillFilter(GridListDataView<Bill> dataView){
+        public SegmentFilter(GridListDataView<Segment> dataView) {
             this.dataView = dataView;
             this.dataView.addFilter(this::test);
         }
-
-        public void setInput(String input) {
+        public void setlInput(String input) {
             this.input = input;
             this.dataView.refreshAll();
         }
-
-        public boolean test(Bill bill) {
-            boolean matchesDateDue = matches(bill.getDateDue().toString(), input);
-            boolean matchesAmount = matches(bill.getAmount().toString(), input);
-            return matchesDateDue || matchesAmount;
+        public boolean test(Segment segment) {
+            boolean matchesName = matches(segment.getName(), input);
+            return matchesName;
         }
-
         private boolean matches(String value, String searchTerm) {
             return searchTerm == null || searchTerm.isEmpty()
                     || value.toLowerCase().contains(searchTerm.toLowerCase());
         }
-
     }
+
     private static Component createFilter(String labelText,
                                           Consumer<String> filterChangeConsumer) {
         TextField textField = new TextField();
@@ -93,12 +95,13 @@ public class BillListView extends VerticalLayout {
 
         return layout;
     }
-    private HorizontalLayout getToolbar(BillListView.BillFilter billFilter) {
-        Component filterText = createFilter("Filter by name...", billFilter::setInput);
+    private HorizontalLayout getToolbar(SegmentFilter segmentFilter) {
+        Component filterText = createFilter("Filter by name...", segmentFilter::setlInput);
+
         HorizontalLayout toolbar = new HorizontalLayout(filterText);
 
         toolbar.addClassName("toolbar");
         return toolbar;
     }
-}
 
+}

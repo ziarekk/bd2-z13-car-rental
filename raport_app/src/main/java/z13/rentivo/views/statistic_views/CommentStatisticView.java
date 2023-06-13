@@ -1,4 +1,4 @@
-package z13.rentivo.views.discount;
+package z13.rentivo.views.statistic_views;
 
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -11,12 +11,12 @@ import z13.rentivo.views.DataSelectView;
 import java.util.HashMap;
 import java.util.Map;
 
-@PageTitle("Discounts statistics")
-@Route(value = "/stats/discounts", layout = DataSelectView.class)
-public class DiscountStatisticView extends VerticalLayout {
+@PageTitle("Comments statistics")
+@Route(value = "/stats/comments", layout = DataSelectView.class)
+public class CommentStatisticView extends VerticalLayout {
     DataService dataService;
     Map<String, Object> stats = new HashMap<>();
-    public DiscountStatisticView(DataService dataService){
+    public CommentStatisticView(DataService dataService){
         this.dataService = dataService;
         getStats();
         for (Map.Entry<String, Object> entry : stats.entrySet()) {
@@ -29,7 +29,6 @@ public class DiscountStatisticView extends VerticalLayout {
     }
 
     private void getStats(){
-        stats.put("Discounts average:", dataService.averageDiscountAmount());
-
+        stats.put("Comments number:", dataService.countComments());
     }
 }

@@ -18,21 +18,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
 
 import z13.rentivo.service.DataService;
-import z13.rentivo.views.bill.BillListView;
-import z13.rentivo.views.bill.BillStatisticView;
-import z13.rentivo.views.car.CarListView;
-import z13.rentivo.views.client.ClientStatisticView;
-import z13.rentivo.views.comment.CommentListView;
-import z13.rentivo.views.comment.CommentStatisticView;
-import z13.rentivo.views.discount.DiscountStatisticView;
-import z13.rentivo.views.licences.DriverLicenceListView;
-import z13.rentivo.views.payment.PaymentListView;
-import z13.rentivo.views.client.ClientListView;
-import z13.rentivo.views.rental.RentalListView;
-import z13.rentivo.views.discount.DiscountListView;
-import z13.rentivo.views.penalty.PenaltyListView;
-import z13.rentivo.views.location.LocationListView;
-import z13.rentivo.views.segment.SegmentListView;
+import z13.rentivo.views.statistic_views.*;
 
 @Route(value = "/stats")
 public class StatsSelectView extends AppLayout{
@@ -42,19 +28,11 @@ public class StatsSelectView extends AppLayout{
         Tabs tabs = new Tabs();
 
         tabs.add(
-                createTab(VaadinIcon.CASH, "Bills", BillStatisticView.class),
-                createTab(VaadinIcon.CAR, "Cars", CarListView.class),
-                createTab(VaadinIcon.USER, "Clients", ClientStatisticView.class),
-                createTab(VaadinIcon.COMMENT, "Comments", CommentStatisticView.class),
-                createTab(VaadinIcon.TICKET, "Discounts", DiscountStatisticView.class),
-                createTab(VaadinIcon.USER_CARD, "Licences", DriverLicenceListView.class),
-                createTab(VaadinIcon.LOCATION_ARROW_CIRCLE, "Location", LocationListView.class),
-                createTab(VaadinIcon.MONEY, "Payments", PaymentListView.class),
-                createTab(VaadinIcon.BAN, "Penalty", PenaltyListView.class),
-                createTab(VaadinIcon.EXCHANGE, "Rental", RentalListView.class),
-                createTab(VaadinIcon.PYRAMID_CHART, "Segments", SegmentListView.class)
+                createTab(VaadinIcon.CASH, "Finances", FinancialStatsView.class),
+                createTab(VaadinIcon.CAR, "Cars", CarStatsView.class),
+                createTab(VaadinIcon.USER, "Clients", ClientStatsView.class),
+                createTab(VaadinIcon.GLOBE, "Map", MapStatsView.class)
         );
-
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;
     }
