@@ -1,8 +1,9 @@
-CREATE OR REPLACE PROCEDURE rent_car(
+CREATE OR REPLACE FUNCTION rent_car(
     p_client_id INT,
     p_car_id INT
 )
-LANGUAGE plpgsql
+RETURNS BOOLEAN -- Add the return type
+    LANGUAGE plpgsql
 AS $$
 DECLARE
     v_start_id INT;
@@ -18,7 +19,7 @@ BEGIN
     WHERE client_id = p_client_id;
 
     IF NOT v_is_verified THEN
-        RAISE EXCEPTION 'Cannot rent a car. User is not verified.';
+        RETURN FALSE;
     END IF;
 
     -- Retrieve start mileage from the car record
@@ -44,13 +45,7 @@ BEGIN
     -- Print confirmation message
     RAISE NOTICE 'Car rented successfully. Rental ID: %', v_rental_id;
 
-EXCEPTION
-    WHEN OTHERS THEN
-        -- Rollback the transaction
-        ROLLBACK;
-        -- Print error message
-        RAISE EXCEPTION 'An error occurred while renting the car: %', SQLERRM;
+    -- Return true to indicate successful completion
+    RETURN TRUE;
 END;
 $$;
-
-CALL rent_car(1, 1);

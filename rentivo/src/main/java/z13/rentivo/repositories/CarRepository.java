@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import z13.rentivo.entities.Car;
 
+
 @Transactional @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
     @Query

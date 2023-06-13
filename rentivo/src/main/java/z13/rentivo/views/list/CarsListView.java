@@ -520,7 +520,7 @@ public class CarsListView extends VerticalLayout {
                     showMessage("This action is forbidden!",
             "You need to be verified client to rent a car. Please, be sure to verify your account and try again");
                 } else{
-                    rentService.rentCar(car.getCarId(), clientsList.get(0).getClientId());
+                    rentService.rentCar(clientsList.get(0).getClientId().intValue(), car.getCarId().intValue());
                     showMessage("You just rent a car!",
             "You just successfully rented a " + car.getBrand() + " " + car.getModel()+ ". Enjoy your rent!");
                 }

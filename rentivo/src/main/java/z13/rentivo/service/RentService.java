@@ -1,6 +1,8 @@
 package z13.rentivo.service;
 
+import org.hibernate.exception.GenericJDBCException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -8,6 +10,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.ParameterMode;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.StoredProcedureParameter;
 import javax.persistence.StoredProcedureQuery;
 
@@ -21,28 +25,28 @@ import javax.persistence.StoredProcedureQuery;
     )
 @Service
 public class RentService {
-    private EntityManagerFactory emf;
+    @PersistenceContext
+    private final EntityManager entityManager;
 
-    @Autowired
-    public RentService() {
-        emf = Persistence.createEntityManagerFactory("rentivo");
+    public RentService(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
-    
-    public void rentCar(Long clientId, Long carId) {
-        EntityManager em = emf.createEntityManager();
+
+    public void rentCar(Integer clientId, Integer carId) {
         try {
-            StoredProcedureQuery query = em.createNamedStoredProcedureQuery("rentCar");
+            StoredProcedureQuery query = entityManager.createStoredProcedureQuery("rent_car");
+            query.registerStoredProcedureParameter("p_client_id", Integer.class, ParameterMode.IN);
+            query.registerStoredProcedureParameter("p_car_id", Integer.class, ParameterMode.IN);
             query.setParameter("p_client_id", clientId);
             query.setParameter("p_car_id", carId);
-            query.execute();
+            boolean result = query.execute();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         } finally {
-            em.close();
+            entityManager.close();
         }
     }
-
-    public static void main(String[] args) {
-        RentService rentalService = new RentService();
-        rentalService.rentCar(1L, 1L);
-    }
 }
+
 
