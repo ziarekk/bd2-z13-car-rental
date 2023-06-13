@@ -40,9 +40,6 @@ public class Client {
     @Column(name = "is_verified")
     private Boolean isVerified;
 
-    @OneToOne(optional = true, mappedBy = "client")
-    private DriverLicence driverLicence;
-
     @OneToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;

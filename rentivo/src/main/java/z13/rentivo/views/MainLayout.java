@@ -28,26 +28,47 @@ import com.vaadin.flow.dom.ElementFactory;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.router.RouterLink;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import z13.rentivo.entities.Client;
+import z13.rentivo.entities.User;
 import z13.rentivo.security.SecurityService;
 import z13.rentivo.service.DataService;
 import z13.rentivo.service.RentService;
 import z13.rentivo.views.form.CarFormView;
 import z13.rentivo.views.list.CarsListView;
+import z13.rentivo.views.list.ClientsListView;
+import z13.rentivo.views.list.MyRentalsListView;
+import z13.rentivo.views.list.RentalsListView;
 
-@Route("")
+@Route(value = "")
 @PermitAll
 public class MainLayout extends AppLayout{
-    private DataService dataService;
-    private SecurityService securityService;
-    private RentService rentService;
+    private final DataService dataService;
+    private final SecurityService securityService;
+    private final RentService rentService;
 
     private Tabs getLinkTabs() {
         Tabs tabs = new Tabs();
 
         tabs.add(
                 createTab(VaadinIcon.CAR, "Our cars", CarsListView.class),
-                createTab(VaadinIcon.PLUS_CIRCLE, "Add car", CarFormView.class)
+                createTab(VaadinIcon.BAR_CHART, "Your rentals", MyRentalsListView.class)
         );
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Collection<? extends GrantedAuthority> roles = auth.getAuthorities();
+
+        for (GrantedAuthority role : roles) {
+            if (role.getAuthority().equals("ROLE_ADMIN")) {
+                tabs.add(
+                        createTab(VaadinIcon.USERS, "Clients", ClientsListView.class),
+                        createTab(VaadinIcon.ABACUS, "All rentals", RentalsListView.class),
+                        createTab(VaadinIcon.PLUS_CIRCLE, "Add car", CarFormView.class)
+                );
+            }
+        }
 
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;
@@ -83,7 +104,16 @@ public class MainLayout extends AppLayout{
         DrawerToggle linksDT = new DrawerToggle();
         linksDT.addClassNames("drawer-toggle");
 
-        HorizontalLayout header = new HorizontalLayout(linksDT, title);
+        Button logout = new Button("Log out", e -> securityService.logout());
+        logout.addClassNames("logout-button");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<User> users = dataService.getUserByLogin(authentication.getName());
+        User user = users.get(0);
+        HorizontalLayout userInfo = createUserCardComponent(user);
+
+
+        HorizontalLayout header = new HorizontalLayout(linksDT, title, userInfo, logout);
 
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         header.expand(title);
@@ -97,6 +127,33 @@ public class MainLayout extends AppLayout{
 
     private void createNavigationDrawer() {
         addToDrawer(getLinkTabs());
+    }
+
+    private HorizontalLayout createUserCardComponent(User user)
+    {
+        HorizontalLayout cardLayout = new HorizontalLayout();
+        cardLayout.setMargin(true);
+
+        Avatar avatar = new Avatar(user.getLogin());
+       // avatar.setImage(employee.getPictureRoute());
+
+        avatar.setHeight("64px");
+        avatar.setWidth("64px");
+
+        VerticalLayout infoLayout = new VerticalLayout();
+        infoLayout.setSpacing(false);
+        infoLayout.setPadding(false);
+        infoLayout.getElement().appendChild(
+                ElementFactory.createStrong(user.getLogin()));
+        infoLayout.add(new Div(new Text(user.getUserRole().getName())));
+
+
+        VerticalLayout contactLayout = new VerticalLayout();
+        contactLayout.setSpacing(false);
+        contactLayout.setPadding(false);
+
+        cardLayout.add(avatar, infoLayout);
+        return cardLayout;
     }
 
 }
