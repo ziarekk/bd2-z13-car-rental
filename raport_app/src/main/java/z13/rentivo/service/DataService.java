@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import z13.rentivo.querries.*;
@@ -158,30 +159,48 @@ public class DataService {
         return carsList;
     }
 
-    public double getAverageBillAmount(){
-        double sum = 0;
-        List<Bill> bills = getAllBills();
-        for (Bill bill: bills) {
-            sum += bill.getAmount();
-        }
-        return sum / bills.size();
+    public Number getSumBillAmount() {
+        return Objects.requireNonNullElse(billRepository.getAmountSum(), 0);
     }
 
-    public Long getPaidBillsCount() {
-        long count = 0;
-        for (Bill bill : getAllBills()) {
-            for (Payment payment : paymentRepository.findByBill(bill)) {
-                if (payment.getStatus().equals("przyjeta")) {
-                    count++;
-                    break;
-                }
-            }
-        }
-        return count;
+    public Number getAverageBillAmount(){
+        return Objects.requireNonNullElse(billRepository.getAverageAmount(), 0);
     }
 
-    public Long getNotPaidBillsCount(){
-        return getAllBills().size() - getPaidBillsCount();
+    public Number getPaidPaymentCount() {
+        return Objects.requireNonNullElse(paymentRepository.getPaidCount(), 0);
+    }
+
+    public Number getPendingCount() {
+        return Objects.requireNonNullElse(paymentRepository.getPendingCount(), 0);
+    }
+
+    public Number getDeclinedCount() {
+        return Objects.requireNonNullElse(paymentRepository.getDeclinedCount(), 0);
+    }
+
+    public Long getNotPaidPaymentCount(){
+        return paymentRepository.getCount() - paymentRepository.getPaidCount();
+    }
+
+    public Number getPaidPaymentAmount() {
+        return Objects.requireNonNullElse(paymentRepository.getPaidAmount(), 0);
+    }
+
+    public Number getPendingPaymentAmount() {
+        return Objects.requireNonNullElse(paymentRepository.getPendingAmount(), 0);
+    }
+
+    public Number getDeclinedPaymentAmount() {
+        return Objects.requireNonNullElse(paymentRepository.getDeclinedAmount(), 0);
+    }
+
+    public Number getPaymentCountByMonth(Integer month, String status) {
+        return Objects.requireNonNullElse(paymentRepository.getCountByMonth(month, status), 0);
+    }
+
+    public Number getPaymentAmountByMonth(Integer month, String status) {
+        return Objects.requireNonNullElse(paymentRepository.getAmountByMonth(month, status), 0);
     }
 
     public Client getMostActiveClient()
