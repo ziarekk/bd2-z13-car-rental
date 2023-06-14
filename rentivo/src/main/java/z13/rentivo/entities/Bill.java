@@ -25,7 +25,7 @@ public class Bill {
     @Column(name = "date_due")
     private Date dateDue;
 
-    // @ManyToOne(optional = true)
-    // @JoinColumn(name = "payment_id", referencedColumnName = "payment_id")
-    // private Payment payment;
+    @OneToOne(optional = false)
+    @JoinColumn(name = "rental_id", referencedColumnName = "rental_id")
+    private Rental rental;
 }

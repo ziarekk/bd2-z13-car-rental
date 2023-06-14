@@ -188,5 +188,28 @@ public class DataService {
         return clientRepository.findByUserId(userId) ;
     }
 
+    public String getPaymentAmount(Rental rental){
+        Bill bill = billRepository.findByRentalId(rental.getRentalId()).get(0);
+        return String.valueOf(bill.getAmount());
+    }
 
+    public String getPaymentStatus(Rental rental){
+        Long billId = billRepository.findByRentalId(rental.getRentalId()).get(0).getBillId();
+        Payment payment = paymentRepository.findByBillId(billId).get(0);
+        return payment.getStatus();
+    }
+
+    public boolean payForRental(Rental rental){
+        Long billId = billRepository.findByRentalId(rental.getRentalId()).get(0).getBillId();
+        Payment payment = paymentRepository.findByBillId(billId).get(0);
+        Long paymentId = payment.getPaymentId();
+        int temp = (Math.random() <= 0.5) ? 1 : 2;
+        if (temp == 1){
+            paymentRepository.updateStatus(paymentId, "przyjeta");
+            return true;
+        } else {
+            paymentRepository.updateStatus(paymentId, "odrzucona");
+            return false;
+        }
+    }
 }

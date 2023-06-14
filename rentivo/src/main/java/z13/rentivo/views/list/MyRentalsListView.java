@@ -4,10 +4,13 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -24,6 +27,7 @@ import z13.rentivo.entities.Client;
 import z13.rentivo.entities.Rental;
 import z13.rentivo.entities.User;
 import z13.rentivo.service.DataService;
+import z13.rentivo.service.ReturnService;
 import z13.rentivo.views.MainLayout;
 
 import javax.annotation.security.PermitAll;
@@ -39,6 +43,7 @@ import java.util.function.Consumer;
 @Route(value = "/myRentalsList", layout = MainLayout.class)
 public class MyRentalsListView extends VerticalLayout {
     private final DataService dataService;
+    private final ReturnService returnService;
 
     private final TextField textField;
     private RentalFilter rentalFilter;
@@ -47,8 +52,9 @@ public class MyRentalsListView extends VerticalLayout {
     Grid<Rental> grid = new Grid<>(Rental.class, false);
 
     @Autowired
-    public MyRentalsListView(DataService dataService) {
+    public MyRentalsListView(DataService dataService, ReturnService returnService) {
         this.dataService = dataService;
+        this.returnService = returnService;
         textField = new TextField();
 
         addClassName("list-view");
@@ -78,7 +84,9 @@ public class MyRentalsListView extends VerticalLayout {
             } );
 
         })).setHeader("Show details");
-
+        grid.addComponentColumn(Rental -> createStatusIcon(getPaymentStatus(Rental)))
+                .setTooltipGenerator(this::getPaymentStatus)
+                .setHeader("Payment Status").setTextAlign(ColumnTextAlign.CENTER);;
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<Rental> listOfRentals = dataService.getRentalsByUser(authentication.getName());
@@ -176,11 +184,6 @@ public class MyRentalsListView extends VerticalLayout {
 
         detailsDialog.setMinWidth("680px");
 
-//        VerticalLayout detailsDialogLayout = getDetailsLayout(dataService.getAllRentals().get(0));
-//        detailsDialog.add(detailsDialogLayout);
-//        Rental rental = dataService.getAllRentals().get(0);
-//        Button rentButton = getEndButton(rental);
-
         detailsDialog.getFooter().add(new Button("Close", e -> detailsDialog.close()));
     }
 
@@ -194,6 +197,9 @@ public class MyRentalsListView extends VerticalLayout {
         if (rental.getRentalEnd() == null ){
             Button endButton = getEndButton(rental);
             detailsDialog.getFooter().add(endButton);
+        } else if (!getPaymentStatus(rental).equals("przyjeta")){
+            Button payButton = getPayButton(rental);
+            detailsDialog.getFooter().add(payButton);
         }
 
         detailsDialog.getFooter().add(new Button("Close", e -> detailsDialog.close()));
@@ -220,14 +226,21 @@ public class MyRentalsListView extends VerticalLayout {
         accordion.add("Car information", carInfo);
 
         Span status = new Span(getStatus(rental));
-        Span time = new Span("Time started: " + getStartTime(rental) + "  Time ended: " + getEndTime(rental));
-        Span bill = new Span("Amount to pay: " + "Payment status: ");
+        Span timeS = new Span("Time started: " + getStartTime(rental));
+        Span timeE = new Span("Time ended: " + getEndTime(rental));
 
         VerticalLayout paymentInfo = new VerticalLayout();
         paymentInfo.setSpacing(false);
         paymentInfo.setPadding(false);
 
-        paymentInfo.add(status, time, bill);
+        paymentInfo.add(status, timeS, timeE);
+
+        if (rental.getRentalEnd() != null){
+        Span amount = new Span("Amount to pay: $" + dataService.getPaymentAmount(rental));
+        Span bill = new Span("Payment status: " + dataService.getPaymentStatus(rental) );
+        paymentInfo.add(amount, bill);
+        }
+
         accordion.add("Rental information", paymentInfo);
 
         verticalDetailsLayout.add(accordion);
@@ -240,7 +253,7 @@ public class MyRentalsListView extends VerticalLayout {
         Button endRentalButton = new Button("End the rental");
         endRentalButton.addClickListener(
                 e -> {
-                    boolean result = rentService.endRental(rental.getRentalId().intValue());
+                    boolean result = returnService.returnCar(rental.getClient().getClientId().intValue(), rental.getCar().getCarId().intValue());
                     detailsDialog.close();
                     if (result){
                         showMessage("Your rent is ended." ,
@@ -254,6 +267,24 @@ public class MyRentalsListView extends VerticalLayout {
         return endRentalButton;
     }
 
+    private Button getPayButton(Rental rental){
+
+        Button endRentalButton = new Button("Pay for the rental");
+        endRentalButton.addClickListener(
+                e -> {
+                    boolean result = dataService.payForRental(rental);
+                    detailsDialog.close();
+                    if (result){
+                        showMessage("Payment was succesful." ,
+                                "You just payed $" + dataService.getPaymentAmount(rental) + " for the rental. Thank you!");
+                    } else{
+                        showMessage("Whoops, something went wrong.." ,
+                                "There was an error while processing your payment. Please, try again later.");
+                    }
+                }
+        );
+        return endRentalButton;
+    }
     private void showMessage( String title, String message){
         Dialog messageBox = new Dialog();
         messageBox.setHeaderTitle(title);
@@ -267,6 +298,8 @@ public class MyRentalsListView extends VerticalLayout {
         messageBox.getFooter().add(new Button("Close", e -> messageBox.close()));
 
         messageBox.open();
+        textField.clear();
+        rentalFilter.setlInput("");
     }
 
     private String getStatus(Rental rental){
@@ -276,5 +309,31 @@ public class MyRentalsListView extends VerticalLayout {
             return "Rental is over.";
         }
     }
+    private String getPaymentStatus(Rental rental){
+        if (rental.getRentalEnd() == null){
+            return "Rental is still active";
+        } else {
+            return dataService.getPaymentStatus(rental);
+        }
+    }
 
+    private Icon createStatusIcon(String status) {
+        Icon icon;
+        if (status.equals("przyjeta")) {
+            icon = VaadinIcon.CHECK.create();
+            icon.getElement().getThemeList().add("badge success");
+        } else if (status.equals("odrzucona")) {
+            icon = VaadinIcon.CLOSE_SMALL.create();
+            icon.getElement().getThemeList().add("badge error");
+        } else if (status.equals("oczekujaca")){
+            icon = VaadinIcon.CLOCK.create();
+            icon.getElement().getThemeList().add("badge");
+        } else {
+            icon = VaadinIcon.INFO_CIRCLE_O.create();
+            icon.getElement().getThemeList().add("badge contrast");
+        }
+
+        icon.getStyle().set("padding", "var(--lumo-space-xs");
+        return icon;
+    }
 }
