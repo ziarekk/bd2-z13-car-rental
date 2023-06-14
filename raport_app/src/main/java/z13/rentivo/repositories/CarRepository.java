@@ -1,7 +1,9 @@
 package z13.rentivo.repositories;
 
 
+import java.lang.annotation.Native;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,6 +13,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import z13.rentivo.entities.Car;
+import z13.rentivo.querries.IFuelTypeCount;
+import z13.rentivo.querries.IProductionYearCount;
+import z13.rentivo.querries.ISegmentsCount;
 
 @Transactional @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
@@ -55,6 +60,26 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     @Query
     List<Car> findByTransmission(String transmission);
+
+    Long countCarsByIsAvailableForRent(boolean isAvailable);
+
+    @Query(value = "select fuel_type as fuelType, count(*) as totalCount " +
+            "from cars " +
+            "group by fuel_type", nativeQuery = true)
+    List<IFuelTypeCount> countCarsByFuelType();
+
+
+    @Query(value = "select production_year as productionYear, count(*) as totalCount " +
+            "from  cars " +
+            "group by production_year " +
+            "order by production_year;", nativeQuery = true)
+    List<IProductionYearCount> countCarsByProductionYear();
+
+    @Query(value = "select s.name as segmentName, count(*) as totalCount " +
+            "from cars c " +
+            "join segments s on c.segment_id = s.segment_id " +
+            "group by s.name;", nativeQuery = true)
+    List<ISegmentsCount> countCarsBySegment();
 
     @Modifying @Query(value = "INSERT INTO cars (mileage, registration_number, production_year, longitude, latitude, fuel_level, is_available_for_rent, fuel_type, fuel_capacity, model, brand, seats, transmission, segment_id) VALUES (:mileage, :registration_number, :production_year, :longitude, :latitude, :fuel_level, :is_available_for_rent, :fuel_type, :fuel_capacity, :model, :brand, :seats, :transmission, :segment_id)", nativeQuery = true)
     void insertCar(@Param("mileage")                Integer mileage,
