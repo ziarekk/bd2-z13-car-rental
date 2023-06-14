@@ -33,4 +33,7 @@ public interface LocationHistoryRepository extends JpaRepository<LocationHistory
                                @Param("latitude") Float latitude, 
                                @Param("registration_timestamp") Date registrationTimestamp,
                                @Param("car_id") Long carId);
+
+    @Query(value = "SELECT * FROM location_history WHERE car_id = :car_id", nativeQuery = true)
+    List<LocationHistory> findByCarID(@Param("car_id") Long carId);
 }

@@ -97,6 +97,10 @@ public class DataService {
         return locationHistoryRepository.findAll();
     }
 
+    public List<LocationHistory> getLocationHistoriesByCarID(Long carID) {
+        return Objects.requireNonNullElse(locationHistoryRepository.findByCarID(carID), Collections.emptyList());
+    }
+
     public List<Payment> getAllPayments() {
         return paymentRepository.findAll();
     }
