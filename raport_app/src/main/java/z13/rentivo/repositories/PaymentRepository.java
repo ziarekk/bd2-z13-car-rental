@@ -25,8 +25,45 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     List<Payment> findByBill(Bill bill);
 
     @Modifying
-    @Query(value = "INSERT INTO z13.rentivo.views.payment (status, bill_id, type_id) VALUES (:status, :bill_id, :type_id)", nativeQuery = true)
+    @Query(value = "INSERT INTO payments (status, bill_id, type_id) VALUES (:status, :bill_id, :type_id)", nativeQuery = true)
     void insertPayment(@Param("status") String status,
                        @Param("bill_id") Long billId,
                        @Param("type_id") Long typeId);
+
+    @Query(value = "SELECT COUNT(p) FROM payments p WHERE p.status = 'przyjeta'", nativeQuery = true)
+    Long getPaidCount();
+
+    @Query(value = "SELECT COUNT(p) FROM payments p WHERE p.status = 'oczekujaca'", nativeQuery = true)
+    Long getPendingCount();
+
+    @Query(value = "SELECT COUNT(p) FROM payments p WHERE p.status = 'odrzucona'", nativeQuery = true)
+    Long getDeclinedCount();
+
+    @Query(value = "SELECT COUNT(p) FROM payments p", nativeQuery = true)
+    Long getCount();
+
+    @Query(value = "SELECT SUM(b.amount) FROM payments p JOIN bills b ON p.bill_id = b.bill_id WHERE p.status = 'przyjeta'", nativeQuery = true)
+    Float getPaidAmount();
+
+    @Query(value = "SELECT SUM(b.amount) FROM payments p JOIN bills b ON p.bill_id = b.bill_id WHERE p.status = 'oczekujaca'", nativeQuery = true)
+    Float getPendingAmount();
+
+    @Query(value = "SELECT SUM(b.amount) FROM payments p JOIN bills b ON p.bill_id = b.bill_id WHERE p.status = 'odrzucona'", nativeQuery = true)
+    Float getDeclinedAmount();
+
+    @Query(value = "SELECT COUNT(p) " +
+            "FROM payments p JOIN bills b ON p.bill_id = b.bill_id " +
+            "WHERE p.status = :status AND EXTRACT(MONTH FROM b.date_due) = :month " +
+            "GROUP BY DATE_TRUNC('month', b.date_due) " +
+            "ORDER BY DATE_TRUNC('month', b.date_due) ", nativeQuery = true)
+    Long getCountByMonth(@Param("month") Integer month,
+                                   @Param("status") String status);
+
+    @Query(value = "SELECT SUM(b.amount) " +
+            "FROM payments p JOIN bills b ON p.bill_id = b.bill_id " +
+            "WHERE p.status = :status AND EXTRACT(MONTH FROM b.date_due) = :month " +
+            "GROUP BY DATE_TRUNC('month', b.date_due) " +
+            "ORDER BY DATE_TRUNC('month', b.date_due) ", nativeQuery = true)
+    Long getAmountByMonth(@Param("month") Integer month,
+                         @Param("status") String status);
 }

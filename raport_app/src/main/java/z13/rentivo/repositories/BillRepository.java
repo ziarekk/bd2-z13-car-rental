@@ -32,4 +32,10 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
     void insertBill(@Param("amount") Float amount, 
                     @Param("date_due") Date dateDue, 
                     @Param("rental_id") Long rentalId);
+
+    @Query(value = "SELECT SUM(b.amount) FROM bills b", nativeQuery = true)
+    Float getAmountSum();
+
+    @Query(value = "SELECT AVG(b.amount) FROM bills b", nativeQuery = true)
+    Float getAverageAmount();
 }
