@@ -1,6 +1,7 @@
 package z13.rentivo.views.list;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -162,8 +163,8 @@ public class MyRentalsListView extends VerticalLayout {
         if(rental.getRentalEnd() == null){
             return "Not ended";
         } else {
-            DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy hh:mm");
-            String strDate = dateFormat.format(rental.getRentalEnd().getEndTime());
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            String strDate = dateFormat.format(rental.getRentalEnd().getEndTime().getTime());
             return  strDate;
         }
     }
@@ -173,7 +174,7 @@ public class MyRentalsListView extends VerticalLayout {
         if(rental.getRentalStart() == null){
             return "Not started";
         } else {
-            DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy hh:mm");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             String strDate = dateFormat.format(rental.getRentalStart().getStartTime());
             return  strDate;
         }
@@ -257,10 +258,10 @@ public class MyRentalsListView extends VerticalLayout {
                     detailsDialog.close();
                     if (result){
                         showMessage("Your rent is ended." ,
-                                "You just finished a rent of  " + rental.getCar().getBrand() + " " + rental.getCar().getModel()+ ". Thank you!");
+                                "You just finished a rent of  " + rental.getCar().getBrand() + " " + rental.getCar().getModel()+ ". Thank you!", 2);
                     } else{
                         showMessage("Whoops, something went wrong.." ,
-                                "There was an error while closing your rent. Please, try again later.");
+                                "There was an error while closing your rent. Please, try again later.", 1);
                     }
                 }
         );
@@ -269,23 +270,23 @@ public class MyRentalsListView extends VerticalLayout {
 
     private Button getPayButton(Rental rental){
 
-        Button endRentalButton = new Button("Pay for the rental");
-        endRentalButton.addClickListener(
+        Button payRentalButton = new Button("Pay for the rental");
+        payRentalButton.addClickListener(
                 e -> {
                     boolean result = dataService.payForRental(rental);
                     detailsDialog.close();
                     if (result){
                         showMessage("Payment was succesful." ,
-                                "You just payed $" + dataService.getPaymentAmount(rental) + " for the rental. Thank you!");
+                                "You just payed $" + dataService.getPaymentAmount(rental) + " for the rental. Thank you!", 1);
                     } else{
                         showMessage("Whoops, something went wrong.." ,
-                                "There was an error while processing your payment. Please, try again later.");
+                                "There was an error while processing your payment. Please, try again later.", 1);
                     }
                 }
         );
-        return endRentalButton;
+        return payRentalButton;
     }
-    private void showMessage( String title, String message){
+    private void showMessage( String title, String message, Integer int1){
         Dialog messageBox = new Dialog();
         messageBox.setHeaderTitle(title);
 
@@ -295,7 +296,11 @@ public class MyRentalsListView extends VerticalLayout {
         VerticalLayout layoutMSG = new VerticalLayout(msgH2);
 
         messageBox.add(layoutMSG);
-        messageBox.getFooter().add(new Button("Close", e -> messageBox.close()));
+        if (int1 == 2){
+            messageBox.getFooter().add(new Button("Close", e -> {messageBox.close(); UI.getCurrent().getPage().reload();}));
+        } else{
+            messageBox.getFooter().add(new Button("Close", e -> messageBox.close()));
+        }
 
         messageBox.open();
         textField.clear();

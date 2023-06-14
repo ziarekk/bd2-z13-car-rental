@@ -23,6 +23,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 
+import com.vaadin.flow.router.RouteAlias;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,6 +47,7 @@ import javax.annotation.security.PermitAll;
 @PermitAll
 @PageTitle("List of all cars")
 @Route(value = "/carsList", layout = MainLayout.class)
+@RouteAlias("home")
 public class CarsListView extends VerticalLayout {
     private final DataService dataService;
     private final RentService rentService;

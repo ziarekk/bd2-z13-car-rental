@@ -71,6 +71,7 @@ RETURNS BOOLEAN
 AS $$
 DECLARE
     v_rental_id INT;
+    v_bill_id INT;
     v_end_id INT;
     v_end_mileage INT;
     v_start_mileage INT;
@@ -144,6 +145,16 @@ BEGIN
     SET is_available_for_rent = TRUE,
         mileage = v_end_mileage
     WHERE car_id = p_car_id;
+
+    -- Insert bills record
+    INSERT INTO bills(amount, date_due, rental_id)
+    VALUES (v_end_mileage, CURRENT_TIMESTAMP, v_rental_id)
+    RETURNING bill_id INTO v_bill_id;
+
+    -- Insert rental_end record
+    INSERT INTO payments(status, bill_id, type_id)
+    VALUES ('oczekujaca', v_bill_id, 1);
+
 
     -- Print confirmation message
     RAISE NOTICE 'Car returned successfully. Rental ID: %', v_rental_id;
