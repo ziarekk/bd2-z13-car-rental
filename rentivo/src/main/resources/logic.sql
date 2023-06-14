@@ -107,12 +107,12 @@ BEGIN
     -- Get discount
     SELECT percent INTO v_discount
     FROM discounts
-    WHERE discount_id = (SELECT discount_id FROM rentals WHERE rental_id = rental_id);
+    WHERE discount_id = (SELECT discount_id FROM rentals WHERE rental_id = v_rental_id);
 
     -- Get penalty
     SELECT amount INTO v_penalty
     FROM penalties
-    WHERE penalty_id = (SELECT penalty_id FROM rentals WHERE rental_id = rental_id);
+    WHERE penalty_id = (SELECT penalty_id FROM rentals WHERE rental_id = v_rental_id);
 
     -- Calculate rental_cost
     SELECT hour_rate INTO v_hour_cost
@@ -152,25 +152,4 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION update_client_status(
-)
-RETURNS TRIGGER AS $$
-DECLARE
-    v_rentals INT;
-    v_sum INT;
-BEGIN
-    IF NEW.client_id IS NOT NULL THEN
-        SELECT COUNT(*) FROM rentals WHERE client_id = NEW.client_id INTO v_sum;
-        IF COALESCE(v_sum, 0) >= 10 THEN
-            UPDATE users
-            SET role_id = 3 --vip
-            WHERE client_id = NEW.client_id;
-        END IF;
-    END IF;
-END;
-$$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_client
-AFTER INSERT OR UPDATE ON rentals
-FOR EACH ROW
-EXECUTE PROCEDURE update_client_status();
