@@ -13,7 +13,7 @@
 	<description>Rent a cuh</description>
 	<properties>
 		<java.version>17</java.version>
-		<vaadin.version>23.2.10</vaadin.version>
+		<vaadin.version>23.3.1</vaadin.version>
 	</properties>
 	<dependencies>
 		<!-- SpringBoot -->
@@ -79,9 +79,12 @@
   			<version>2.3.0</version>
 		</dependency>
 		<dependency>
-        	<groupId>org.hibernate</groupId>
-        	<artifactId>hibernate-core</artifactId>
-    	</dependency>
+  			<groupId>org.hibernate</groupId>
+  			<artifactId>hibernate-core</artifactId>
+  			<version>6.0.0.Final</version>
+  			<type>pom</type>
+  			<scope>compile</scope>
+		</dependency>
 
 		<!-- Vaadin -->
 		<dependency>

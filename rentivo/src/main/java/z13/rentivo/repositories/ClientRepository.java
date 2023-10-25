@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import z13.rentivo.entities.Client;
+import z13.rentivo.entities.Rental;
 
 @Transactional @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
@@ -36,14 +37,17 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     @Query
     List<Client> findByIsVerified(Boolean isVerified);
 
-    @Modifying @Query(value = "INSERT INTO clients (name, surname, birth_date, gender, phone_number, is_verified, licence_id, user_id) VALUES (:name, :surname, :birth_date, :gender, :phone_number, :is_verified, :licence_id, :user_id)", nativeQuery = true)
+    @Query(value = "SELECT clnt.* FROM users u JOIN clients clnt ON(clnt.user_id = u.user_id) WHERE u.user_id = :user_id", nativeQuery = true)
+    List<Client> findByUserId(@Param("user_id")Long userId);
+    @Modifying @Query(value = "INSERT INTO clients (name, surname, birth_date, gender, phone_number, is_verified, user_id) VALUES (:name, :surname, :birth_date, :gender, :phone_number, :is_verified, :user_id)", nativeQuery = true)
     void insertClient(@Param("name") String name,
                       @Param("surname") String surname,
                       @Param("birth_date") Date birthDate,
                       @Param("gender") String gender,
                       @Param("phone_number") String phoneNumber,
                       @Param("is_verified") Boolean isVerified,
-                      @Param("licence_id") Long licenceId,
                       @Param("user_id") Long userId
                     );
+
+
 }
